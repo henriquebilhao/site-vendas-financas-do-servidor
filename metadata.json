@@ -1,0 +1,6 @@
+{
+  "name": "Finanças do Servidor - Assistente Financeiro no WhatsApp",
+  "description": "Assistente financeiro inteligente no WhatsApp. Registre despesas e receitas por áudio ou foto e acompanhe tudo em um dashboard em tempo real.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

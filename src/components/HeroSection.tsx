@@ -62,7 +62,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenCheckout }) => {
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-slate-200 bg-slate-900/90 border border-blue-900/40">
                 <Check className="w-3.5 h-3.5 text-amber-400" />
-                <span>Dashboard integrado em tempo real</span>
+                <span>Dashboard Integrado em Tempo Real</span>
               </div>
             </div>
 

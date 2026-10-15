@@ -18,7 +18,7 @@ export const AudioAndPhotoCaptureSection: React.FC = () => {
   const currentTime = `${hours}:${minutes}`;
 
   return (
-    <section id="recursos" className="relative py-20 md:py-28 bg-black overflow-hidden border-t border-slate-900">
+    <section id="recursos" className="relative py-20 md:py-28 bg-slate-950 overflow-hidden border-t border-slate-900">
       
       {/* Background ambient lighting */}
       <div 
@@ -36,7 +36,7 @@ export const AudioAndPhotoCaptureSection: React.FC = () => {
             Praticidade Absoluta Sem Digitação
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-tight mb-4">
-            Registre por Áudio ou Foto da Nota Fiscal
+            Registre por Texto, Áudio ou Foto da Nota Fiscal
           </h2>
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
             Você não precisa digitar valores, abrir planilhas ou lembrar de nada no fim do dia. O Finanças do Servidor processa voz e imagem com inteligência artificial instantânea.
@@ -47,10 +47,10 @@ export const AudioAndPhotoCaptureSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-stretch">
           
           {/* Left Column: Audio Recording Smartphone Mockup */}
-          <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-slate-900/90 via-blue-950/30 to-slate-950 border border-blue-900/40 shadow-2xl flex flex-col justify-between group hover:border-amber-400/40 transition-all duration-300">
-            
+          <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-slate-900/90 via-blue-950/30 to-slate-950 border border-blue-900/40 shadow-2xl flex flex-col justify-between group hover:border-amber-400/40 transition-all duration-300 h-full">
+
             {/* Phone Mockup Screen */}
-            <div className="mx-auto w-full max-w-[340px] rounded-[38px] p-3 bg-gradient-to-b from-slate-800 via-blue-950/80 to-slate-900 border-2 border-slate-700/60 shadow-2xl shadow-blue-950/60 mb-6">
+            <div className="mx-auto w-full max-w-[340px] rounded-[38px] p-3 bg-gradient-to-b from-slate-800 via-blue-950/80 to-slate-900 border-2 border-slate-700/60 shadow-2xl shadow-blue-950/60 mb-6 flex-1">
               <div className="rounded-[30px] bg-slate-950 border border-slate-800/80 p-3.5 min-h-[460px] flex flex-col justify-between overflow-hidden">
                 
                 {/* Phone Status Bar */}
@@ -172,10 +172,10 @@ export const AudioAndPhotoCaptureSection: React.FC = () => {
           </div>
 
           {/* Right Column: Photo of Receipt / Nota Fiscal Smartphone Mockup */}
-          <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-slate-900/90 via-blue-950/30 to-slate-950 border border-blue-900/40 shadow-2xl flex flex-col justify-between group hover:border-amber-400/40 transition-all duration-300">
-            
+          <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-slate-900/90 via-blue-950/30 to-slate-950 border border-blue-900/40 shadow-2xl flex flex-col justify-between group hover:border-amber-400/40 transition-all duration-300 h-full">
+
             {/* Phone Mockup Screen */}
-            <div className="mx-auto w-full max-w-[340px] rounded-[38px] p-3 bg-gradient-to-b from-slate-800 via-blue-950/80 to-slate-900 border-2 border-slate-700/60 shadow-2xl shadow-blue-950/60 mb-6">
+            <div className="mx-auto w-full max-w-[340px] rounded-[38px] p-3 bg-gradient-to-b from-slate-800 via-blue-950/80 to-slate-900 border-2 border-slate-700/60 shadow-2xl shadow-blue-950/60 mb-6 flex-1">
               <div className="rounded-[30px] bg-slate-950 border border-slate-800/80 p-3.5 min-h-[460px] flex flex-col justify-between overflow-hidden">
                 
                 {/* Phone Status Bar */}

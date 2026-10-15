@@ -40,6 +40,36 @@
   background: radial-gradient(circle at 80% 30%, rgba(245, 158, 11, 0.12) 0%, transparent 60%);
 }
 
+/* Blink-pulse animation for simulator arrow */
+@keyframes blink-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(-90deg);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.2) rotate(-90deg);
+  }
+}
+.animate-blink-pulse {
+  animation: blink-pulse 1.2s ease-in-out infinite;
+}
+
+/* Glowing urgency animation */
+@keyframes urgency-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.3), 0 0 30px -5px rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 25px -3px rgba(245, 158, 11, 0.6), 0 0 50px -5px rgba(245, 158, 11, 0.3);
+    border-color: rgba(245, 158, 11, 0.9);
+  }
+}
+.animate-urgency-glow {
+  animation: urgency-glow 2s ease-in-out infinite;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

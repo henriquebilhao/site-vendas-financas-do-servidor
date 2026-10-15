@@ -29,7 +29,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenCheckout }) => {
   const currentTime = `${hours}:${minutes}`;
 
   return (
-    <section className="relative overflow-hidden pt-8 pb-20 md:pt-14 md:pb-28 bg-black">
+    <section className="relative overflow-hidden pt-8 pb-20 md:pt-14 md:pb-28 bg-blue-950">
       {/* Background ambient radial gradients - Navy blue & Gold accents replacing the green */}
       <div 
         className="pointer-events-none absolute top-10 right-0 w-[550px] h-[550px] rounded-full blur-[140px] opacity-35"
@@ -51,32 +51,29 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenCheckout }) => {
           <div className="lg:col-span-7 flex flex-col items-start text-left">
 
             {/* Badges strip */}
-            <div className="flex flex-wrap items-center gap-2.5 md:gap-3 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-slate-200 bg-slate-900/90 border border-blue-900/40">
-                <Check className="w-3.5 h-3.5 text-amber-400" />
+            <div className="flex items-center gap-2 md:gap-3 mb-6">
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium text-slate-200 bg-slate-900/90 border border-blue-900/40 shrink-0">
+                <Check className="w-3 h-3 text-amber-400" />
                 <span>Gestão Fácil de Gastos & Receitas</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-slate-200 bg-slate-900/90 border border-blue-900/40">
-                <Check className="w-3.5 h-3.5 text-amber-400" />
-                <span>Registro por Áudio & Foto de Notas</span>
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium text-slate-200 bg-slate-900/90 border border-blue-900/40 shrink-0">
+                <Check className="w-3 h-3 text-amber-400" />
+                <span>Registro por Texto, Áudio & Foto de Notas</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-slate-200 bg-slate-900/90 border border-blue-900/40">
-                <Check className="w-3.5 h-3.5 text-amber-400" />
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium text-slate-200 bg-slate-900/90 border border-blue-900/40 shrink-0">
+                <Check className="w-3 h-3 text-amber-400" />
                 <span>Dashboard Integrado em Tempo Real</span>
               </div>
             </div>
 
             {/* Main Punchy Headline */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight uppercase leading-[1.1] mb-5 text-balance">
-              Transforme o seu WhatsApp no{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500">
-                Assistente Financeiro do Servidor
-              </span>
+              Controlar seu dinheiro pelo WhatsApp é a Maneira Mais Eficiente para o servidor prosperar
             </h1>
 
             {/* Subheadline */}
             <p className="text-slate-300 text-base sm:text-lg md:text-xl font-normal leading-relaxed mb-8 max-w-2xl">
-              Desenvolvido especialmente para a sua rotina: registre cada gasto no WhatsApp por áudio ou foto, acompanhe despesas e receitas automaticamente e faça seu salário sobrar de verdade.
+              Desenvolvido especialmente para a sua rotina: registre cada gasto no WhatsApp por texto, áudio ou foto, acompanhe despesas e receitas automaticamente e faça seu salário sobrar de verdade.
             </p>
 
             {/* Primary Action Button -> Scrolls to Pricing Section (#planos) */}

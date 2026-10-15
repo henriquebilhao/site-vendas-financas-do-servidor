@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  Sparkles, 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
+import {
+  Sparkles,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
   RotateCcw,
   Clock,
   ArrowUpRight,
   ArrowDownRight,
   PlusCircle,
-  MinusCircle
+  MinusCircle,
+  ArrowRight
 } from 'lucide-react';
 import { LogoFS } from './LogoFS';
 
@@ -36,7 +37,6 @@ export const InteractiveSimulatorSection: React.FC = () => {
   const currentTime = `${hours}:${minutes}`;
 
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
-  const [activeMode, setActiveMode] = useState<'expense' | 'income'>('expense');
   const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'bot'; text: string; time: string; type?: 'income' | 'expense' }>>([
     { 
       sender: 'bot', 
@@ -159,7 +159,7 @@ export const InteractiveSimulatorSection: React.FC = () => {
   };
 
   return (
-    <section id="simulador" className="relative py-20 md:py-28 bg-black overflow-hidden border-t border-slate-900">
+    <section id="simulador" className="relative py-20 md:py-28 overflow-hidden border-t border-slate-900" style={{ background: 'linear-gradient(180deg, #0c1a3a 0%, #050a18 40%, #000000 100%)' }}>
       
       {/* Background glow */}
       <div 
@@ -177,75 +177,16 @@ export const InteractiveSimulatorSection: React.FC = () => {
             Experimente na Prática Sem Cadastro
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-tight mb-4">
-            Simulador: Mande Mensagem, Veja o Painel Atualizar
+            Simulador:<br />
+            Mande Mensagem, Veja como é Prático e Interativo
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Diferencie com clareza entre <strong className="text-rose-400">Despesas (Saídas)</strong> e <strong className="text-emerald-400">Receitas (Entradas)</strong>. Veja como o assistente identifica a operação e atualiza seus gráficos automaticamente.
-          </p>
-        </div>
-
-        {/* Mode Selector Tabs: Despesa vs Receita */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-          <div className="inline-flex p-1 bg-slate-900/90 rounded-2xl border border-slate-800 shadow-lg">
-            <button
-              onClick={() => setActiveMode('expense')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeMode === 'expense'
-                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50 shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <MinusCircle className="w-4 h-4 text-rose-400" />
-              <span>Registrar Despesa (Saída)</span>
-            </button>
-            <button
-              onClick={() => setActiveMode('income')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeMode === 'income'
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <PlusCircle className="w-4 h-4 text-emerald-400" />
-              <span>Registrar Receita (Entrada)</span>
-            </button>
-          </div>
-
-          <button
-            onClick={handleReset}
-            className="text-xs font-medium px-4 py-2 rounded-xl bg-slate-950 text-slate-400 hover:text-white border border-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="Reiniciar simulador"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Resetar</span>
-          </button>
-        </div>
-
-        {/* Quick Sample Action Chips based on selected mode */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-          <span className="text-xs text-slate-400 font-semibold mr-1">
-            Exemplos de {activeMode === 'expense' ? 'Despesas' : 'Receitas'}:
-          </span>
-          {(activeMode === 'expense' ? expenseSamples : incomeSamples).map((sample, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleProcessMessage(sample.text, activeMode)}
-              className={`text-xs font-medium px-3.5 py-1.5 rounded-full transition-all cursor-pointer shadow-sm active:scale-95 border ${
-                activeMode === 'expense'
-                  ? 'bg-slate-900/90 text-slate-200 border-rose-900/40 hover:border-rose-400 hover:text-rose-300'
-                  : 'bg-slate-900/90 text-slate-200 border-emerald-900/40 hover:border-emerald-400 hover:text-emerald-300'
-              }`}
-            >
-              {sample.label}
-            </button>
-          ))}
         </div>
 
         {/* 2-Column Split: WhatsApp Box on Left, Financial Dashboard on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* Column 1: WhatsApp Conversation Box */}
-          <div className="lg:col-span-5 bg-gradient-to-b from-slate-900 via-blue-950/40 to-slate-950 rounded-3xl border border-blue-900/40 shadow-2xl overflow-hidden flex flex-col h-[530px]">
+          <div className="lg:col-span-5 bg-gradient-to-b from-slate-900 via-blue-950/40 to-slate-950 rounded-3xl border border-blue-900/40 shadow-2xl overflow-hidden flex flex-col h-[650px]">
             
             {/* WhatsApp Chat Header */}
             <div className="px-4 py-3.5 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between">
@@ -263,7 +204,13 @@ export const InteractiveSimulatorSection: React.FC = () => {
                   <p className="text-[11px] text-emerald-400 font-medium">Assistente Ativo no WhatsApp</p>
                 </div>
               </div>
-              <span className="text-xs font-mono text-slate-500 bg-slate-900 px-2.5 py-1 rounded-md">Live Demo</span>
+              <button
+                onClick={handleReset}
+                className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/40 transition-all cursor-pointer active:scale-90"
+                title="Reiniciar conversa"
+              >
+                <RotateCcw className="w-4 h-4" />
+              </button>
             </div>
 
             {/* Chat Body Scroll */}
@@ -300,35 +247,51 @@ export const InteractiveSimulatorSection: React.FC = () => {
               )}
             </div>
 
-            {/* Quick Action Buttons - Only Clickable Sample Messages */}
+            {/* Quick Action Buttons - Both Despesas and Receitas */}
             <div className="p-3.5 bg-slate-950 border-t border-slate-800/80">
               <div className="flex items-center justify-between mb-2.5">
-                <span className="text-[11px] font-semibold text-slate-300 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-[10px] font-semibold text-slate-300 flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 text-amber-400" />
                   Clique em um exemplo para enviar:
                 </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider font-mono ${
-                  activeMode === 'expense' ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'
-                }`}>
-                  {activeMode === 'expense' ? 'Modo Despesa' : 'Modo Receita'}
-                </span>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {(activeMode === 'expense' ? expenseSamples : incomeSamples).map((sample, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    disabled={isTyping}
-                    onClick={() => handleProcessMessage(sample.text, activeMode)}
-                    className={`text-xs font-semibold px-3 py-2 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95 border text-left ${
-                      activeMode === 'expense'
-                        ? 'bg-rose-950/30 text-rose-200 border-rose-800/40 hover:bg-rose-900/60 hover:border-rose-400 hover:text-white'
-                        : 'bg-emerald-950/30 text-emerald-200 border-emerald-800/40 hover:bg-emerald-900/60 hover:border-emerald-400 hover:text-white'
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    {sample.label}
-                  </button>
-                ))}
+              <div className="space-y-2">
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-[9px] text-rose-400 font-semibold flex items-center">Despesas:</span>
+                  {expenseSamples.map((sample, idx) => (
+                    <button
+                      key={`expense-${idx}`}
+                      type="button"
+                      disabled={isTyping}
+                      onClick={() => handleProcessMessage(sample.text, 'expense')}
+                      className="text-[10px] font-semibold px-2.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95 border text-left bg-rose-950/30 text-rose-200 border-rose-800/40 hover:bg-rose-900/60 hover:border-rose-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {sample.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-[9px] text-emerald-400 font-semibold flex items-center">Receitas:</span>
+                  {incomeSamples.map((sample, idx) => (
+                    <button
+                      key={`income-${idx}`}
+                      type="button"
+                      disabled={isTyping}
+                      onClick={() => handleProcessMessage(sample.text, 'income')}
+                      className="text-[10px] font-semibold px-2.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95 border text-left bg-emerald-950/30 text-emerald-200 border-emerald-800/40 hover:bg-emerald-900/60 hover:border-emerald-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {sample.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Attention Indicator at Bottom */}
+            <div className="px-3.5 py-2 bg-amber-400/10 border-t border-amber-400/30">
+              <div className="flex items-center gap-2 text-sm text-amber-300 font-bold">
+                <ArrowRight className="w-10 h-10 text-amber-400 animate-blink-pulse" />
+                <span className="text-base">Teste clicando nas opções acima!</span>
               </div>
             </div>
 

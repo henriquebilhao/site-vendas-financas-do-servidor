@@ -50,6 +50,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCheckout }) => {
           <a href="#faq" className="hover:text-amber-400 transition-colors whitespace-nowrap shrink-0">
             Dúvidas
           </a>
+          <a
+            href="https://membros.appfinancasdoservidor.digital"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative inline-flex items-center justify-center px-6 py-2.5 text-xs uppercase tracking-wider font-bold text-slate-950 bg-white hover:bg-slate-100 rounded-lg shadow-lg hover:shadow-xl transition-all cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <span className="flex items-center gap-2">
+              Já é Cliente
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </span>
+          </a>
         </nav>
 
         {/* Primary Action CTA Zone -> Scroll to Pricing (#planos) */}
@@ -108,12 +119,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCheckout }) => {
           >
             Ver Planos & Valores
           </a>
-          <a 
-            href="#faq" 
+          <a
+            href="#faq"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-base font-medium text-slate-300 hover:text-amber-400"
           >
             Perguntas Frequentes
+          </a>
+          <a
+            href="https://membros.appfinancasdoservidor.digital"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block w-full py-3 text-center text-xs uppercase tracking-wider font-bold text-slate-950 bg-white hover:bg-slate-100 rounded-lg shadow-md"
+          >
+            Já é Cliente
           </a>
           <div className="pt-2">
             <a

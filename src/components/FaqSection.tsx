@@ -10,10 +10,6 @@ export const FaqSection: React.FC = () => {
       answer: 'De jeito nenhum! Essa é uma das nossas maiores prioridades de segurança. Você NUNCA precisará fornecer senhas do SouGov, Portal do Servidor, Siape, nem senhas de bancos ou consignatárias. O assistente funciona exclusivamente com base nas mensagens de texto, comprovantes ou áudios que você enviar voluntariamente no WhatsApp.'
     },
     {
-      question: 'Eu tenho empréstimos consignados. O assistente me ajuda a organizar?',
-      answer: 'Sim! Uma das maiores vantagens para servidores públicos é justamente o módulo de controle de margem e consignados. O assistente calcula quanto do seu salário líquido está comprometido com parcelas, projeta quando cada contrato será quitado e ajuda você a blindar sua sobra financeira mês a mês.'
-    },
-    {
       question: 'O assistente funciona para qualquer carreira ou perfil?',
       answer: 'Sim! O Finanças do Servidor atende com perfeição qualquer perfil — seja de órgãos públicos, autarquias, saúde, educação, judiciário ou iniciativa privada.'
     },

@@ -38,10 +38,10 @@ export const PricingSection: React.FC = () => {
   }, []);
 
   const HOTMART_MENSAL_SEM = "https://pay.hotmart.com/R107997768B?off=tp446sid";
-  const HOTMART_MENSAL_COM = "https://go.hotmart.com/R107997768B?off=6rkpkqdm";
-  const HOTMART_TRIMESTRAL_SEM = "https://go.hotmart.com/R107997768B?off=lll6osu7";
-  const HOTMART_TRIMESTRAL_COM = "https://go.hotmart.com/R107997768B?off=sw3m0ili";
-  const HOTMART_ANUAL = "https://go.hotmart.com/R107997768B?off=3347zlda";
+  const HOTMART_MENSAL_COM = "https://pay.hotmart.com/R107997768B?off=6rkpkqdm";
+  const HOTMART_TRIMESTRAL_SEM = "https://pay.hotmart.com/R107997768B?off=lll6osu7";
+  const HOTMART_TRIMESTRAL_COM = "https://pay.hotmart.com/R107997768B?off=sw3m0ili";
+  const HOTMART_ANUAL = "https://pay.hotmart.com/R107997768B?off=3347zlda";
 
   return (
     <section id="planos" className="relative py-20 md:py-28 bg-slate-950 overflow-hidden border-t border-slate-900">
@@ -54,20 +54,20 @@ export const PricingSection: React.FC = () => {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Urgency countdown bar */}
-        <div className="max-w-2xl mx-auto mb-10 p-5 md:p-6 rounded-2xl bg-gradient-to-r from-amber-500/25 via-blue-950/60 to-amber-500/25 border-2 animate-urgency-glow flex flex-col sm:flex-row items-center justify-between gap-3 text-sm md:text-base text-slate-200">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-amber-400/20 border border-amber-400/50 flex items-center justify-center shrink-0">
-              <Clock className="w-5 h-5 text-amber-400 animate-pulse" />
+        {/* Urgency countdown bar - Optimized for mobile */}
+        <div className="max-w-2xl mx-auto mb-8 sm:mb-10 p-3.5 sm:p-5 md:p-6 rounded-2xl bg-gradient-to-r from-amber-500/25 via-blue-950/60 to-amber-500/25 border-2 animate-urgency-glow flex flex-col sm:flex-row items-center justify-between gap-3 text-sm md:text-base text-slate-200">
+          <div className="flex items-center gap-2.5 sm:gap-3 text-center sm:text-left">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-amber-400/20 border border-amber-400/50 flex items-center justify-center shrink-0">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 animate-pulse" />
             </div>
             <div>
-              <span className="font-black text-white text-lg md:text-xl block leading-tight">🔥 Condição Especial por Tempo Limitado</span>
-              <span className="text-[11px] text-amber-300/80 font-medium">Aproveite antes que o contador zere!</span>
+              <span className="font-black text-white text-base sm:text-lg md:text-xl block leading-tight">🔥 Condição Especial por Tempo Limitado</span>
+              <span className="text-[10px] sm:text-[11px] text-amber-300/80 font-medium">Aproveite antes que o contador zere!</span>
             </div>
           </div>
-          <div className="font-mono font-black text-amber-400 tracking-wider text-2xl md:text-3xl tabular-nums bg-black/40 px-4 py-2 rounded-xl border border-amber-400/30">
+          <div className="font-mono font-black text-amber-400 tracking-wider text-xl sm:text-2xl md:text-3xl tabular-nums bg-black/40 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-amber-400/30">
             {String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
           </div>
         </div>
@@ -441,9 +441,9 @@ export const PricingSection: React.FC = () => {
         </div>
 
         {/* 7-Day Unconditional Guarantee Box */}
-        <div className="max-w-3xl mx-auto mt-16 p-6 md:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-blue-950/60 to-slate-900 border border-blue-900/50 flex flex-col sm:flex-row items-center gap-6">
-          <div className="w-16 h-16 rounded-2xl bg-amber-400/15 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0">
-            <ShieldCheck className="w-9 h-9" />
+        <div className="max-w-3xl mx-auto mt-12 sm:mt-16 p-4 sm:p-6 md:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-blue-950/60 to-slate-900 border border-blue-900/50 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-center sm:text-left">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-amber-400/15 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0">
+            <ShieldCheck className="w-8 h-8 sm:w-9 sm:h-9" />
           </div>
           <div>
             <h4 className="text-base sm:text-lg font-bold text-white mb-1">

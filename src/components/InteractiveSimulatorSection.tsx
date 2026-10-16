@@ -10,7 +10,9 @@ import {
   ArrowDownRight,
   PlusCircle,
   MinusCircle,
-  ArrowRight
+  ArrowRight,
+  MessageCircle,
+  LayoutDashboard
 } from 'lucide-react';
 import { LogoFS } from './LogoFS';
 
@@ -36,6 +38,7 @@ export const InteractiveSimulatorSection: React.FC = () => {
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const currentTime = `${hours}:${minutes}`;
 
+  const [mobileTab, setMobileTab] = useState<'chat' | 'dashboard'>('chat');
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
   const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'bot'; text: string; time: string; type?: 'income' | 'expense' }>>([
     { 
@@ -45,17 +48,18 @@ export const InteractiveSimulatorSection: React.FC = () => {
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   const expenseSamples = [
     { label: '🍕 Almoço R$ 42', text: 'Gastei 42 reais no almoço com a equipe' },
     { label: '🚗 Combustível R$ 150', text: 'Abasteci 150 reais de gasolina' },
-    { label: '💡 Conta de Luz R$ 160', text: 'Paguei a conta de energia 160 reais' },
+    { label: '💡 Luz R$ 160', text: 'Paguei a conta de energia 160 reais' },
     { label: '💊 Farmácia R$ 85', text: 'Comprei remédios na farmácia 85 reais' },
-    { label: '🛒 Supermercado R$ 320', text: 'Compras de mercado 320 reais' },
+    { label: '🛒 Mercado R$ 320', text: 'Compras de mercado 320 reais' },
   ];
 
   const incomeSamples = [
-    { label: '💰 Salário Mensal R$ 8.500', text: 'Recebi meu salário de 8500 reais' },
+    { label: '💰 Salário R$ 8.500', text: 'Recebi meu salário de 8500 reais' },
     { label: '💼 Renda Extra R$ 1.200', text: 'Recebi 1200 de um trabalho extra' },
     { label: '📈 Rendimentos R$ 380', text: 'Entrou 380 reais de rendimentos' },
     { label: '🎁 Restituição R$ 650', text: 'Recebi restituição de 650 reais' },
@@ -72,10 +76,10 @@ export const InteractiveSimulatorSection: React.FC = () => {
     setTimeout(() => {
       const lower = rawText.toLowerCase();
       
-      // Determine type: if forcedType is passed, prioritize it, otherwise check intent
+      // Determine type safely
       let isIncome = forcedType 
         ? forcedType === 'income' 
-        : (activeMode === 'income' || lower.includes('recebi') || lower.includes('ganhei') || lower.includes('salário') || lower.includes('rendimento') || lower.includes('entrou'));
+        : (lower.includes('recebi') || lower.includes('ganhei') || lower.includes('salário') || lower.includes('rendimento') || lower.includes('entrou'));
 
       let amount = 50;
       const numbers = rawText.match(/\d+([.,]\d+)?/g);
@@ -138,7 +142,8 @@ export const InteractiveSimulatorSection: React.FC = () => {
 
       setChatMessages(prev => [...prev, { sender: 'bot', text: botReply, time: timeStr, type: txType }]);
       setIsTyping(false);
-    }, 600);
+      setLastUpdated(isIncome ? `+R$ ${amount.toFixed(2)}` : `-R$ ${amount.toFixed(2)}`);
+    }, 550);
   };
 
   const totalIncome = transactions
@@ -154,12 +159,13 @@ export const InteractiveSimulatorSection: React.FC = () => {
   const handleReset = () => {
     setTransactions(initialTransactions);
     setChatMessages([
-      { sender: 'bot', text: 'Simulador reiniciado! Escolha entre Despesa ou Receita e teste o assistente.', time: '14:00' },
+      { sender: 'bot', text: 'Simulador reiniciado! Escolha entre Despesa ou Receita e teste o assistente.', time: currentTime },
     ]);
+    setLastUpdated(null);
   };
 
   return (
-    <section id="simulador" className="relative py-20 md:py-28 overflow-hidden border-t border-slate-900" style={{ background: 'linear-gradient(180deg, #0c1a3a 0%, #050a18 40%, #000000 100%)' }}>
+    <section id="simulador" className="relative py-16 sm:py-20 md:py-28 overflow-hidden border-t border-slate-900" style={{ background: 'linear-gradient(180deg, #0c1a3a 0%, #050a18 40%, #000000 100%)' }}>
       
       {/* Background glow */}
       <div 
@@ -169,59 +175,112 @@ export const InteractiveSimulatorSection: React.FC = () => {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-10 px-2 sm:px-0">
           <span className="text-xs font-mono font-bold tracking-widest uppercase text-amber-400 mb-2 block">
             Experimente na Prática Sem Cadastro
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-tight mb-4">
-            Simulador:<br />
-            Mande Mensagem, Veja como é Prático e Interativo
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-tight mb-3 sm:mb-4">
+            Simulador Interativo
           </h2>
+          <p className="text-slate-300 text-xs sm:text-base leading-relaxed">
+            Mande uma mensagem simulada no WhatsApp e veja o painel financeiro calcular seu saldo e registrar a transação em tempo real.
+          </p>
+        </div>
+
+        {/* Mobile Tab Control - Switches between WhatsApp and Dashboard on smartphone */}
+        <div className="flex lg:hidden items-center justify-center gap-1.5 mb-5 p-1 bg-slate-900/90 rounded-2xl border border-blue-900/50 max-w-sm mx-auto">
+          <button
+            type="button"
+            onClick={() => setMobileTab('chat')}
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+              mobileTab === 'chat'
+                ? 'bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 text-white shadow-md border border-amber-400/40'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span>1. WhatsApp Chat</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileTab('dashboard')}
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 relative ${
+              mobileTab === 'dashboard'
+                ? 'bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 text-white shadow-md border border-amber-400/40'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <LayoutDashboard className="w-3.5 h-3.5 text-amber-400" />
+            <span>2. Painel ao Vivo</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          </button>
         </div>
 
         {/* 2-Column Split: WhatsApp Box on Left, Financial Dashboard on Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
           {/* Column 1: WhatsApp Conversation Box */}
-          <div className="lg:col-span-5 bg-gradient-to-b from-slate-900 via-blue-950/40 to-slate-950 rounded-3xl border border-blue-900/40 shadow-2xl overflow-hidden flex flex-col h-[650px]">
+          <div className={`lg:col-span-5 bg-gradient-to-b from-slate-900 via-blue-950/40 to-slate-950 rounded-3xl border border-blue-900/40 shadow-2xl overflow-hidden flex flex-col h-[560px] sm:h-[620px] lg:h-[650px] ${
+            mobileTab === 'chat' ? 'flex' : 'hidden lg:flex'
+          }`}>
             
             {/* WhatsApp Chat Header */}
-            <div className="px-4 py-3.5 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+            <div className="px-3 sm:px-4 py-3 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-xl bg-blue-900/80 border border-amber-400/40 flex items-center justify-center p-1">
-                    <LogoFS size={30} />
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-900/80 border border-amber-400/40 flex items-center justify-center p-1">
+                    <LogoFS size={28} />
                   </div>
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-950" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
+                  <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
                     Finanças do Servidor
                   </h4>
-                  <p className="text-[11px] text-emerald-400 font-medium">Assistente Ativo no WhatsApp</p>
+                  <p className="text-[10px] sm:text-[11px] text-emerald-400 font-medium">Assistente Ativo no WhatsApp</p>
                 </div>
               </div>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={handleReset}
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/40 transition-all cursor-pointer active:scale-90"
+                  title="Reiniciar conversa"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Synchronized Mini-Status Bar (Allows instant preview of balance) */}
+            <div className="px-3 py-1.5 bg-blue-950/60 border-b border-blue-900/30 flex items-center justify-between text-[11px]">
+              <div className="flex items-center gap-1.5 text-slate-300">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Saldo Livre:</span>
+                <strong className="text-amber-400 font-mono">
+                  R$ {currentBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </strong>
+              </div>
               <button
-                onClick={handleReset}
-                className="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/40 transition-all cursor-pointer active:scale-90"
-                title="Reiniciar conversa"
+                type="button"
+                onClick={() => setMobileTab('dashboard')}
+                className="lg:hidden text-[10px] font-bold text-amber-300 hover:underline flex items-center gap-1"
               >
-                <RotateCcw className="w-4 h-4" />
+                Ver Painel ➜
               </button>
             </div>
 
             {/* Chat Body Scroll */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-black/40">
+            <div className="flex-1 p-3 sm:p-4 overflow-y-auto space-y-3 bg-black/40">
               {chatMessages.map((msg, index) => (
                 <div
                   key={index}
                   className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-md ${
+                    className={`max-w-[88%] sm:max-w-[85%] rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-md ${
                       msg.sender === 'user'
                         ? 'bg-blue-900/80 text-white rounded-tr-xs border border-blue-700/50'
                         : msg.type === 'income'
@@ -233,12 +292,12 @@ export const InteractiveSimulatorSection: React.FC = () => {
                   >
                     {msg.text}
                   </div>
-                  <span className="text-[10px] text-slate-500 mt-1 px-1">{msg.time}</span>
+                  <span className="text-[9px] sm:text-[10px] text-slate-500 mt-1 px-1">{msg.time}</span>
                 </div>
               ))}
 
               {isTyping && (
-                <div className="flex items-center gap-1.5 bg-slate-900/80 px-3 py-2 rounded-2xl w-fit border border-slate-800">
+                <div className="flex items-center gap-1.5 bg-slate-900/80 px-3 py-1.5 rounded-2xl w-fit border border-slate-800">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce" />
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:0.2s]" />
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:0.4s]" />
@@ -247,80 +306,96 @@ export const InteractiveSimulatorSection: React.FC = () => {
               )}
             </div>
 
-            {/* Quick Action Buttons - Both Despesas and Receitas */}
-            <div className="p-3.5 bg-slate-950 border-t border-slate-800/80">
-              <div className="flex items-center justify-between mb-2.5">
-                <span className="text-[10px] font-semibold text-slate-300 flex items-center gap-1.5">
-                  <Sparkles className="w-3 h-3 text-amber-400" />
-                  Clique em um exemplo para enviar:
+            {/* Quick Action Buttons - Optimized touch buttons for mobile */}
+            <div className="p-2.5 sm:p-3.5 bg-slate-950 border-t border-slate-800/80">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] sm:text-[11px] font-semibold text-slate-300 flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 text-amber-400 shrink-0" />
+                  Clique em um exemplo para testar:
                 </span>
+                {lastUpdated && (
+                  <span className="text-[10px] font-mono text-emerald-400 animate-pulse">
+                    ✓ Atualizado ({lastUpdated})
+                  </span>
+                )}
               </div>
               <div className="space-y-2">
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-[9px] text-rose-400 font-semibold flex items-center">Despesas:</span>
-                  {expenseSamples.map((sample, idx) => (
-                    <button
-                      key={`expense-${idx}`}
-                      type="button"
-                      disabled={isTyping}
-                      onClick={() => handleProcessMessage(sample.text, 'expense')}
-                      className="text-[10px] font-semibold px-2.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95 border text-left bg-rose-950/30 text-rose-200 border-rose-800/40 hover:bg-rose-900/60 hover:border-rose-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {sample.label}
-                    </button>
-                  ))}
+                <div>
+                  <span className="text-[9.5px] text-rose-400 font-bold mb-1 flex items-center gap-1">
+                    <MinusCircle className="w-3 h-3" /> Despesas:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {expenseSamples.map((sample, idx) => (
+                      <button
+                        key={`expense-${idx}`}
+                        type="button"
+                        disabled={isTyping}
+                        onClick={() => handleProcessMessage(sample.text, 'expense')}
+                        className="text-[9.5px] sm:text-[10px] font-semibold px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl transition-all cursor-pointer shadow-sm active:scale-95 border text-left bg-rose-950/30 text-rose-200 border-rose-800/40 hover:bg-rose-900/60 hover:border-rose-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {sample.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-[9px] text-emerald-400 font-semibold flex items-center">Receitas:</span>
-                  {incomeSamples.map((sample, idx) => (
-                    <button
-                      key={`income-${idx}`}
-                      type="button"
-                      disabled={isTyping}
-                      onClick={() => handleProcessMessage(sample.text, 'income')}
-                      className="text-[10px] font-semibold px-2.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95 border text-left bg-emerald-950/30 text-emerald-200 border-emerald-800/40 hover:bg-emerald-900/60 hover:border-emerald-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {sample.label}
-                    </button>
-                  ))}
+
+                <div>
+                  <span className="text-[9.5px] text-emerald-400 font-bold mb-1 flex items-center gap-1">
+                    <PlusCircle className="w-3 h-3" /> Receitas:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {incomeSamples.map((sample, idx) => (
+                      <button
+                        key={`income-${idx}`}
+                        type="button"
+                        disabled={isTyping}
+                        onClick={() => handleProcessMessage(sample.text, 'income')}
+                        className="text-[9.5px] sm:text-[10px] font-semibold px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl transition-all cursor-pointer shadow-sm active:scale-95 border text-left bg-emerald-950/30 text-emerald-200 border-emerald-800/40 hover:bg-emerald-900/60 hover:border-emerald-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {sample.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Attention Indicator at Bottom */}
-            <div className="px-3.5 py-2 bg-amber-400/10 border-t border-amber-400/30">
-              <div className="flex items-center gap-2 text-sm text-amber-300 font-bold">
-                <ArrowRight className="w-10 h-10 text-amber-400 animate-blink-pulse" />
-                <span className="text-base">Teste clicando nas opções acima!</span>
+            <div className="px-3 py-1.5 sm:py-2 bg-amber-400/10 border-t border-amber-400/30">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-amber-300 font-bold">
+                <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 text-amber-400 animate-blink-pulse shrink-0" />
+                <span>Clique nos botões acima para ver o assistente funcionar!</span>
               </div>
             </div>
 
           </div>
 
           {/* Column 2: Synchronized Live Financial Dashboard */}
-          <div className="lg:col-span-7 bg-gradient-to-b from-slate-900/90 via-blue-950/30 to-slate-950 rounded-3xl border border-blue-900/40 shadow-2xl p-6 md:p-7 flex flex-col justify-between">
+          <div className={`lg:col-span-7 bg-gradient-to-b from-slate-900/90 via-blue-950/30 to-slate-950 rounded-3xl border border-blue-900/40 shadow-2xl p-3.5 sm:p-6 md:p-7 flex flex-col justify-between ${
+            mobileTab === 'dashboard' ? 'flex' : 'hidden lg:flex'
+          }`}>
             
             {/* Dashboard Top Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-800">
+            <div className="flex items-center justify-between gap-3 pb-3 sm:pb-5 border-b border-slate-800">
               <div>
                 <span className="text-[10px] font-mono tracking-widest text-emerald-400 uppercase font-semibold flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Sincronizado ao Vivo
                 </span>
-                <h3 className="text-xl font-black text-white uppercase tracking-tight">
+                <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-tight">
                   Painel Financeiro
                 </h3>
               </div>
-              <div className="text-xs text-slate-400 font-mono">
-                Mês Vigente: <strong className="text-white">Outubro/2026</strong>
+              <div className="text-[11px] sm:text-xs text-slate-400 font-mono text-right">
+                Mês: <strong className="text-white">Outubro/2026</strong>
               </div>
             </div>
 
-            {/* KPI Cards Strip */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-5">
+            {/* KPI Cards Strip - Responsive layout utilizing space */}
+            <div className="space-y-2.5 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 my-3 sm:my-5">
               
               {/* Total Balance */}
-              <div className="p-4 rounded-2xl bg-black/60 border border-blue-900/40 relative overflow-hidden">
-                <span className="text-xs text-slate-400 font-medium block mb-1">Saldo Livre Disponível</span>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/60 border border-blue-900/40 relative overflow-hidden">
+                <span className="text-[11px] sm:text-xs text-slate-400 font-medium block mb-0.5">Saldo Livre Disponível</span>
                 <div className="text-xl sm:text-2xl font-black text-amber-400 font-mono tabular-nums">
                   R$ {currentBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                 </div>
@@ -329,55 +404,58 @@ export const InteractiveSimulatorSection: React.FC = () => {
                 </span>
               </div>
 
-              {/* Income */}
-              <div className="p-4 rounded-2xl bg-black/60 border border-emerald-950/60 border-l-2 border-l-emerald-500">
-                <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1 mb-1">
-                  <ArrowUpRight className="w-3.5 h-3.5" /> Total Receitas (Entradas)
-                </span>
-                <div className="text-lg sm:text-xl font-bold text-emerald-400 font-mono tabular-nums">
-                  +R$ {totalIncome.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              {/* Income and Expense Side-by-Side on Mobile */}
+              <div className="grid grid-cols-2 gap-2 sm:contents">
+                {/* Income */}
+                <div className="p-2.5 sm:p-4 rounded-2xl bg-black/60 border border-emerald-950/60 border-l-2 border-l-emerald-500">
+                  <span className="text-[10px] sm:text-xs text-emerald-400 font-semibold flex items-center gap-1 mb-0.5 truncate">
+                    <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" /> Receitas
+                  </span>
+                  <div className="text-sm sm:text-xl font-bold text-emerald-400 font-mono tabular-nums truncate">
+                    +R$ {totalIncome.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  </div>
+                  <span className="text-[9.5px] sm:text-[10px] text-slate-400 mt-0.5 block truncate">Entradas</span>
                 </div>
-                <span className="text-[10px] text-slate-400 mt-1 block">Entradas cadastradas</span>
-              </div>
 
-              {/* Expense */}
-              <div className="p-4 rounded-2xl bg-black/60 border border-rose-950/60 border-l-2 border-l-rose-500">
-                <span className="text-xs text-rose-400 font-semibold flex items-center gap-1 mb-1">
-                  <ArrowDownRight className="w-3.5 h-3.5" /> Total Despesas (Saídas)
-                </span>
-                <div className="text-lg sm:text-xl font-bold text-rose-400 font-mono tabular-nums">
-                  -R$ {totalExpense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                {/* Expense */}
+                <div className="p-2.5 sm:p-4 rounded-2xl bg-black/60 border border-rose-950/60 border-l-2 border-l-rose-500">
+                  <span className="text-[10px] sm:text-xs text-rose-400 font-semibold flex items-center gap-1 mb-0.5 truncate">
+                    <ArrowDownRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" /> Despesas
+                  </span>
+                  <div className="text-sm sm:text-xl font-bold text-rose-400 font-mono tabular-nums truncate">
+                    -R$ {totalExpense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  </div>
+                  <span className="text-[9.5px] sm:text-[10px] text-slate-400 mt-0.5 block truncate">Gastos</span>
                 </div>
-                <span className="text-[10px] text-slate-400 mt-1 block">Gastos lançados</span>
               </div>
 
             </div>
 
             {/* Live Transactions List with Clear Distinction */}
             <div>
-              <div className="flex items-center justify-between mb-3 text-xs">
-                <h4 className="font-bold text-white uppercase tracking-wider">Lançamentos Recentes</h4>
-                <span className="text-slate-400 font-mono">{transactions.length} registros</span>
+              <div className="flex items-center justify-between mb-2 sm:mb-3 text-xs">
+                <h4 className="font-bold text-white uppercase tracking-wider text-[11px] sm:text-xs">Lançamentos Recentes</h4>
+                <span className="text-slate-400 font-mono text-[10px] sm:text-xs">{transactions.length} registros</span>
               </div>
 
-              <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+              <div className="space-y-1.5 sm:space-y-2 max-h-56 sm:max-h-64 overflow-y-auto pr-1">
                 {transactions.map((tx) => (
                   <div
                     key={tx.id}
-                    className="flex items-center justify-between p-3 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-blue-800/60 transition-colors"
+                    className="flex items-center justify-between p-2 sm:p-3 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-blue-800/60 transition-colors gap-2"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                      <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
                         tx.type === 'income' 
                           ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/40' 
                           : 'bg-rose-950 text-rose-400 border border-rose-500/40'
                       }`}>
-                        {tx.type === 'income' ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                        {tx.type === 'income' ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <p className="text-xs sm:text-sm font-semibold text-white">{tx.description}</p>
-                          <span className={`text-[9px] font-mono uppercase font-bold px-1.5 py-0.5 rounded ${
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <p className="text-xs sm:text-sm font-semibold text-white truncate">{tx.description}</p>
+                          <span className={`text-[8.5px] sm:text-[9px] font-mono uppercase font-bold px-1.5 py-0.5 rounded shrink-0 ${
                             tx.type === 'income' 
                               ? 'bg-emerald-500/20 text-emerald-400' 
                               : 'bg-rose-500/20 text-rose-400'
@@ -385,11 +463,11 @@ export const InteractiveSimulatorSection: React.FC = () => {
                             {tx.type === 'income' ? 'Receita' : 'Despesa'}
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-400 font-medium">{tx.category} · {tx.time}</p>
+                        <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium truncate">{tx.category} · {tx.time}</p>
                       </div>
                     </div>
 
-                    <div className={`text-xs sm:text-sm font-mono font-bold tabular-nums ${
+                    <div className={`text-xs sm:text-sm font-mono font-bold tabular-nums shrink-0 ${
                       tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'
                     }`}>
                       {tx.type === 'income' ? '+' : '-'} R$ {tx.amount.toFixed(2)}
@@ -400,12 +478,12 @@ export const InteractiveSimulatorSection: React.FC = () => {
             </div>
 
             {/* Sincronização alert at bottom of dashboard */}
-            <div className="mt-5 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-              <span className="flex items-center gap-1.5 text-amber-400">
-                <Sparkles className="w-3.5 h-3.5" />
-                Sem planilhas. Registre despesas e receitas pelo WhatsApp.
+            <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+              <span className="flex items-center gap-1 text-amber-400 text-[10px] sm:text-xs">
+                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                Registros refletidos instantaneamente.
               </span>
-              <span className="font-mono text-slate-500">Backup na nuvem</span>
+              <span className="font-mono text-slate-500 text-[10px]">Nuvem Segura</span>
             </div>
 
           </div>
@@ -416,3 +494,4 @@ export const InteractiveSimulatorSection: React.FC = () => {
     </section>
   );
 };
+

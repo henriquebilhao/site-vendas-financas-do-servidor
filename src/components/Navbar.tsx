@@ -20,14 +20,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCheckout }) => {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-black/90 backdrop-blur-md border-b border-slate-900/90 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-8">
-        {/* Brand Zone: 1 clean text/brand element with LogoFS */}
-        <a href="#" className="flex items-center gap-3 group whitespace-nowrap shrink-0">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-900 via-slate-950 to-blue-950 p-1 border border-amber-400/30 flex items-center justify-center shadow-lg shadow-blue-950/80 group-hover:border-amber-400/60 transition-colors">
-            <LogoFS size={34} />
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4 sm:gap-8">
+        {/* Brand Zone */}
+        <a href="#" className="flex items-center gap-2 sm:gap-3 group whitespace-nowrap shrink-0">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-blue-900 via-slate-950 to-blue-950 p-1 border border-amber-400/30 flex items-center justify-center shadow-lg shadow-blue-950/80 group-hover:border-amber-400/60 transition-colors">
+            <LogoFS size={28} />
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-bold tracking-tight text-white flex items-center">
+            <span className="text-base sm:text-xl font-bold tracking-tight text-white flex items-center">
               Finanças do Servidor
             </span>
           </div>
@@ -63,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCheckout }) => {
           </a>
         </nav>
 
-        {/* Primary Action CTA Zone -> Scroll to Pricing (#planos) */}
+        {/* Desktop CTA */}
         <div className="hidden sm:flex items-center gap-4 shrink-0">
           <a
             href="#planos"
@@ -76,14 +76,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCheckout }) => {
           </a>
         </div>
 
-        {/* Mobile menu trigger */}
-        <div className="flex md:hidden">
+        {/* Mobile quick CTA and menu trigger */}
+        <div className="flex md:hidden items-center gap-2">
+          <a
+            href="#planos"
+            className="sm:hidden px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-950 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-lg shadow-md active:scale-95 transition-all"
+          >
+            Planos
+          </a>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 focus:outline-none"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>

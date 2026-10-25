@@ -187,7 +187,7 @@ export const ProblemChartSection: React.FC = () => {
                   <strong className="text-slate-200">2. A rotina exaustiva no órgão:</strong> Entre processos, audiências, plantões ou aulas, ninguém tem ânimo para abrir planilha de Excel à noite.
                 </p>
                 <p className="text-xs md:text-sm text-slate-400">
-                  <strong className="text-slate-200">3. Medo de expor dados do SouGov ou banco:</strong> Softwares convencionais pedem acessos bancários complexos que deixam qualquer servidor receoso.
+                  <strong className="text-slate-200">3. Medo de expor dados do Gov.br ou banco:</strong> Softwares convencionais pedem acessos bancários complexos que deixam qualquer servidor receoso.
                 </p>
               </div>
 

@@ -52,7 +52,7 @@ export const ThreePillarsSection: React.FC<ThreePillarsSectionProps> = ({ onOpen
 
               {/* Title */}
               <h3 className="text-base sm:text-lg font-bold text-white mb-2 sm:mb-3 tracking-tight">
-                Mande por Texto ou Áudio
+                Mande por Texto, Áudio ou Foto
               </h3>
 
               {/* Description */}

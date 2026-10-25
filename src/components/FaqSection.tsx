@@ -6,8 +6,8 @@ export const FaqSection: React.FC = () => {
 
   const faqs = [
     {
-      question: 'Preciso fornecer senhas do SouGov, Siape, Portal do Servidor ou banco?',
-      answer: 'De jeito nenhum! Essa é uma das nossas maiores prioridades de segurança. Você NUNCA precisará fornecer senhas do SouGov, Portal do Servidor, Siape, nem senhas de bancos ou consignatárias. O assistente funciona exclusivamente com base nas mensagens de texto, comprovantes ou áudios que você enviar voluntariamente no WhatsApp.'
+      question: 'Preciso fornecer senhas do Gov.br, Siape, Portal do Servidor ou banco?',
+      answer: 'De jeito nenhum! Essa é uma das nossas maiores prioridades de segurança. Você NUNCA precisará fornecer senhas do Gov.br, Portal do Servidor, Siape, nem senhas de bancos ou consignatárias. O assistente funciona exclusivamente com base nas mensagens de texto, comprovantes ou áudios que você enviar voluntariamente no WhatsApp.'
     },
     {
       question: 'O assistente funciona para qualquer carreira ou perfil?',

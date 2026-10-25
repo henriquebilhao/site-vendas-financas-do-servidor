@@ -50,25 +50,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenCheckout }) => {
           {/* Left Column: Copy & Value Proposition */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
 
-            {/* Badges strip - wraps gracefully on mobile so all badges are visible */}
-            <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-5 sm:mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium text-slate-200 bg-slate-900/90 border border-blue-900/50 shadow-sm">
-                <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>Gestão Fácil de Gastos & Receitas</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium text-slate-200 bg-slate-900/90 border border-blue-900/50 shadow-sm">
-                <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>Registro por Texto, Áudio & Foto de Notas</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium text-slate-200 bg-slate-900/90 border border-blue-900/50 shadow-sm">
-                <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>Dashboard Integrado em Tempo Real</span>
-              </div>
-            </div>
+
 
             {/* Main Punchy Headline */}
             <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight uppercase leading-[1.15] mb-4 sm:mb-5 text-balance">
-              Controlar seu dinheiro pelo WhatsApp é a Maneira Mais Eficiente para o servidor prosperar
+              Transforme o seu WhatsApp no Assistente Financeiro do Servidor
             </h1>
 
             {/* Subheadline */}
@@ -93,7 +79,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenCheckout }) => {
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-slate-400">
               <div className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>Sem senhas do SouGov ou banco</span>
+                <span>Sem senhas do Gov.br ou banco</span>
               </div>
               <span className="hidden sm:inline text-slate-700">·</span>
               <div className="flex items-center gap-1.5">

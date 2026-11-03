@@ -34,9 +34,10 @@ const DORES = [
 ];
 
 export const ForWho: React.FC = () => (
-  <section className="relative py-20 sm:py-28">
+  <section className="relative bg-white py-20 sm:py-28">
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
+        light
         title={<>Quem protege todo mundo também merece ter o próprio dinheiro protegido.</>}
         sub="Um assistente com uma única missão: fazer o seu salário render. Sem planilha e sem complicação."
       />
@@ -44,12 +45,12 @@ export const ForWho: React.FC = () => (
       <div className="grid gap-5 md:grid-cols-3">
         {DORES.map(({ icon: I, t, d }, i) => (
           <Reveal key={t} delay={i * 0.1}>
-            <div className="card h-full p-7">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400">
+            <div className="card-light h-full p-7">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-navy-900 text-amber-400">
                 <I className="h-6 w-6" />
               </div>
-              <h3 className="font-display text-xl font-bold text-white">{t}</h3>
-              <p className="mt-2 leading-relaxed text-slate-400">{d}</p>
+              <h3 className="font-display text-xl font-bold text-navy-900">{t}</h3>
+              <p className="mt-2 leading-relaxed text-slate-600">{d}</p>
             </div>
           </Reveal>
         ))}
@@ -134,7 +135,7 @@ const PLANTAO = [
 export const ShiftTimeline: React.FC = () => {
   const [active, setActive] = useState(0);
   return (
-    <section id="plantao" className="relative border-t border-white/5 bg-[#060c1d] py-20 sm:py-28">
+    <section id="plantao" className="relative bg-navy-800 py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionTitle
           eyebrow="Como funciona"
@@ -155,14 +156,14 @@ export const ShiftTimeline: React.FC = () => {
               >
                 <div
                   className={`relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border text-[12px] font-bold transition-all duration-500 ${
-                    active === i ? 'border-amber-400 bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/30' : 'border-white/15 bg-[#0b1430] text-slate-400'
+                    active === i ? 'border-amber-400 bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/30' : 'border-white/15 bg-navy-900 text-slate-300'
                   }`}
                 >
                   {s.h}
                 </div>
                 <div className={`transition-opacity duration-500 ${active === i ? 'opacity-100' : 'lg:opacity-40'}`}>
                   <h3 className="font-display text-2xl font-bold text-white">{s.t}</h3>
-                  <p className="mt-2 max-w-md leading-relaxed text-slate-400">{s.d}</p>
+                  <p className="mt-2 max-w-md leading-relaxed text-slate-300">{s.d}</p>
                   {/* no celular, o chat aparece junto do passo */}
                   <div className="wa-wallpaper mt-5 space-y-2 rounded-2xl p-3 lg:hidden">{s.chat}</div>
                 </div>
@@ -221,7 +222,7 @@ const CATS = [
 ] as const;
 
 export const DashboardShowcase: React.FC = () => (
-  <section id="painel" className="relative overflow-hidden py-20 sm:py-28">
+  <section id="painel" className="relative overflow-hidden bg-navy-900 py-20 sm:py-28">
     <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-700/15 blur-[140px]" />
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
@@ -316,21 +317,21 @@ export const DashboardShowcase: React.FC = () => (
 
 /* ---------- Dependente / casal ---------- */
 export const Together: React.FC = () => (
-  <section className="border-t border-white/5 bg-[#060c1d] py-20 sm:py-28">
+  <section className="bg-white py-20 sm:py-28">
     <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
       <Reveal>
-        <div className="mb-4"><span className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300">Família</span></div>
-        <h2 className="font-display text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+        <div className="mb-4"><span className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-700">Família</span></div>
+        <h2 className="font-display text-3xl font-bold leading-[1.1] tracking-tight text-navy-900 sm:text-4xl md:text-5xl">
           Divida o controle com quem divide as contas com você.
         </h2>
-        <p className="mt-5 text-lg leading-relaxed text-slate-400">
+        <p className="mt-5 text-lg leading-relaxed text-slate-600">
           Adicione um dependente: cada um usa o próprio WhatsApp, e os gastos dos dois aparecem juntos no mesmo painel.
           Enquanto você está de plantão, a casa continua organizada.
         </p>
-        <ul className="mt-6 space-y-3 text-slate-300">
+        <ul className="mt-6 space-y-3 text-slate-700">
           {['Cada pessoa registra pelo próprio WhatsApp', 'Um painel só com as contas da casa', 'Já incluso no Plano Anual'].map((t) => (
             <li key={t} className="flex items-center gap-3">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">✓</span>
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span>
               {t}
             </li>
           ))}
@@ -338,26 +339,26 @@ export const Together: React.FC = () => (
       </Reveal>
 
       <Reveal delay={0.15}>
-        <div className="card mx-auto max-w-md p-6">
-          <p className="text-[13px] font-semibold text-white">Pessoas com acesso</p>
+        <div className="card-light mx-auto max-w-md p-6">
+          <p className="text-[13px] font-semibold text-navy-900">Pessoas com acesso</p>
           <div className="mt-4 space-y-3">
             {[
               ['V', 'Você', 'Titular', 'R$ 3.410,20 em gastos'],
               ['C', 'Camila', 'Dependente', 'R$ 2.785,10 em gastos'],
             ].map(([a, n, r, g]) => (
-              <div key={n} className="flex items-center gap-3 rounded-2xl bg-white/[0.04] p-3">
+              <div key={n} className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-900 font-bold text-white">{a}</div>
                 <div className="flex-1">
-                  <p className="text-[14px] font-semibold text-white">{n}</p>
+                  <p className="text-[14px] font-semibold text-navy-900">{n}</p>
                   <p className="text-[12px] text-slate-500">{g}</p>
                 </div>
-                <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${r === 'Titular' ? 'bg-amber-400/15 text-amber-300' : 'bg-blue-500/15 text-blue-300'}`}>{r}</span>
+                <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${r === 'Titular' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}`}>{r}</span>
               </div>
             ))}
           </div>
-          <div className="mt-4 flex items-center justify-between rounded-2xl border border-dashed border-white/10 p-3 text-[13px] text-slate-400">
+          <div className="mt-4 flex items-center justify-between rounded-2xl border border-dashed border-slate-300 p-3 text-[13px] text-slate-600">
             <span className="flex items-center gap-2"><UserPlus className="h-4 w-4" /> Total da casa no mês</span>
-            <span className="font-display font-bold text-white">R$ 6.195,30</span>
+            <span className="font-display font-bold text-navy-900">R$ 6.195,30</span>
           </div>
           <div className="wa-wallpaper mt-4 rounded-2xl p-3">
             <Bubble from="bot" time="20:15">
@@ -379,7 +380,7 @@ const SEG = [
 ];
 
 export const Security: React.FC = () => (
-  <section id="seguranca" className="py-20 sm:py-28">
+  <section id="seguranca" className="bg-navy-800 py-20 sm:py-28">
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
         eyebrow="Segurança"
@@ -392,7 +393,7 @@ export const Security: React.FC = () => (
             <div className="card h-full p-6">
               <I className="h-7 w-7 text-amber-400" />
               <h3 className="font-display mt-4 text-lg font-bold text-white">{t}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-slate-400">{d}</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-slate-300">{d}</p>
             </div>
           </Reveal>
         ))}
@@ -400,4 +401,3 @@ export const Security: React.FC = () => (
     </div>
   </section>
 );
-

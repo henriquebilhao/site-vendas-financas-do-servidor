@@ -27,7 +27,7 @@ const NAV = [
 export const Nav: React.FC = () => {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-40 border-b border-white/5 bg-[#050a18]/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/5 bg-navy-950/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6">
         <a href="#" className="flex shrink-0 items-center gap-2.5">
           <LogoFS size={34} />
@@ -51,7 +51,7 @@ export const Nav: React.FC = () => {
         </button>
       </div>
       {open && (
-        <div className="space-y-1 border-t border-white/5 bg-[#050a18] px-4 pb-5 pt-2 xl:hidden">
+        <div className="space-y-1 border-t border-white/5 bg-navy-950 px-4 pb-5 pt-2 xl:hidden">
           {NAV.map(([l, h]) => (
             <a key={h} href={h} onClick={() => setOpen(false)} className="block rounded-lg px-2 py-2.5 text-[15px] text-slate-200 hover:bg-white/5">
               {l}
@@ -168,7 +168,7 @@ const HeroChat: React.FC = () => {
 
 /* ---------- Hero ---------- */
 export const Hero: React.FC = () => (
-  <section className="relative overflow-hidden pb-20 pt-12 sm:pt-16 lg:pb-28">
+  <section className="relative overflow-hidden bg-gradient-to-b from-navy-900 via-navy-800 to-navy-900 pb-20 pt-12 sm:pt-16 lg:pb-28">
     <div className="hero-grid pointer-events-none absolute inset-0" />
     <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-blue-700/25 blur-[140px]" />
     <div className="pointer-events-none absolute right-0 top-1/3 h-[380px] w-[380px] rounded-full bg-amber-500/10 blur-[120px]" />
@@ -257,9 +257,9 @@ const TRUST = [
 ];
 
 export const TrustMarquee: React.FC = () => (
-  <div className="relative overflow-hidden border-y border-white/5 bg-[#060c1d] py-5">
-    <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[#060c1d] to-transparent" />
-    <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[#060c1d] to-transparent" />
+  <div className="relative overflow-hidden border-y border-white/10 bg-navy-950 py-5">
+    <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-navy-950 to-transparent" />
+    <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-navy-950 to-transparent" />
     <div className="marquee flex w-max gap-12">
       {[...TRUST, ...TRUST].map(([a, b], i) => (
         <div key={i} className="flex shrink-0 items-center gap-3">

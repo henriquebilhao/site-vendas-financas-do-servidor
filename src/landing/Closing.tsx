@@ -52,7 +52,7 @@ const FAQ = [
 export const Faq: React.FC = () => {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="py-20 sm:py-28">
+    <section id="faq" className="bg-navy-900 py-20 sm:py-28">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <SectionTitle eyebrow="Dúvidas" title="Perguntas frequentes." sub="Não achou a sua? Fale com o suporte humano pelo WhatsApp." />
         <div className="divide-y divide-white/10 border-y border-white/10">
@@ -79,7 +79,7 @@ export const Faq: React.FC = () => {
                       transition={{ duration: 0.25 }}
                       className="overflow-hidden"
                     >
-                      <p className="pb-6 pr-12 leading-relaxed text-slate-400">{f.a}</p>
+                      <p className="pb-6 pr-12 leading-relaxed text-slate-300">{f.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -94,9 +94,9 @@ export const Faq: React.FC = () => {
 
 /* ---------- Chamada final ---------- */
 export const FinalCta: React.FC = () => (
-  <section className="px-4 pb-24 sm:px-6">
+  <section className="bg-white px-4 py-20 sm:px-6 sm:py-24">
     <Reveal>
-      <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[32px] border border-amber-400/30 bg-gradient-to-br from-[#13204a] via-[#0a1530] to-[#050a18] px-6 py-14 text-center sm:px-12 sm:py-20">
+      <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[32px] border border-amber-400/30 bg-gradient-to-br from-navy-700 via-navy-800 to-navy-900 px-6 py-14 text-center sm:px-12 sm:py-20">
         <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[600px] -translate-x-1/2 rounded-full bg-amber-400/20 blur-[100px]" />
         <div className="relative">
           <LogoFS size={56} className="mx-auto" />
@@ -122,7 +122,7 @@ export const FinalCta: React.FC = () => (
 
 /* ---------- Rodapé ---------- */
 export const Footer: React.FC = () => (
-  <footer className="border-t border-white/5 bg-[#030712] pb-28 pt-14 text-[13px] text-slate-500 lg:pb-14">
+  <footer className="border-t border-white/5 bg-navy-950 pb-28 pt-14 text-[13px] text-slate-500 lg:pb-14">
     <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
       <div>
         <div className="flex items-center gap-2.5">
@@ -181,7 +181,7 @@ export const StickyMobileCta: React.FC = () => {
           initial={{ y: 100 }}
           animate={{ y: 0 }}
           exit={{ y: 100 }}
-          className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#050a18]/95 px-4 py-3 backdrop-blur-xl lg:hidden"
+          className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-navy-950/95 px-4 py-3 backdrop-blur-xl lg:hidden"
         >
           <div className="flex items-center gap-3">
             <div className="flex-1">

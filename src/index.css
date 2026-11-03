@@ -3,6 +3,15 @@
 @theme {
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+
+  /* Paleta azul-marinho (mais clara que o preto anterior) */
+  --color-navy-950: #0a1838;
+  --color-navy-900: #0d2050;
+  --color-navy-800: #13295e;
+  --color-navy-700: #1a3570;
+  --color-navy-600: #234186;
+  /* Fundo claro levemente azulado */
+  --color-mist: #f2f5fb;
 }
 
 @layer base {
@@ -15,7 +24,7 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 80px;
-    background-color: #050a18;
+    background-color: #0d2050;
     color: #f8fafc;
   }
 }
@@ -63,11 +72,41 @@
 .card {
   border-radius: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(19, 32, 74, 0.55) 0%, rgba(10, 18, 38, 0.7) 100%);
+  background: linear-gradient(180deg, rgba(35, 65, 134, 0.45) 0%, rgba(19, 41, 94, 0.6) 100%);
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
 .card:hover {
   border-color: rgba(251, 191, 36, 0.35);
+}
+
+/* Cartão para dobras claras */
+.card-light {
+  border-radius: 1.5rem;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(13, 32, 80, 0.04), 0 12px 32px -16px rgba(13, 32, 80, 0.18);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.card-light:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 1px 2px rgba(13, 32, 80, 0.04), 0 18px 40px -16px rgba(13, 32, 80, 0.25);
+}
+
+/* Botão secundário em fundo claro */
+.btn-ghost-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #0d2050;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.btn-ghost-light:hover {
+  border-color: #f59e0b;
+  background: #fffbeb;
 }
 
 /* Fundo quadriculado do hero */
@@ -164,7 +203,7 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #050a18;
+  background: #0d2050;
 }
 ::-webkit-scrollbar-thumb {
   background: #1e293b;

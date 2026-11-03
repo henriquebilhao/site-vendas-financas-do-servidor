@@ -161,10 +161,10 @@ export const LiveDemo: React.FC = () => {
   const max = cats[0]?.[1] || 1;
 
   return (
-    <section id="teste" className="relative overflow-hidden border-t border-white/5 py-20 sm:py-28">
-      <div className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-blue-700/20 blur-[140px]" />
+    <section id="teste" className="relative overflow-hidden bg-mist py-20 sm:py-28">
+      <div className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-blue-200/50 blur-[140px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionTitle
+        <SectionTitle light
           eyebrow="Teste agora, sem cadastro"
           title="Se você sabe mandar mensagem no WhatsApp, já sabe usar."
           sub="Toque em qualquer pedido e veja a resposta e o painel atualizarem na hora, do jeito que acontece de verdade."
@@ -176,12 +176,12 @@ export const LiveDemo: React.FC = () => {
               key={a.id}
               onClick={() => run(a)}
               disabled={busy}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-[14px] font-medium text-slate-200 transition hover:border-amber-400/60 hover:bg-amber-400/10 hover:text-white active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-medium text-navy-900 shadow-sm transition hover:border-amber-400 hover:bg-amber-50 active:scale-95 disabled:opacity-50"
             >
-              <a.icon className="h-4 w-4 text-amber-400" /> {a.label}
+              <a.icon className="h-4 w-4 text-amber-500" /> {a.label}
             </button>
           ))}
-          <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-full px-3 py-2.5 text-[13px] text-slate-500 hover:text-slate-300">
+          <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-full px-3 py-2.5 text-[13px] text-slate-500 hover:text-navy-900">
             <RotateCcw className="h-3.5 w-3.5" /> Recomeçar
           </button>
         </div>
@@ -200,25 +200,25 @@ export const LiveDemo: React.FC = () => {
           </PhoneFrame>
 
           {/* mini painel sincronizado */}
-          <div className="card p-5 sm:p-7">
+          <div className="card-light p-5 sm:p-7">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-400">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" /> Atualiza ao vivo
+                <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" /> Atualiza ao vivo
                 </p>
-                <p className="font-display mt-1 text-2xl font-bold text-white">Seu painel</p>
+                <p className="font-display mt-1 text-2xl font-bold text-navy-900">Seu painel</p>
               </div>
-              <span className="rounded-full bg-white/5 px-3 py-1 text-[12px] text-slate-400">outubro</span>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-[12px] text-slate-600">outubro</span>
             </div>
 
             <div className="grid grid-cols-3 gap-3">
               {[
-                ['Entradas', t.e, 'text-emerald-400'],
-                ['Saídas', t.s, 'text-rose-400'],
-                ['Saldo livre', t.saldo, 'text-amber-300'],
+                ['Entradas', t.e, 'text-emerald-600'],
+                ['Saídas', t.s, 'text-rose-600'],
+                ['Saldo livre', t.saldo, 'text-amber-600'],
               ].map(([l, v, c]) => (
-                <div key={l as string} className="rounded-2xl bg-white/[0.04] p-3 sm:p-4">
-                  <p className="text-[11px] text-slate-400 sm:text-[12px]">{l}</p>
+                <div key={l as string} className="rounded-2xl bg-slate-50 p-3 sm:p-4">
+                  <p className="text-[11px] text-slate-500 sm:text-[12px]">{l}</p>
                   <motion.p
                     key={v as number}
                     initial={{ opacity: 0.4, y: -4 }}
@@ -231,17 +231,17 @@ export const LiveDemo: React.FC = () => {
               ))}
             </div>
 
-            <p className="mb-3 mt-6 text-[13px] font-semibold text-white">Gastos por categoria</p>
+            <p className="mb-3 mt-6 text-[13px] font-semibold text-navy-900">Gastos por categoria</p>
             <div className="space-y-3">
               {cats.map(([c, v]) => (
                 <motion.div layout key={c}>
                   <div className="mb-1 flex justify-between text-[13px]">
-                    <span className={flash === c ? 'font-semibold text-amber-300' : 'text-slate-300'}>{c}</span>
-                    <span className="tabular-nums text-slate-400">R$ {brl(v)}</span>
+                    <span className={flash === c ? 'font-semibold text-amber-600' : 'text-slate-700'}>{c}</span>
+                    <span className="tabular-nums text-slate-500">R$ {brl(v)}</span>
                   </div>
-                  <div className="h-2.5 overflow-hidden rounded-full bg-white/5">
+                  <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">
                     <motion.div
-                      className={`h-full rounded-full ${flash === c ? 'bg-amber-400' : 'bg-blue-500'}`}
+                      className={`h-full rounded-full ${flash === c ? 'bg-amber-400' : 'bg-navy-600'}`}
                       animate={{ width: `${(v / max) * 100}%` }}
                       transition={{ duration: 0.6 }}
                     />

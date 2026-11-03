@@ -20,24 +20,34 @@ export const Reveal: React.FC<{ children: React.ReactNode; delay?: number; class
   </motion.div>
 );
 
-export const Eyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300">
+export const Eyebrow: React.FC<{ children: React.ReactNode; light?: boolean }> = ({ children, light }) => (
+  <span
+    className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] ${
+      light ? 'border-amber-300 bg-amber-50 text-amber-700' : 'border-amber-400/30 bg-amber-400/10 text-amber-300'
+    }`}
+  >
     {children}
   </span>
 );
 
-export const SectionTitle: React.FC<{ eyebrow?: string; title: React.ReactNode; sub?: React.ReactNode; center?: boolean }> = ({
-  eyebrow,
-  title,
-  sub,
-  center = true,
-}) => (
+/* light = dobra de fundo claro (texto escuro) */
+export const SectionTitle: React.FC<{
+  eyebrow?: string;
+  title: React.ReactNode;
+  sub?: React.ReactNode;
+  center?: boolean;
+  light?: boolean;
+}> = ({ eyebrow, title, sub, center = true, light }) => (
   <Reveal className={`${center ? 'mx-auto text-center' : ''} mb-10 max-w-3xl sm:mb-14`}>
-    {eyebrow && <div className="mb-4"><Eyebrow>{eyebrow}</Eyebrow></div>}
-    <h2 className="font-display text-3xl font-bold leading-[1.1] tracking-tight text-white text-balance sm:text-4xl md:text-5xl">
+    {eyebrow && <div className="mb-4"><Eyebrow light={light}>{eyebrow}</Eyebrow></div>}
+    <h2
+      className={`font-display text-3xl font-bold leading-[1.1] tracking-tight text-balance sm:text-4xl md:text-5xl ${
+        light ? 'text-navy-900' : 'text-white'
+      }`}
+    >
       {title}
     </h2>
-    {sub && <p className="mt-4 text-base leading-relaxed text-slate-400 sm:text-lg">{sub}</p>}
+    {sub && <p className={`mt-4 text-base leading-relaxed sm:text-lg ${light ? 'text-slate-600' : 'text-slate-300'}`}>{sub}</p>}
   </Reveal>
 );
 

@@ -34,27 +34,33 @@ const DORES = [
 ];
 
 export const ForWho: React.FC = () => (
-  <section className="relative bg-white py-20 sm:py-28">
-    <div className="mx-auto max-w-7xl px-4 sm:px-6">
+  <section id="dores" className="relative overflow-hidden bg-navy-800 py-20 sm:py-28">
+    <div className="pointer-events-none absolute -left-40 bottom-0 h-[420px] w-[420px] rounded-full bg-rose-500/10 blur-[140px]" />
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
-        light
+        eyebrow="Você se identifica?"
         title={<>Quem protege todo mundo também merece ter o próprio dinheiro protegido.</>}
-        sub="Um assistente com uma única missão: fazer o seu salário render. Sem planilha e sem complicação."
+        sub="Se alguma dessas situações parece familiar, você não está sozinho. E não é falta de esforço: é falta da ferramenta certa."
       />
 
       <div className="grid gap-5 md:grid-cols-3">
         {DORES.map(({ icon: I, t, d }, i) => (
           <Reveal key={t} delay={i * 0.1}>
-            <div className="card-light h-full p-7">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-navy-900 text-amber-400">
+            <motion.div whileHover={{ y: -6 }} className="card h-full p-7">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-rose-500/15 text-rose-300">
                 <I className="h-6 w-6" />
               </div>
-              <h3 className="font-display text-xl font-bold text-navy-900">{t}</h3>
-              <p className="mt-2 leading-relaxed text-slate-600">{d}</p>
-            </div>
+              <h3 className="font-display text-xl font-bold text-white">{t}</h3>
+              <p className="mt-2 leading-relaxed text-slate-300">{d}</p>
+            </motion.div>
           </Reveal>
         ))}
       </div>
+      <Reveal className="mt-12 text-center">
+        <p className="font-display text-xl font-bold text-white sm:text-2xl">
+          A boa notícia: dá para resolver com <span className="text-amber-300">uma mensagem</span>. 👇
+        </p>
+      </Reveal>
     </div>
   </section>
 );

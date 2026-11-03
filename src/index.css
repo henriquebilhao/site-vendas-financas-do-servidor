@@ -140,6 +140,22 @@
 .marquee {
   animation: marquee 38s linear infinite;
 }
+.marquee-reverse {
+  animation: marquee 42s linear infinite reverse;
+}
+
+/* Anéis girando (autoridade) */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin 40s linear infinite;
+}
+.spin-slower {
+  animation: spin 70s linear infinite reverse;
+}
 
 /* Onda do áudio */
 @keyframes wave {
@@ -188,6 +204,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .marquee,
+  .marquee-reverse,
+  .spin-slow,
+  .spin-slower,
   .wave-bar,
   .scan-line,
   .float-slow,

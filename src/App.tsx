@@ -1,7 +1,8 @@
 import React from 'react';
 import { MotionConfig } from 'motion/react';
 import { Hero, Nav, TopBar, TrustMarquee } from './landing/Hero';
-import { DashboardShowcase, ForWho, Security, ShiftTimeline, Together } from './landing/Sections';
+import { DashboardShowcase, ForWho, ShiftTimeline, Together } from './landing/Sections';
+import { Authority, Deliverables, ForWhom, SocialProof, VideoSection } from './landing/Story';
 import { LiveDemo } from './landing/LiveDemo';
 import { Pricing } from './landing/Pricing';
 import { Faq, FinalCta, Footer, StickyMobileCta } from './landing/Closing';
@@ -14,15 +15,36 @@ export default function App() {
         <TopBar />
         <Nav />
         <main>
+          {/* 1. Promessa principal */}
           <Hero />
           <TrustMarquee />
+
+          {/* 2. Prova social */}
+          <SocialProof />
+
+          {/* 3. Dores do público */}
           <ForWho />
+
+          {/* 4. Resolução: funcionalidades */}
+          <VideoSection />
           <ShiftTimeline />
           <LiveDemo />
           <DashboardShowcase />
           <Together />
-          <Security />
+
+          {/* 5. Entregáveis e bônus */}
+          <Deliverables />
+
+          {/* 6. Para quem é */}
+          <ForWhom />
+
+          {/* 7. Autoridade */}
+          <Authority />
+
+          {/* 8. Planos */}
           <Pricing />
+
+          {/* 9. Dúvidas */}
           <Faq />
           <FinalCta />
         </main>

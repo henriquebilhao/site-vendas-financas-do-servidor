@@ -16,10 +16,11 @@ export const TopBar: React.FC = () => (
 
 /* ---------- Navegação ---------- */
 const NAV = [
-  ['Como funciona', '#plantao'],
+  ['Depoimentos', '#depoimentos'],
+  ['Como funciona', '#como-funciona'],
   ['Teste agora', '#teste'],
-  ['Painel', '#painel'],
-  ['Segurança', '#seguranca'],
+  ['Bônus', '#bonus'],
+  ['Quem somos', '#quem-somos'],
   ['Planos', '#planos'],
   ['Dúvidas', '#faq'],
 ];

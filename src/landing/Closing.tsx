@@ -1,0 +1,199 @@
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ArrowRight, Lock, Minus, Plus, ShieldCheck } from 'lucide-react';
+import { LogoFS } from '../components/LogoFS';
+import { LINKS, PRECOS, brl } from './data';
+import { Reveal, SectionTitle } from './ui';
+
+/* ---------- FAQ ---------- */
+const FAQ = [
+  {
+    q: 'Preciso dar senha do banco, do Gov.br ou do Portal do Servidor?',
+    a: 'Não. Nunca vamos pedir senha de banco, Gov.br, Portal do Servidor, Siape ou consignatária. O assistente trabalha só com as mensagens, áudios e fotos que você mesmo envia no WhatsApp.',
+  },
+  {
+    q: 'Como eu acesso o meu painel?',
+    a: 'Os registros são feitos no WhatsApp que você já usa. Depois da assinatura, você recebe o aplicativo do Finanças do Servidor para instalar e acompanhar o seu painel completo.',
+  },
+  {
+    q: 'Funciona para quem trabalha em escala ou plantão?',
+    a: 'Foi pensado para isso. Você registra na hora, por áudio, enquanto está na viatura, no quartel ou saindo do plantão, sem precisar parar para digitar.',
+  },
+  {
+    q: 'Ele entende áudio com vários gastos de uma vez?',
+    a: 'Sim. Um áudio como "almoço 32 e 15 de estacionamento" vira dois lançamentos, cada um na sua categoria.',
+  },
+  {
+    q: 'Consigo separar salário, escala extra e diárias?',
+    a: 'Sim. Cada entrada é registrada como receita na categoria que você indicar, para você saber quanto vem do vencimento e quanto vem dos extras.',
+  },
+  {
+    q: 'Funciona só para segurança pública?',
+    a: 'Não. A linguagem e os exemplos são da segurança pública, mas o assistente atende qualquer servidor ou trabalhador que queira organizar o dinheiro pelo WhatsApp.',
+  },
+  {
+    q: 'Posso usar junto com minha esposa ou meu marido?',
+    a: 'Sim. Com a opção de dependente, cada um usa o próprio WhatsApp e tudo aparece no mesmo painel. No Plano Anual o dependente já vem incluso.',
+  },
+  {
+    q: 'Tem limite de mensagens ou de registros?',
+    a: 'Não. Os registros são ilimitados em todos os planos, inclusive no teste grátis.',
+  },
+  {
+    q: 'Como funciona a garantia de 7 dias?',
+    a: 'Depois da compra você tem 7 dias para usar. Se não gostar, peça o reembolso pela Hotmart ou pelo suporte e recebe 100% do valor de volta.',
+  },
+  {
+    q: 'Posso cancelar quando quiser?',
+    a: 'Sim. O plano mensal pode ser cancelado a qualquer momento, sem multa.',
+  },
+];
+
+export const Faq: React.FC = () => {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <section id="faq" className="py-20 sm:py-28">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <SectionTitle eyebrow="Dúvidas" title="Perguntas frequentes." sub="Não achou a sua? Fale com o suporte humano pelo WhatsApp." />
+        <div className="divide-y divide-white/10 border-y border-white/10">
+          {FAQ.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <div key={f.q}>
+                <button
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-center justify-between gap-6 py-5 text-left"
+                >
+                  <span className="text-[16px] font-semibold text-white sm:text-[17px]">{f.q}</span>
+                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition ${isOpen ? 'bg-amber-400 text-slate-950' : 'bg-white/5 text-slate-300'}`}>
+                    {isOpen ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                  </span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
+                    >
+                      <p className="pb-6 pr-12 leading-relaxed text-slate-400">{f.a}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------- Chamada final ---------- */
+export const FinalCta: React.FC = () => (
+  <section className="px-4 pb-24 sm:px-6">
+    <Reveal>
+      <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[32px] border border-amber-400/30 bg-gradient-to-br from-[#13204a] via-[#0a1530] to-[#050a18] px-6 py-14 text-center sm:px-12 sm:py-20">
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[600px] -translate-x-1/2 rounded-full bg-amber-400/20 blur-[100px]" />
+        <div className="relative">
+          <LogoFS size={56} className="mx-auto" />
+          <h2 className="font-display mx-auto mt-6 max-w-2xl text-3xl font-bold leading-tight text-white text-balance sm:text-5xl">
+            Você cuida da sociedade. Deixa que a gente ajuda a cuidar do seu salário.
+          </h2>
+          <p className="mx-auto mt-5 max-w-xl text-lg text-slate-300">
+            Comece hoje pelo WhatsApp. A partir de R$ {brl(PRECOS.anual / 12)} por mês no plano anual, com 7 dias de garantia.
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <a href="#planos" className="btn-gold rounded-full px-8 py-4 text-[16px]">
+              Escolher meu plano <ArrowRight className="h-5 w-5" />
+            </a>
+            <a href={LINKS.testeGratis} target="_blank" rel="noopener noreferrer" className="btn-ghost rounded-full px-8 py-4 text-[16px]">
+              Testar 3 dias grátis
+            </a>
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  </section>
+);
+
+/* ---------- Rodapé ---------- */
+export const Footer: React.FC = () => (
+  <footer className="border-t border-white/5 bg-[#030712] pb-28 pt-14 text-[13px] text-slate-500 lg:pb-14">
+    <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <div className="flex items-center gap-2.5">
+          <LogoFS size={34} />
+          <span className="font-display text-[17px] font-bold text-white">Finanças do Servidor</span>
+        </div>
+        <p className="mt-4 max-w-sm leading-relaxed text-slate-400">
+          O assistente financeiro no WhatsApp feito para quem trabalha na segurança pública e no serviço público.
+        </p>
+        <div className="mt-4 flex gap-4 text-slate-400">
+          <span className="flex items-center gap-1.5"><Lock className="h-4 w-4 text-amber-400" /> Dados protegidos</span>
+          <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-amber-400" /> Compra segura Hotmart</span>
+        </div>
+      </div>
+      <div>
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">Navegação</p>
+        <ul className="space-y-2">
+          {[['Como funciona', '#plantao'], ['Teste agora', '#teste'], ['Planos', '#planos'], ['Dúvidas', '#faq']].map(([l, h]) => (
+            <li key={h}><a href={h} className="hover:text-white">{l}</a></li>
+          ))}
+          <li><a href={LINKS.areaCliente} target="_blank" rel="noopener noreferrer" className="hover:text-white">Área do cliente</a></li>
+        </ul>
+      </div>
+      <div>
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">Aviso</p>
+        <p className="leading-relaxed">
+          Este produto não tem vínculo com a Meta / WhatsApp Inc. nem com órgãos públicos. Seus dados financeiros não são
+          vendidos nem compartilhados com terceiros.
+        </p>
+      </div>
+    </div>
+    <p className="mx-auto mt-10 max-w-7xl border-t border-white/5 px-4 pt-6 sm:px-6">
+      © {new Date().getFullYear()} Finanças do Servidor. Todos os direitos reservados.
+    </p>
+  </footer>
+);
+
+/* ---------- Barra fixa de compra no celular ---------- */
+export const StickyMobileCta: React.FC = () => {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      const planos = document.getElementById('planos');
+      const r = planos?.getBoundingClientRect();
+      const inPlanos = r ? r.top < window.innerHeight && r.bottom > 0 : false;
+      setShow(window.scrollY > 700 && !inPlanos);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          exit={{ y: 100 }}
+          className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#050a18]/95 px-4 py-3 backdrop-blur-xl lg:hidden"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <p className="text-[11px] text-slate-400">Plano anual</p>
+              <p className="font-display text-[15px] font-bold text-white">R$ {brl(PRECOS.anual / 12)}/mês</p>
+            </div>
+            <a href="#planos" className="btn-gold rounded-full px-5 py-3 text-[14px]">
+              Ver planos <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};

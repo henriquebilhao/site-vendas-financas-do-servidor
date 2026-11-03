@@ -63,7 +63,7 @@ export const ThreePillarsSection: React.FC<ThreePillarsSectionProps> = ({ onOpen
 
             <div className="mt-6 sm:mt-8 pt-3 sm:pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
               <span>Etapa 01</span>
-              <span className="text-amber-400 font-semibold">Áudio ou Texto</span>
+              <span className="text-amber-400 font-semibold">Áudio, Texto ou Foto</span>
             </div>
           </div>
 

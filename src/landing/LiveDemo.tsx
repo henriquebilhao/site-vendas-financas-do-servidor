@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { Camera, MessageSquareText, Mic, PiggyBank, FileBarChart, BadgeDollarSign, RotateCcw } from 'lucide-react';
 import { brl } from './data';
-import { AudioBubble, Bubble, DateChip, EncryptionNotice, PhoneFrame, PhotoBubble, Receipt, SectionTitle } from './ui';
+import { AudioBubble, Bubble, DateChip, EncryptionNotice, PhoneFrame, PhotoBubble, Receipt, SectionTitle, TypingBubble, agora } from './ui';
 
 type Tx = { cat: string; v: number; type: 'in' | 'out' };
 
@@ -17,9 +17,10 @@ type Action = {
   id: string;
   label: string;
   icon: React.ElementType;
-  ask: () => React.ReactNode;
+  /* o que o usuário manda: texto digitado, áudio gravado ou foto */
+  send: { kind: 'text'; text: string } | { kind: 'audio'; caption: string; duration: string } | { kind: 'photo' };
   txs?: Tx[];
-  reply: (state: Tx[]) => React.ReactNode;
+  reply: (state: Tx[], time: string) => React.ReactNode;
 };
 
 const totals = (txs: Tx[]) => {
@@ -39,55 +40,63 @@ const ACTIONS: Action[] = [
     id: 'texto',
     label: 'Anotar um gasto',
     icon: MessageSquareText,
-    ask: () => <Bubble from="me">gastei 45 no almoço</Bubble>,
+    send: { kind: 'text', text: 'gastei 45 no almoço' },
     txs: [{ cat: 'Alimentação', v: 45, type: 'out' }],
-    reply: () => (
-      <Bubble from="bot"><Receipt title="✅ Despesa registrada" rows={[['Valor', 'R$ 45,00'], ['Categoria', 'Alimentação']]} /></Bubble>
+    reply: (_, time) => (
+      <Bubble from="bot" time={time}>
+        <Receipt title="✅ Despesa registrada!" rows={[['💸 Valor', 'R$ 45,00'], ['🏷️ Categoria', 'Alimentação'], ['📅 Data', 'hoje']]} />
+      </Bubble>
     ),
   },
   {
     id: 'audio',
     label: 'Mandar um áudio',
     icon: Mic,
-    ask: () => <AudioBubble duration="0:05" caption="abasteci 150 e lanche 18" />,
+    send: { kind: 'audio', caption: 'abasteci 150 e comi um lanche de 18', duration: '0:05' },
     txs: [
       { cat: 'Transporte', v: 150, type: 'out' },
       { cat: 'Alimentação', v: 18, type: 'out' },
     ],
-    reply: () => (
-      <Bubble from="bot"><Receipt title="✅ Entendi 2 gastos" rows={[['Combustível', 'R$ 150,00'], ['Lanche', 'R$ 18,00']]} /></Bubble>
+    reply: (_, time) => (
+      <Bubble from="bot" time={time}>
+        <Receipt title="🎧 Ouvi seu áudio e registrei 2 gastos:" rows={[['⛽ Combustível', 'R$ 150,00'], ['🍔 Lanche', 'R$ 18,00']]} />
+      </Bubble>
     ),
   },
   {
     id: 'foto',
     label: 'Foto da nota fiscal',
     icon: Camera,
-    ask: () => <PhotoBubble />,
+    send: { kind: 'photo' },
     txs: [{ cat: 'Mercado', v: 184.3, type: 'out' }],
-    reply: () => (
-      <Bubble from="bot"><Receipt title="✅ Nota fiscal lida" rows={[['Supermercado', 'R$ 184,30'], ['Categoria', 'Mercado']]} /></Bubble>
+    reply: (_, time) => (
+      <Bubble from="bot" time={time}>
+        <Receipt title="🧾 Nota fiscal lida!" rows={[['🏪 Local', 'Supermercado Bom Preço'], ['💸 Valor', 'R$ 184,30'], ['🏷️ Categoria', 'Mercado']]} />
+      </Bubble>
     ),
   },
   {
     id: 'extra',
     label: 'Registrar escala extra',
     icon: BadgeDollarSign,
-    ask: () => <Bubble from="me">recebi 960 da escala extra</Bubble>,
+    send: { kind: 'text', text: 'recebi 960 da escala extra' },
     txs: [{ cat: 'Renda extra', v: 960, type: 'in' }],
-    reply: () => (
-      <Bubble from="bot"><Receipt tone="in" title="🟢 Receita registrada" rows={[['Valor', '+ R$ 960,00'], ['Categoria', 'Renda extra']]} /></Bubble>
+    reply: (_, time) => (
+      <Bubble from="bot" time={time}>
+        <Receipt title="🟢 Receita registrada!" rows={[['💰 Valor', '+ R$ 960,00'], ['🏷️ Categoria', 'Renda extra']]} />
+      </Bubble>
     ),
   },
   {
     id: 'sobra',
     label: 'Quanto sobrou?',
     icon: PiggyBank,
-    ask: () => <Bubble from="me">quanto sobrou esse mês?</Bubble>,
-    reply: (st) => {
+    send: { kind: 'text', text: 'quanto sobrou esse mês?' },
+    reply: (st, time) => {
       const t = totals(st);
       return (
-        <Bubble from="bot">
-          <Receipt tone="in" title={`💰 Saldo livre: R$ ${brl(t.saldo)}`} rows={[['Entradas', `R$ ${brl(t.e)}`], ['Saídas', `R$ ${brl(t.s)}`]]} />
+        <Bubble from="bot" time={time}>
+          <Receipt title={`💰 Saldo livre: R$ ${brl(t.saldo)}`} rows={[['🟢 Entradas', `R$ ${brl(t.e)}`], ['🔴 Saídas', `R$ ${brl(t.s)}`]]} />
         </Bubble>
       );
     },
@@ -96,23 +105,25 @@ const ACTIONS: Action[] = [
     id: 'relatorio',
     label: 'Relatório',
     icon: FileBarChart,
-    ask: () => <Bubble from="me">me manda o relatório do mês</Bubble>,
-    reply: (st) => {
+    send: { kind: 'text', text: 'me manda o relatório do mês' },
+    reply: (st, time) => {
       const t = totals(st);
       const top = byCat(st).slice(0, 3).map(([c, v]) => [`• ${c}`, `R$ ${brl(v)}`] as [string, string]);
       return (
-        <Bubble from="bot">
+        <Bubble from="bot" time={time}>
           <Receipt
-            title="📊 Relatório de outubro"
+            title={`📊 Relatório de ${new Date().toLocaleString('pt-BR', { month: 'long' })}`}
             rows={[
-              ['Entradas', `R$ ${brl(t.e)}`],
-              ['Saídas', `R$ ${brl(t.s)}`],
-              ['Saldo livre', `R$ ${brl(t.saldo)}`],
+              ['🟢 Entradas', `R$ ${brl(t.e)}`],
+              ['🔴 Saídas', `R$ ${brl(t.s)}`],
+              ['💰 Saldo livre', `R$ ${brl(t.saldo)}`],
               ['Maiores gastos:', ''],
               ...top,
             ]}
           />
-          <p className="mt-1.5 text-[11.5px] text-[#8696a0]">O relatório completo está no seu painel.</p>
+          {'\n\n'}
+          <span className="text-[#667781]">O relatório completo está no seu painel 👉 </span>
+          <span className="text-[#027eb5] underline">painel.financasdoservidor</span>
         </Bubble>
       );
     },
@@ -121,39 +132,89 @@ const ACTIONS: Action[] = [
 
 type Msg = { key: number; node: React.ReactNode };
 
+const welcome = (time: string) => (
+  <Bubble from="bot" time={time}>
+    Oi! 👋 Eu sou seu assistente financeiro.{'\n'}Toque num pedido aqui embaixo e veja como eu respondo.
+  </Bubble>
+);
+
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 export const LiveDemo: React.FC = () => {
   const [txs, setTxs] = useState<Tx[]>(INICIAL);
-  const [msgs, setMsgs] = useState<Msg[]>([
-    { key: 0, node: <Bubble from="bot">Oi! 👋 Toque num pedido aqui embaixo e veja como eu respondo.</Bubble> },
-  ]);
+  const [msgs, setMsgs] = useState<Msg[]>(() => [{ key: 0, node: welcome(agora()) }]);
   const [busy, setBusy] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [recording, setRecording] = useState(false);
+  const [status, setStatus] = useState('online');
   const [flash, setFlash] = useState<string | null>(null);
   const keyRef = useRef(1);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  // invalida a sequência em andamento quando o usuário recomeça ou sai da página
+  const runId = useRef(0);
 
-  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  useEffect(() => () => void runId.current++, []);
 
-  const run = (a: Action) => {
+  const push = (node: React.ReactNode) => setMsgs((m) => [...m, { key: keyRef.current++, node }].slice(-20));
+
+  const run = async (a: Action) => {
     if (busy) return;
     setBusy(true);
+    const id = ++runId.current;
+    const alive = () => id === runId.current;
     const next = a.txs ? [...txs, ...a.txs] : txs;
-    setMsgs((m) => [...m, { key: keyRef.current++, node: a.ask() }].slice(-20));
-    timers.current.push(
-      setTimeout(() => {
-        setMsgs((m) => [...m, { key: keyRef.current++, node: a.reply(next) }].slice(-20));
-        if (a.txs) {
-          setTxs(next);
-          setFlash(a.txs[0].cat);
-          timers.current.push(setTimeout(() => setFlash(null), 1400));
-        }
-        setBusy(false);
-      }, 1200),
-    );
+
+    // 1. o usuário escreve, grava ou escolhe a foto
+    if (a.send.kind === 'text') {
+      const text = a.send.text;
+      for (let i = 1; i <= text.length; i++) {
+        await wait(38);
+        if (!alive()) return;
+        setDraft(text.slice(0, i));
+      }
+      await wait(250);
+      if (!alive()) return;
+      setDraft('');
+      push(<Bubble from="me" time={agora()}>{text}</Bubble>);
+    } else if (a.send.kind === 'audio') {
+      setRecording(true);
+      await wait(2200);
+      if (!alive()) return;
+      setRecording(false);
+      push(<AudioBubble time={agora()} duration={a.send.duration} caption={a.send.caption} />);
+    } else {
+      await wait(400);
+      if (!alive()) return;
+      push(<PhotoBubble time={agora()} />);
+    }
+
+    // 2. o assistente lê (vistos azuis) e começa a digitar
+    await wait(1100);
+    if (!alive()) return;
+    setStatus('digitando…');
+    const typingKey = keyRef.current++;
+    setMsgs((m) => [...m, { key: typingKey, node: <TypingBubble /> }]);
+    await wait(1300);
+    if (!alive()) return;
+
+    // 3. resposta + painel atualizado
+    setStatus('online');
+    setMsgs((m) => [...m.filter((x) => x.key !== typingKey), { key: keyRef.current++, node: a.reply(next, agora()) }].slice(-20));
+    if (a.txs) {
+      setTxs(next);
+      setFlash(a.txs[0].cat);
+      setTimeout(() => alive() && setFlash(null), 1400);
+    }
+    setBusy(false);
   };
 
   const reset = () => {
+    runId.current++;
+    setBusy(false);
+    setDraft('');
+    setRecording(false);
+    setStatus('online');
     setTxs(INICIAL);
-    setMsgs([{ key: keyRef.current++, node: <Bubble from="bot">Tudo zerado. Pode testar de novo! 🙂</Bubble> }]);
+    setMsgs([{ key: keyRef.current++, node: <Bubble from="bot" time={agora()}>Tudo zerado. Pode testar de novo! 🙂</Bubble> }]);
   };
 
   const t = totals(txs);
@@ -189,7 +250,9 @@ export const LiveDemo: React.FC = () => {
         <div className="grid items-center gap-10 lg:grid-cols-[auto_1fr] lg:gap-16">
           <PhoneFrame
             className="lg:mx-0 lg:w-[340px]"
-            status={busy ? 'digitando…' : 'online'}
+            status={status}
+            draft={draft}
+            recording={recording}
             scrollKey={`${msgs.length}-${msgs[msgs.length - 1]?.key}`}
           >
             <DateChip>HOJE</DateChip>
@@ -208,7 +271,7 @@ export const LiveDemo: React.FC = () => {
                 </p>
                 <p className="font-display mt-1 text-2xl font-bold text-navy-900">Seu painel</p>
               </div>
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-[12px] text-slate-600">outubro</span>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-[12px] text-slate-600">{new Date().toLocaleString('pt-BR', { month: 'long' })}</span>
             </div>
 
             <div className="grid grid-cols-3 gap-3">

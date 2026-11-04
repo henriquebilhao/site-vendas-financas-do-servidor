@@ -6,15 +6,18 @@ import { DashboardFeatures, DashboardSimulator } from './landing/Dashboard';
 import { Authority, Deliverables, ForWhom, SocialProof, VideoSection } from './landing/Story';
 import { LiveDemo } from './landing/LiveDemo';
 import { Pricing } from './landing/Pricing';
-import { Faq, FinalCta, Footer, StickyMobileCta } from './landing/Closing';
+import { Faq, FinalCta, Footer } from './landing/Closing';
 
 export default function App() {
   return (
     // reducedMotion="user": respeita quem desativou animações no sistema
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen overflow-x-hidden bg-navy-900 font-sans text-slate-100 antialiased selection:bg-amber-400 selection:text-slate-950">
-        <TopBar />
-        <Nav />
+      <div className="min-h-screen overflow-x-clip bg-navy-900 font-sans text-slate-100 antialiased selection:bg-amber-400 selection:text-slate-950">
+        {/* faixa de lançamento + menu ficam fixos no topo */}
+        <div className="sticky top-0 z-50">
+          <TopBar />
+          <Nav />
+        </div>
         <main>
           {/* 1. Promessa principal */}
           <Hero />
@@ -51,7 +54,6 @@ export default function App() {
           <FinalCta />
         </main>
         <Footer />
-        <StickyMobileCta />
       </div>
     </MotionConfig>
   );

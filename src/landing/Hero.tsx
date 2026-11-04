@@ -2,17 +2,70 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Lock, Menu, ShieldCheck, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
-import { LINKS } from './data';
+import { LANCAMENTO_FIM, LINKS } from './data';
 import { AudioBubble, Bubble, DateChip, EncryptionNotice, PhoneFrame, PhotoBubble, Receipt, TypingBubble } from './ui';
 
-/* ---------- Faixa do topo (sem contador falso) ---------- */
-export const TopBar: React.FC = () => (
-  <div className="relative z-50 bg-gradient-to-r from-blue-950 via-[#0d1f4d] to-blue-950 px-4 py-2 text-center text-[12px] text-slate-200 sm:text-[13px]">
-    <span className="mr-2 rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold uppercase text-slate-950">Novo</span>
-    Teste grátis por 3 dias · Garantia de 7 dias em todos os planos ·{' '}
-    <a href="#planos" className="font-semibold text-amber-300 underline underline-offset-2">Ver planos</a>
-  </div>
+/* ---------- Faixa do topo: oferta de lançamento com cronômetro ---------- */
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const useCountdown = (fim: Date) => {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const i = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(i);
+  }, []);
+  const ms = Math.max(0, fim.getTime() - now);
+  const s = Math.floor(ms / 1000);
+  return { ms, d: Math.floor(s / 86400), h: Math.floor((s % 86400) / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };
+};
+
+const TimeBox: React.FC<{ v: string; l: string }> = ({ v, l }) => (
+  <span className="flex min-w-[30px] flex-col items-center rounded-md bg-white/10 px-1 py-0.5 leading-none sm:min-w-[40px] sm:px-1.5">
+    <span className="font-display text-[13px] font-bold tabular-nums text-white sm:text-[16px]">{v}</span>
+    <span className="mt-0.5 text-[8.5px] uppercase tracking-wider text-amber-200/80">{l}</span>
+  </span>
 );
+
+export const TopBar: React.FC = () => {
+  const t = useCountdown(LANCAMENTO_FIM);
+  const ativo = t.ms > 0;
+  return (
+    <div className="border-b border-amber-400/20 bg-gradient-to-r from-[#3a1d00] via-[#1a1033] to-[#0d1f4d] px-3 py-1.5 text-white sm:py-2">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center sm:gap-x-4">
+        <p className="text-[12.5px] leading-snug sm:text-[14px]">
+          <span className="mr-1.5 inline-flex animate-pulse items-center rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-extrabold uppercase text-slate-950">
+            🚀 Lançamento
+          </span>
+          <b className="text-amber-300">3 dias grátis</b> para testar o assistente
+          <span className="hidden sm:inline">. Aproveite antes que a condição de lançamento acabe!</span>
+        </p>
+        {ativo && (
+          <div className="flex items-center gap-1" aria-label="Tempo restante da condição de lançamento" role="timer">
+            <span className="mr-0.5 text-[11px] text-slate-300">Termina em</span>
+            {t.d > 0 && <TimeBox v={String(t.d)} l={t.d === 1 ? 'dia' : 'dias'} />}
+            <TimeBox v={pad(t.h)} l="h" />
+            <TimeBox v={pad(t.m)} l="min" />
+            <TimeBox v={pad(t.s)} l="seg" />
+          </div>
+        )}
+        {/* celular: link simples ao lado do cronômetro; computador: botão */}
+        <a
+          href={LINKS.testeGratis}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[12px] font-bold text-amber-300 underline underline-offset-2 sm:hidden"
+        >
+          Ativar →
+        </a>
+        <span className="hidden sm:block">
+          <a href={LINKS.testeGratis} target="_blank" rel="noopener noreferrer" className="btn-gold rounded-full px-4 py-1.5 text-[12.5px]">
+            Quero meus 3 dias grátis <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+        </span>
+      </div>
+    </div>
+  );
+};
 
 /* ---------- Navegação ---------- */
 const NAV = [
@@ -29,7 +82,7 @@ const NAV = [
 export const Nav: React.FC = () => {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-40 border-b border-white/5 bg-navy-950/85 backdrop-blur-xl">
+    <header className="relative border-b border-white/5 bg-navy-950/95 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6">
         <a href="#" className="flex shrink-0 items-center gap-2.5">
           <LogoFS size={34} />

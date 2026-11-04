@@ -20,3 +20,7 @@ export const PRECOS = {
 
 export const brl = (v: number) =>
   v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/* Fim da condição de lançamento (horário de Brasília).
+   O cronômetro do topo conta até aqui e some sozinho quando a data passa. */
+export const LANCAMENTO_FIM = new Date('2026-11-30T23:59:59-03:00');

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Lock, Minus, Plus, ShieldCheck } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
@@ -159,41 +159,3 @@ export const Footer: React.FC = () => (
     </p>
   </footer>
 );
-
-/* ---------- Barra fixa de compra no celular ---------- */
-export const StickyMobileCta: React.FC = () => {
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    const onScroll = () => {
-      const planos = document.getElementById('planos');
-      const r = planos?.getBoundingClientRect();
-      const inPlanos = r ? r.top < window.innerHeight && r.bottom > 0 : false;
-      setShow(window.scrollY > 700 && !inPlanos);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          initial={{ y: 100 }}
-          animate={{ y: 0 }}
-          exit={{ y: 100 }}
-          className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-navy-950/95 px-4 py-3 backdrop-blur-xl lg:hidden"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
-              <p className="text-[11px] text-slate-400">Plano anual</p>
-              <p className="font-display text-[15px] font-bold text-white">R$ {brl(PRECOS.anual / 12)}/mês</p>
-            </div>
-            <a href="#planos" className="btn-gold rounded-full px-5 py-3 text-[14px]">
-              Ver planos <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};

@@ -1,7 +1,8 @@
 import React from 'react';
 import { MotionConfig } from 'motion/react';
 import { Hero, Nav, TopBar, TrustMarquee } from './landing/Hero';
-import { DashboardShowcase, ForWho, ShiftTimeline, Together } from './landing/Sections';
+import { ForWho, ShiftTimeline, Together } from './landing/Sections';
+import { DashboardFeatures, DashboardSimulator } from './landing/Dashboard';
 import { Authority, Deliverables, ForWhom, SocialProof, VideoSection } from './landing/Story';
 import { LiveDemo } from './landing/LiveDemo';
 import { Pricing } from './landing/Pricing';
@@ -29,7 +30,8 @@ export default function App() {
           <VideoSection />
           <ShiftTimeline />
           <LiveDemo />
-          <DashboardShowcase />
+          <DashboardFeatures />
+          <DashboardSimulator />
           <Together />
 
           {/* 5. Entregáveis e bônus */}

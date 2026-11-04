@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { ArrowRight, Lock, Menu, ShieldCheck, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { LINKS } from './data';
-import { AudioBubble, Bubble, DateChip, EncryptionNotice, PhoneFrame, PhotoBubble, Receipt } from './ui';
+import { AudioBubble, Bubble, DateChip, EncryptionNotice, PhoneFrame, PhotoBubble, Receipt, TypingBubble } from './ui';
 
 /* ---------- Faixa do topo (sem contador falso) ---------- */
 export const TopBar: React.FC = () => (
@@ -19,6 +19,7 @@ const NAV = [
   ['Depoimentos', '#depoimentos'],
   ['Como funciona', '#como-funciona'],
   ['Teste agora', '#teste'],
+  ['Painel', '#painel'],
   ['Bônus', '#bonus'],
   ['Quem somos', '#quem-somos'],
   ['Planos', '#planos'],
@@ -163,6 +164,7 @@ const HeroChat: React.FC = () => {
         </>
       )}
       {items}
+      {typing && <TypingBubble key={`t${n}`} />}
     </PhoneFrame>
   );
 };

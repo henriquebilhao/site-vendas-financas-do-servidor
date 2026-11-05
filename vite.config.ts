@@ -6,6 +6,15 @@ import {defineConfig} from 'vite';
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss()],
+    build: {
+      rollupOptions: {
+        // Duas páginas: a de vendas e a de obrigado (/obrigado) usada pela Hotmart
+        input: {
+          main: path.resolve(import.meta.dirname, 'index.html'),
+          obrigado: path.resolve(import.meta.dirname, 'obrigado/index.html'),
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': path.resolve(import.meta.dirname, '.'),

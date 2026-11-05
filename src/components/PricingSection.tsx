@@ -37,11 +37,11 @@ export const PricingSection: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const HOTMART_MENSAL_SEM = "https://pay.hotmart.com/R107997768B?off=tp446sid";
-  const HOTMART_MENSAL_COM = "https://pay.hotmart.com/R107997768B?off=6rkpkqdm";
-  const HOTMART_TRIMESTRAL_SEM = "https://pay.hotmart.com/R107997768B?off=lll6osu7";
-  const HOTMART_TRIMESTRAL_COM = "https://pay.hotmart.com/R107997768B?off=sw3m0ili";
-  const HOTMART_ANUAL = "https://pay.hotmart.com/R107997768B?off=3347zlda";
+  const HOTMART_MENSAL_SEM = "https://pay.hotmart.com/P108349038G?off=jgetfxt8";
+  const HOTMART_MENSAL_COM = "https://pay.hotmart.com/P108349038G?off=7uwqfyck";
+  const HOTMART_TRIMESTRAL_SEM = "https://pay.hotmart.com/P108349038G?off=hrxkq0o2";
+  const HOTMART_TRIMESTRAL_COM = "https://pay.hotmart.com/P108349038G?off=020d4o7v";
+  const HOTMART_ANUAL = "https://pay.hotmart.com/P108349038G?off=tllte0hp";
 
   return (
     <section id="planos" className="relative py-20 md:py-28 bg-slate-950 overflow-hidden border-t border-slate-900">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, Lock, Minus, Plus, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Lock, Mail, Minus, Plus, ShieldCheck } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { LINKS, PRECOS, brl } from './data';
 import { Reveal, SectionTitle } from './ui';
@@ -54,7 +54,7 @@ export const Faq: React.FC = () => {
   return (
     <section id="faq" className="bg-navy-900 py-20 sm:py-28">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <SectionTitle eyebrow="Dúvidas" title="Perguntas frequentes." sub="Não achou a sua? Fale com o suporte humano pelo WhatsApp." />
+        <SectionTitle eyebrow="Dúvidas" title="Perguntas frequentes." sub="Não achou a sua? Fale com o nosso suporte humano." />
         <div className="divide-y divide-white/10 border-y border-white/10">
           {FAQ.map((f, i) => {
             const isOpen = open === i;
@@ -86,6 +86,20 @@ export const Faq: React.FC = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* contato do suporte */}
+        <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="font-semibold text-white">Ainda ficou com dúvida?</p>
+            <p className="text-[14px] text-slate-400">Escreva para o nosso suporte que a gente te ajuda.</p>
+          </div>
+          <a
+            href={`mailto:${LINKS.suporteEmail}`}
+            className="inline-flex max-w-full items-center gap-2 rounded-full border border-amber-400/40 px-4 py-2.5 text-[13px] font-semibold [overflow-wrap:anywhere] sm:text-[14px] text-amber-300 transition hover:bg-amber-400/10"
+          >
+            <Mail className="h-4 w-4 shrink-0" /> {LINKS.suporteEmail}
+          </a>
         </div>
       </div>
     </section>
@@ -122,8 +136,8 @@ export const FinalCta: React.FC = () => (
 
 /* ---------- Rodapé ---------- */
 export const Footer: React.FC = () => (
-  <footer className="border-t border-white/5 bg-navy-950 pb-28 pt-14 text-[13px] text-slate-500 lg:pb-14">
-    <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+  <footer className="border-t border-white/5 bg-navy-950 pb-14 pt-14 text-[13px] text-slate-500">
+    <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1.2fr]">
       <div>
         <div className="flex items-center gap-2.5">
           <LogoFS size={34} />
@@ -145,6 +159,13 @@ export const Footer: React.FC = () => (
           ))}
           <li><a href={LINKS.areaCliente} target="_blank" rel="noopener noreferrer" className="hover:text-white">Área do cliente</a></li>
         </ul>
+      </div>
+      <div>
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">Suporte</p>
+        <a href={`mailto:${LINKS.suporteEmail}`} className="flex items-start gap-2 break-all text-slate-300 hover:text-white">
+          <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" /> {LINKS.suporteEmail}
+        </a>
+        <p className="mt-2 leading-relaxed">Dúvidas, cancelamento ou reembolso: fale com a gente por e-mail.</p>
       </div>
       <div>
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">Aviso</p>

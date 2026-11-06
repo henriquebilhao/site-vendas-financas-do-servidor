@@ -127,6 +127,10 @@ export default function Obrigado() {
                 Não recebeu a mensagem em alguns minutos? Fale com o nosso suporte humano pelo{' '}
                 <a href={LINKS.whatsappAssinante} target="_blank" rel="noopener noreferrer" className="font-semibold text-amber-400 hover:underline">
                   WhatsApp
+                </a>{' '}
+                ou pelo e-mail{' '}
+                <a href={`mailto:${LINKS.suporteEmail}`} className="break-all font-semibold text-amber-400 hover:underline">
+                  {LINKS.suporteEmail}
                 </a>
                 .
               </p>
@@ -142,6 +146,8 @@ export default function Obrigado() {
 
       <footer className="border-t border-white/5 bg-navy-950 py-8 text-center text-[13px] text-slate-500">
         <a href="/" className="hover:text-white">appfinancasdoservidor.digital</a>
+        <span className="mx-2">·</span>
+        <a href={`mailto:${LINKS.suporteEmail}`} className="hover:text-white">{LINKS.suporteEmail}</a>
       </footer>
     </div>
   );

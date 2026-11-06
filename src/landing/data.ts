@@ -8,6 +8,7 @@ export const LINKS = {
   testeGratis:
     'https://wa.me/5554994197878?text=Ol%C3%A1%21+Gostaria+de+iniciar+meu+teste+gr%C3%A1tis+de+3+dias+no+Finan%C3%A7as+do+Servidor.',
   areaCliente: 'https://membros.appfinancasdoservidor.digital',
+  suporteEmail: 'suporte@appfinancasdoservidor.digital',
   cadastroPainel: 'https://membros.appfinancasdoservidor.digital/cadastro',
   whatsappAssinante:
     'https://wa.me/5554994197878?text=Ol%C3%A1%21+Acabei+de+assinar+o+Finan%C3%A7as+do+Servidor.',

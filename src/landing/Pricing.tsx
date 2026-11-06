@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Check, ShieldCheck, Star, User, Users } from 'lucide-react';
+import { ArrowRight, Calculator, Check, ClipboardCheck, ShieldCheck, Star, User, Users } from 'lucide-react';
 import { motion } from 'motion/react';
 import { LINKS, PRECOS, brl } from './data';
 import { Reveal, SectionTitle } from './ui';
@@ -10,6 +10,15 @@ const BASE = [
   'Painel financeiro completo',
   'Relatórios de entradas e saídas',
 ];
+
+/* Recursos que só o Plano Anual tem */
+const EXCLUSIVOS_ANUAL = ['Calculadora de distribuição da renda', 'Diagnóstico financeiro completo com plano RSC'];
+
+const SeloAnual: React.FC = () => (
+  <span className="ml-1.5 inline-block whitespace-nowrap rounded-full bg-amber-400 px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-slate-950">
+    Exclusivo do anual
+  </span>
+);
 
 const Feature: React.FC<{ children: React.ReactNode; gold?: boolean; light?: boolean }> = ({ children, gold, light }) => (
   <li
@@ -24,6 +33,59 @@ const Feature: React.FC<{ children: React.ReactNode; gold?: boolean; light?: boo
     />
     <span>{children}</span>
   </li>
+);
+
+/* ---------- Exclusivos do Plano Anual (seção antes dos planos) ---------- */
+const RECURSOS_ANUAL = [
+  {
+    icon: Calculator,
+    t: 'Calculadora de distribuição da renda',
+    d: 'Informe sua renda fixa e a extra e veja quanto vai para despesas obrigatórias, despesas variáveis e reservas, por mês, por semana e por dia.',
+    extra: 'Padrão Ideal 50/30/20, Aceitável 60/30/10 ou do seu jeito. Com um clique, os valores viram as metas do mês no app.',
+  },
+  {
+    icon: ClipboardCheck,
+    t: 'Diagnóstico financeiro completo com plano RSC',
+    d: 'Em 4 etapas, veja se você está no Ideal, Aceitável ou Crítico pelo quanto da renda já começa o mês comprometida, e onde o dinheiro está pesando.',
+    extra: 'Depois, escolha Reduzir, Substituir ou Cortar em cada despesa, veja a economia por mês e em 12 meses e exporte tudo em PDF.',
+  },
+];
+
+export const AnnualExclusives: React.FC = () => (
+  <section id="exclusivos-anual" className="relative overflow-hidden bg-white py-20 sm:py-28">
+    <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+      <SectionTitle
+        light
+        eyebrow="Exclusivo do Plano Anual"
+        title="Descubra onde seu dinheiro está pesando."
+        sub="Duas ferramentas para entender quanto da sua renda já está comprometida e o que mudar para chegar ao padrão ideal."
+      />
+      <div className="grid gap-5 md:grid-cols-2">
+        {RECURSOS_ANUAL.map((r, i) => (
+          <Reveal key={r.t} delay={i * 0.1}>
+            <div className="card-light flex h-full flex-col p-6 sm:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-navy-900 text-amber-400">
+                  <r.icon className="h-7 w-7" />
+                </div>
+                <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wide text-amber-800">
+                  Exclusivo do anual
+                </span>
+              </div>
+              <h3 className="font-display mt-5 text-xl font-bold text-navy-900 sm:text-2xl">{r.t}</h3>
+              <p className="mt-2 leading-relaxed text-slate-600">{r.d}</p>
+              <p className="mt-2 leading-relaxed text-slate-600">{r.extra}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+      <Reveal className="mt-10 text-center">
+        <a href="#planos" className="btn-gold rounded-full px-7 py-4 text-[16px]">
+          Ver o Plano Anual <ArrowRight className="h-5 w-5" />
+        </a>
+      </Reveal>
+    </div>
+  </section>
 );
 
 export const Pricing: React.FC = () => {
@@ -44,7 +106,7 @@ export const Pricing: React.FC = () => {
         <SectionTitle light
           eyebrow="Planos"
           title="Menos que um lanche no plantão por mês."
-          sub="Todas as funções em todos os planos. A diferença é só o tempo de assinatura e o dependente."
+          sub="As funções do assistente estão em todos os planos. O Plano Anual traz o dependente incluso e libera a Calculadora de distribuição da renda e o Diagnóstico financeiro completo."
         />
 
         {/* seletor único de dependente */}
@@ -87,6 +149,12 @@ export const Pricing: React.FC = () => {
               </div>
               <ul className="my-6 flex-1 space-y-2.5 border-t border-white/10 pt-6">
                 {BASE.map((f) => <Feature key={f}>{f}</Feature>)}
+                {EXCLUSIVOS_ANUAL.map((f) => (
+                  <Feature gold key={f}>
+                    {f}
+                    <SeloAnual />
+                  </Feature>
+                ))}
                 <Feature gold>Dependente incluso sem custo</Feature>
                 <Feature gold>Suporte VIP prioritário no WhatsApp</Feature>
               </ul>
@@ -100,7 +168,7 @@ export const Pricing: React.FC = () => {
           <Reveal>
             <div className="card-light flex h-full flex-col p-7">
               <h3 className="font-display text-xl font-bold text-navy-900">Teste grátis</h3>
-              <p className="mt-1 text-[13px] text-slate-600">Todas as funções por 3 dias</p>
+              <p className="mt-1 text-[13px] text-slate-600">Use o assistente por 3 dias</p>
               <div className="mt-5">
                 <p className="text-[13px] text-transparent">.</p>
                 <p className="font-display text-5xl font-bold text-navy-900"><span className="text-2xl">R$</span> 0</p>

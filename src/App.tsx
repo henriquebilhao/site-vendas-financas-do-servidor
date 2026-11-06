@@ -5,7 +5,7 @@ import { ForWho, ShiftTimeline, Together } from './landing/Sections';
 import { DashboardFeatures, DashboardSimulator } from './landing/Dashboard';
 import { Authority, Deliverables, ForWhom, SocialProof, VideoSection } from './landing/Story';
 import { LiveDemo } from './landing/LiveDemo';
-import { Pricing } from './landing/Pricing';
+import { AnnualExclusives, Pricing } from './landing/Pricing';
 import { Faq, FinalCta, Footer } from './landing/Closing';
 
 export default function App() {
@@ -47,6 +47,7 @@ export default function App() {
           <Authority />
 
           {/* 8. Planos */}
+          <AnnualExclusives />
           <Pricing />
 
           {/* 9. Dúvidas */}

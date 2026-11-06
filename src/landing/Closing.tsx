@@ -36,6 +36,10 @@ const FAQ = [
     a: 'Sim. Com a opção de dependente, cada um usa o próprio WhatsApp e tudo aparece no mesmo painel. No Plano Anual o dependente já vem incluso.',
   },
   {
+    q: 'O que o Plano Anual tem a mais?',
+    a: 'Além de tudo dos outros planos, o anual libera a Calculadora de distribuição da renda e o Diagnóstico financeiro completo, para você saber exatamente quanto da sua renda já está comprometida e o que mudar para chegar ao padrão ideal.',
+  },
+  {
     q: 'Tem limite de mensagens ou de registros?',
     a: 'Não. Os registros são ilimitados em todos os planos, inclusive no teste grátis.',
   },

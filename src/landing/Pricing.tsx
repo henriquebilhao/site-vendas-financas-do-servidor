@@ -9,10 +9,8 @@ const BASE = [
   'Texto, áudio e foto da nota fiscal',
   'Painel financeiro completo',
   'Relatórios de entradas e saídas',
+  'Calculadora de distribuição da renda',
 ];
-
-/* Nos planos pagos (mensal, trimestral e anual) */
-const PAGOS = [...BASE, 'Calculadora de distribuição da renda'];
 
 /* Recursos que só o Plano Anual tem */
 const EXCLUSIVOS_ANUAL = ['Diagnóstico financeiro completo', 'Simuladores de crédito e amortização'];
@@ -70,7 +68,7 @@ export const AnnualExclusives: React.FC = () => (
         light
         eyebrow="Ferramentas do app"
         title="Ferramentas para organizar e planejar seu dinheiro."
-        sub="A Calculadora vem em todos os planos. O Diagnóstico e os Simuladores são do Plano Anual."
+        sub="O Diagnóstico e os Simuladores são exclusivos do Plano Anual."
       />
       <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
         {FERRAMENTAS.map((r, i) => (
@@ -80,13 +78,11 @@ export const AnnualExclusives: React.FC = () => (
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-navy-900 text-amber-400">
                   <r.icon className="h-6 w-6" />
                 </div>
-                <span
-                  className={`rounded-full px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wide ${
-                    r.anual ? 'bg-amber-100 text-amber-800' : 'bg-emerald-50 text-emerald-700'
-                  }`}
-                >
-                  {r.anual ? 'Plano Anual' : 'Todos os planos'}
-                </span>
+                {r.anual && (
+                  <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wide text-amber-800">
+                    Plano Anual
+                  </span>
+                )}
               </div>
               <h3 className="font-display mt-4 text-lg font-bold leading-snug text-navy-900 sm:text-xl">{r.t}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-slate-600">{r.d}</p>
@@ -171,7 +167,7 @@ export const Pricing: React.FC = () => {
                 <p className="mt-1 text-[13px] font-semibold text-emerald-400">Você economiza R$ {brl(anualEconomia)}</p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-white/10 pt-4">
-                {PAGOS.map((f) => <Feature key={f}>{f}</Feature>)}
+                {BASE.map((f) => <Feature key={f}>{f}</Feature>)}
                 {/* grupo com um selo só, para o card caber na tela */}
                 <li className="pt-1">
                   <SeloAnual />
@@ -222,7 +218,7 @@ export const Pricing: React.FC = () => {
                 <p className="mt-1 text-[14px] text-slate-600">por mês · cancele quando quiser</p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
-                {PAGOS.map((f) => <Feature light key={f}>{f}</Feature>)}
+                {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}
                 {dep && <Feature light gold>1 dependente incluso</Feature>}
               </ul>
               <a href={dep ? LINKS.mensalCom : LINKS.mensalSem} target="_blank" rel="noopener noreferrer" className="btn-ghost-light w-full rounded-xl py-3.5 text-[15px]">
@@ -244,7 +240,7 @@ export const Pricing: React.FC = () => {
                 <p className="mt-1 text-[14px] text-slate-600">a cada 3 meses · R$ {brl(tri / 3)}/mês</p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
-                {PAGOS.map((f) => <Feature light key={f}>{f}</Feature>)}
+                {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}
                 {dep && <Feature light gold>1 dependente incluso</Feature>}
               </ul>
               <a href={dep ? LINKS.trimestralCom : LINKS.trimestralSem} target="_blank" rel="noopener noreferrer" className="btn-ghost-light w-full rounded-xl py-3.5 text-[15px]">

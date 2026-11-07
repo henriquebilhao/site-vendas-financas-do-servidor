@@ -20,49 +20,45 @@ const useCountdown = (fim: Date) => {
 };
 
 const TimeBox: React.FC<{ v: string; l: string }> = ({ v, l }) => (
-  <span className="flex min-w-[30px] flex-col items-center rounded-md bg-white/10 px-1 py-0.5 leading-none sm:min-w-[40px] sm:px-1.5">
-    <span className="font-display text-[13px] font-bold tabular-nums text-white sm:text-[16px]">{v}</span>
-    <span className="mt-0.5 text-[8.5px] uppercase tracking-wider text-amber-200/80">{l}</span>
+  <span className="flex min-w-[36px] flex-col items-center rounded-lg bg-white/10 px-1 py-0.5 leading-none ring-1 ring-white/10 sm:min-w-[52px] sm:px-2 sm:py-1">
+    <span className="font-display text-[17px] font-bold tabular-nums text-white sm:text-[24px]">{v}</span>
+    <span className="mt-0.5 text-[8.5px] font-semibold uppercase tracking-wider text-amber-200/90 sm:text-[10px]">{l}</span>
   </span>
 );
 
+/* Faixa fixa: "Oferta de Lançamento" + contagem regressiva. Some quando a oferta acaba. */
 export const TopBar: React.FC = () => {
   const t = useCountdown(LANCAMENTO_FIM);
-  const ativo = t.ms > 0;
+  if (t.ms <= 0) return null;
   return (
-    <div className="border-b border-amber-400/20 bg-gradient-to-r from-[#3a1d00] via-[#1a1033] to-[#0d1f4d] px-3 py-1.5 text-white sm:py-2">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center sm:gap-x-4">
-        <p className="text-[12.5px] leading-snug sm:text-[14px]">
-          <span className="mr-1.5 inline-flex animate-pulse items-center rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-extrabold uppercase text-slate-950">
-            🚀 Lançamento
-          </span>
-          <b className="text-amber-300">3 dias grátis</b> para testar o assistente
-          <span className="hidden sm:inline">. Aproveite antes que a condição de lançamento acabe!</span>
-        </p>
-        {ativo && (
-          <div className="flex items-center gap-1" aria-label="Tempo restante da condição de lançamento" role="timer">
-            <span className="mr-0.5 text-[11px] text-slate-300">Termina em</span>
-            {t.d > 0 && <TimeBox v={String(t.d)} l={t.d === 1 ? 'dia' : 'dias'} />}
-            <TimeBox v={pad(t.h)} l="h" />
-            <TimeBox v={pad(t.m)} l="min" />
-            <TimeBox v={pad(t.s)} l="seg" />
-          </div>
-        )}
-        {/* celular: link simples ao lado do cronômetro; computador: botão */}
-        <a
-          href={LINKS.testeGratis}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[12px] font-bold text-amber-300 underline underline-offset-2 sm:hidden"
-        >
-          Ativar →
-        </a>
-        <span className="hidden sm:block">
-          <a href={LINKS.testeGratis} target="_blank" rel="noopener noreferrer" className="btn-gold rounded-full px-4 py-1.5 text-[12.5px]">
-            Quero meus 3 dias grátis <ArrowRight className="h-3.5 w-3.5" />
-          </a>
+    <div className="sticky top-0 z-50 border-b border-amber-400/30 bg-gradient-to-r from-[#3a1d00] via-[#1a1033] to-[#0d1f4d] px-2 py-1.5 text-white shadow-lg shadow-black/30 sm:px-3 sm:py-2.5">
+      <div
+        className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:gap-x-5"
+        role="timer"
+        aria-label="Tempo restante da oferta de lançamento"
+      >
+        <span className="inline-flex animate-pulse items-center rounded-full bg-amber-400 px-3 py-0.5 text-[12px] font-extrabold uppercase tracking-wide text-slate-950 sm:py-1 sm:text-[15px]">
+          🚀 Oferta de Lançamento
         </span>
+        <div className="flex items-center gap-1.5">
+          <span className="mr-0.5 text-[12.5px] font-semibold text-slate-200 sm:text-[15px]">Termina em:</span>
+          {t.d > 0 && <TimeBox v={String(t.d)} l={t.d === 1 ? 'dia' : 'dias'} />}
+          <TimeBox v={pad(t.h)} l="h" />
+          <TimeBox v={pad(t.m)} l="min" />
+          <TimeBox v={pad(t.s)} l="seg" />
+        </div>
       </div>
+    </div>
+  );
+};
+
+/* Linha da oferta logo abaixo da faixa fixa (rola junto com a página) */
+export const TopBarOffer: React.FC = () => {
+  const t = useCountdown(LANCAMENTO_FIM);
+  if (t.ms <= 0) return null;
+  return (
+    <div className="border-b border-white/5 bg-[#160f2b] px-4 py-2 text-center text-[13.5px] leading-snug text-slate-200 sm:text-[15px]">
+      <b className="text-amber-300">7 dias grátis</b> para testar o assistente. Aproveite antes que a condição de lançamento acabe!
     </div>
   );
 };
@@ -266,7 +262,7 @@ export const Hero: React.FC = () => (
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-4 text-[16px] font-semibold text-white transition hover:border-white/30 hover:bg-white/5"
           >
-            Testar 3 dias grátis
+            Testar 7 dias grátis
           </a>
         </motion.div>
 

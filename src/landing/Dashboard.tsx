@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowDownLeft,
@@ -224,7 +224,7 @@ const MobileMock: React.FC = () => (
 );
 
 export const DashboardFeatures: React.FC = () => (
-  <section id="painel" className="relative overflow-hidden bg-navy-900 py-20 sm:py-28">
+  <section id="painel" className="relative overflow-hidden bg-navy-900 py-12 sm:py-16">
     <div className="pointer-events-none absolute right-0 top-1/3 h-[500px] w-[700px] rounded-full bg-blue-700/20 blur-[140px]" />
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
@@ -292,15 +292,15 @@ const CATEGORIAS: Record<Tipo, string[]> = {
 
 const ATALHOS: Record<Tipo, [string, number, string][]> = {
   out: [
-    ['Mercado do mês', 230, 'Mercado'],
+    ['Mercado', 230, 'Mercado'],
     ['Combustível', 180, 'Transporte'],
     ['Farmácia', 64.9, 'Saúde'],
-    ['Conta de luz', 212.4, 'Casa e contas'],
+    ['Luz', 212.4, 'Casa e contas'],
   ],
   in: [
     ['Escala extra', 960, 'Escala extra'],
-    ['Diárias da operação', 540, 'Diárias'],
-    ['Restituição do IR', 1320, 'Restituição'],
+    ['Diárias', 540, 'Diárias'],
+    ['Restituição IR', 1320, 'Restituição'],
   ],
 };
 
@@ -349,7 +349,7 @@ const Panel: React.FC<{ title?: string; caption?: string; children: React.ReactN
   children,
   className = '',
 }) => (
-  <div className={`rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 ${className}`}>
+  <div className={`rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4 ${className}`}>
     {title && <p className="text-[14px] font-semibold text-navy-900">{title}</p>}
     {caption && <p className="mt-0.5 text-[12px] text-slate-500">{caption}</p>}
     {children}
@@ -357,7 +357,7 @@ const Panel: React.FC<{ title?: string; caption?: string; children: React.ReactN
 );
 
 const Kpi: React.FC<{ label: string; value: number; note?: string; dot: string }> = ({ label, value, note, dot }) => (
-  <div className="rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4">
+  <div className="rounded-2xl border border-slate-200 bg-white px-3 py-2.5 sm:px-4 sm:py-3">
     <p className="flex items-center gap-1.5 text-[11.5px] text-slate-500 sm:text-[12px]">
       <span className={`h-2 w-2 rounded-full ${dot}`} /> {label}
     </p>
@@ -365,11 +365,11 @@ const Kpi: React.FC<{ label: string; value: number; note?: string; dot: string }
       key={value}
       initial={{ opacity: 0.3, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
-      className="font-display mt-1 text-[16px] font-bold tabular-nums text-navy-900 sm:text-[20px]"
+      className="font-display mt-0.5 text-[16px] font-bold tabular-nums text-navy-900 sm:text-[19px]"
     >
       R$ {brl(value)}
     </motion.p>
-    {note && <p className="mt-0.5 text-[11px] text-slate-500">{note}</p>}
+    {note && <p className="kpi-note mt-0.5 text-[11px] text-slate-500">{note}</p>}
   </div>
 );
 
@@ -378,7 +378,7 @@ const CategoryBars: React.FC<{ entries: Entry[]; highlight?: string }> = ({ entr
   const max = cats[0]?.[1] || 1;
   if (!cats.length) return <p className="mt-4 text-[13px] text-slate-500">Nenhum lançamento ainda.</p>;
   return (
-    <div className="mt-4 space-y-3">
+    <div className="mt-3 space-y-2.5">
       {cats.map(([c, v]) => (
         <motion.div layout key={c} title={`${c}: R$ ${brl(v)}`}>
           <div className="mb-1 flex justify-between gap-3 text-[13px]">
@@ -412,7 +412,7 @@ const EntryList: React.FC<{ entries: Entry[]; lastId: number | null; onToggle: (
           layout
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className={`flex items-center gap-3 py-2.5 transition-colors ${lastId === e.id ? 'rounded-xl bg-amber-50 px-2' : ''}`}
+          className={`flex items-center gap-3 py-2 transition-colors ${lastId === e.id ? 'rounded-xl bg-amber-50 px-2' : ''}`}
         >
           <span
             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
@@ -453,8 +453,9 @@ const EntryList: React.FC<{ entries: Entry[]; lastId: number | null; onToggle: (
 
 /* ---------- formulário de novo lançamento ---------- */
 
-const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Omit<Entry, 'id'>) => void }> = ({
+const EntryForm: React.FC<{ type: Tipo; saldo: number; onType: (t: Tipo) => void; onAdd: (e: Omit<Entry, 'id'>) => void }> = ({
   type,
+  saldo,
   onType,
   onAdd,
 }) => {
@@ -463,9 +464,16 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
   const [date, setDate] = useState(hojeISO);
   const [cat, setCat] = useState(CATEGORIAS[type][0]);
   const [paid, setPaid] = useState(true);
+  // ok: guarda a descrição lançada; o saldo é lido na hora, já atualizado
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const isIn = type === 'in';
+
+  // depois de lançar, garante que a confirmação (com o saldo novo) fique visível
+  const msgRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (msg) msgRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [msg]);
 
   const submit = (ev: React.FormEvent) => {
     ev.preventDefault();
@@ -475,25 +483,25 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
       return;
     }
     onAdd({ type, desc: desc.trim(), cat, v, date, paid });
-    setMsg({ ok: true, text: `“${desc.trim()}” lançado com sucesso. Veja os totais atualizados.` });
+    setMsg({ ok: true, text: desc.trim() });
     setDesc('');
     setValor('');
   };
 
   const field =
-    'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[16px] text-navy-900 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 sm:text-[14px]';
+    'w-full min-w-0 rounded-xl border border-slate-200 bg-white px-3 py-2 text-[16px] text-navy-900 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 sm:text-[14px]';
 
   return (
-    <Panel title="Novo lançamento" caption="Use um atalho ou preencha do seu jeito.">
+    <Panel title="Novo lançamento">
       {/* despesa / receita */}
-      <div className="mt-4 grid grid-cols-2 rounded-xl bg-slate-100 p-1 text-[13px] font-semibold">
+      <div className="mt-3 grid grid-cols-2 rounded-xl bg-slate-100 p-1 text-[13px] font-semibold">
         {(['out', 'in'] as Tipo[]).map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => onType(t)}
             aria-pressed={type === t}
-            className={`rounded-lg py-2 transition ${
+            className={`rounded-lg py-1.5 transition ${
               type === t ? (t === 'in' ? 'bg-emerald-600 text-white shadow' : 'bg-rose-600 text-white shadow') : 'text-slate-600'
             }`}
           >
@@ -502,7 +510,7 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
         ))}
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-1.5">
+      <div className="no-scrollbar -mx-1 mt-2.5 flex gap-1.5 overflow-x-auto px-1 pb-0.5 lg:flex-wrap lg:overflow-visible">
         {ATALHOS[type].map(([d, v, c]) => (
           <button
             key={d}
@@ -513,14 +521,14 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
               setCat(c);
               setMsg(null);
             }}
-            className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[12px] text-slate-700 transition hover:border-amber-400 hover:bg-amber-50"
+            className="shrink-0 whitespace-nowrap rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[12px] text-slate-700 transition hover:border-amber-400 hover:bg-amber-50"
           >
-            {d} · R$ {brl(v)}
+            {d} · R$ {Number.isInteger(v) ? v.toLocaleString('pt-BR') : brl(v)}
           </button>
         ))}
       </div>
 
-      <form onSubmit={submit} className="mt-4 space-y-3" noValidate>
+      <form onSubmit={submit} className="mt-2.5 space-y-2.5" noValidate>
         <input
           className={field}
           aria-label="Descrição"
@@ -529,7 +537,7 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
           maxLength={60}
           onChange={(e) => setDesc(e.target.value)}
         />
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2.5">
           <input
             className={field}
             aria-label="Valor"
@@ -540,16 +548,17 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
           />
           <input className={field} aria-label="Data" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </div>
+        <div className="grid grid-cols-2 gap-2.5">
         <select className={field} aria-label="Categoria" value={cat} onChange={(e) => setCat(e.target.value)}>
           {CATEGORIAS[type].map((c) => (
             <option key={c}>{c}</option>
           ))}
         </select>
-        <div className="grid grid-cols-2 gap-2 text-[13px]">
+        <div className="grid grid-cols-2 gap-1 text-[12.5px]">
           {[true, false].map((p) => (
             <label
               key={String(p)}
-              className={`flex cursor-pointer items-center justify-center gap-2 rounded-xl border py-2.5 transition ${
+              className={`flex cursor-pointer items-center justify-center rounded-xl border px-1 text-center leading-tight transition ${
                 paid === p ? 'border-navy-600 bg-navy-600/5 font-semibold text-navy-900' : 'border-slate-200 text-slate-600'
               }`}
             >
@@ -558,9 +567,10 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
             </label>
           ))}
         </div>
+        </div>
         <button
           type="submit"
-          className={`flex w-full items-center justify-center gap-2 rounded-xl py-3 text-[15px] font-bold text-white transition active:scale-[0.98] ${
+          className={`flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-[15px] font-bold text-white transition active:scale-[0.98] ${
             isIn ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-rose-600 hover:bg-rose-700'
           }`}
         >
@@ -569,6 +579,7 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
         <AnimatePresence>
           {msg && (
             <motion.p
+              ref={msgRef}
               key={msg.text}
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
@@ -576,8 +587,13 @@ const EntryForm: React.FC<{ type: Tipo; onType: (t: Tipo) => void; onAdd: (e: Om
               role={msg.ok ? 'status' : 'alert'}
               className={`rounded-xl px-3 py-2 text-[13px] ${msg.ok ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'}`}
             >
-              {msg.ok ? '✅ ' : '⚠️ '}
-              {msg.text}
+              {msg.ok ? (
+                <>
+                  ✅ “{msg.text}” lançado! Saldo livre agora: <b>R$ {brl(saldo)}</b>
+                </>
+              ) : (
+                <>⚠️ {msg.text}</>
+              )}
             </motion.p>
           )}
         </AnimatePresence>
@@ -638,21 +654,24 @@ export const DashboardSimulator: React.FC = () => {
   const atual = NAV.find((n) => n.key === view)!;
 
   return (
-    <section id="simulador" className="relative overflow-hidden bg-white py-20 sm:py-28">
+    <section id="simulador" className="relative overflow-hidden bg-white py-10 sm:py-12">
       <div className="pointer-events-none absolute -right-40 top-10 h-[480px] w-[480px] rounded-full bg-amber-100/60 blur-[140px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionTitle
-          light
-          eyebrow="Experimente o painel"
-          title="Lance uma receita ou despesa e veja o painel mudar na hora."
-          sub="Este é um simulador do painel. Use os atalhos ou digite seus próprios valores: totais, categorias e contas a pagar atualizam na hora."
-        />
+        {/* título compacto: a janela do simulador precisa caber inteira na tela */}
+        <Reveal className="mb-5 text-center sm:mb-6">
+          <span className="inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-700">
+            Experimente o painel
+          </span>
+          <h2 className="font-display mt-3 text-[1.6rem] font-bold leading-[1.15] tracking-tight text-balance text-navy-900 sm:text-3xl lg:text-[2.1rem]">
+            Lance uma receita ou despesa e veja o painel mudar na hora.
+          </h2>
+        </Reveal>
 
         <Reveal>
           <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-navy-900/15">
             <BrowserBar url={`painel.financasdoservidor.com.br/${atual.url}`} />
 
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row lg:h-[clamp(440px,calc(100svh-285px),600px)]">
               {/* menu: lateral no computador, abas no celular */}
               <aside className="shrink-0 bg-navy-900 md:w-56 md:p-4">
                 <div className="mb-5 hidden items-center gap-2.5 px-1 md:flex">
@@ -684,10 +703,10 @@ export const DashboardSimulator: React.FC = () => {
                 </nav>
               </aside>
 
-              <div className="min-w-0 flex-1 bg-slate-50">
-                <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
+              <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-50">
+                <header className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-2.5 sm:px-5">
                   <div>
-                    <h3 className="font-display text-[19px] font-bold text-navy-900">{view === 'geral' ? 'Visão geral' : atual.label}</h3>
+                    <h3 className="font-display text-[17px] font-bold text-navy-900 sm:text-[18px]">{view === 'geral' ? 'Visão geral' : atual.label}</h3>
                     <p className="text-[12.5px] text-slate-500">
                       {view === 'geral' ? `Suas finanças em ${MES}` : 'Lançamentos do mês'}
                     </p>
@@ -700,8 +719,8 @@ export const DashboardSimulator: React.FC = () => {
                   </div>
                 </header>
 
-                <div className="p-3 sm:p-6">
-                  <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 lg:gap-3">
+                <div className="shrink-0 px-3 pt-3 sm:px-5">
+                  <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
                     <Kpi label="Receitas" value={k.receitas} dot="bg-emerald-500" note={k.aReceber ? `R$ ${brl(k.aReceber)} a receber` : 'tudo recebido'} />
                     <Kpi label="Despesas" value={k.despesas} dot="bg-rose-500" note={`R$ ${brl(k.pago)} já pagos`} />
                     <Kpi label="Saldo livre" value={saldo} dot="bg-amber-400" note="receitas − despesas" />
@@ -712,7 +731,10 @@ export const DashboardSimulator: React.FC = () => {
                       note={k.nPendentes ? `${k.nPendentes} conta${k.nPendentes > 1 ? 's' : ''} pendente${k.nPendentes > 1 ? 's' : ''}` : 'nada pendente 🎉'}
                     />
                   </div>
+                </div>
 
+                {/* só esta parte rola por dentro da janela */}
+                <div className="min-h-0 flex-1 p-3 sm:px-5 lg:overflow-y-auto">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={view}
@@ -720,12 +742,11 @@ export const DashboardSimulator: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className="mt-3 lg:mt-4"
                     >
                       {view === 'geral' ? (
-                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-4">
+                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
                           <Panel title="Situação das despesas" caption="O que já foi pago e o que ainda vence no mês">
-                            <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-200">
+                            <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-200">
                               <motion.div
                                 className="h-full rounded-full bg-emerald-500"
                                 initial={false}
@@ -742,11 +763,11 @@ export const DashboardSimulator: React.FC = () => {
                               </span>
                             </div>
                             {k.aPagar > 0 && (
-                              <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-[13px] text-amber-900">
+                              <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-[13px] text-amber-900">
                                 ⚡ Você tem <b>R$ {brl(k.aPagar)}</b> em contas pendentes este mês.
                               </p>
                             )}
-                            <div className="mt-4 flex flex-wrap gap-2">
+                            <div className="mt-3 flex flex-wrap gap-2">
                               <button
                                 onClick={() => setView('out')}
                                 className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-rose-700"
@@ -767,20 +788,20 @@ export const DashboardSimulator: React.FC = () => {
                           </Panel>
 
                           <Panel title="Últimos lançamentos" caption="Toque em “pagar” para dar baixa numa conta" className="lg:col-span-2">
-                            <EntryList entries={entries.slice(0, 6)} lastId={lastId} onToggle={toggle} />
+                            <EntryList entries={entries.slice(0, 5)} lastId={lastId} onToggle={toggle} />
                           </Panel>
                         </div>
                       ) : (
-                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[360px_1fr] lg:gap-4">
-                          <EntryForm key={view} type={view} onType={(t) => setView(t)} onAdd={add} />
-                          <div className="space-y-3 lg:space-y-4">
+                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,390px)_1fr] lg:items-start">
+                          <EntryForm key={view} type={view} saldo={saldo} onType={(t) => setView(t)} onAdd={add} />
+                          <div className="space-y-3">
                             <Panel
                               title={view === 'in' ? 'Receitas por fonte' : 'Despesas por categoria'}
                               caption={`${(view === 'in' ? k.ins : k.outs).length} lançamentos · R$ ${brl(view === 'in' ? k.receitas : k.despesas)}`}
                             >
                               <CategoryBars entries={view === 'in' ? k.ins : k.outs} highlight={lastCat} />
                             </Panel>
-                            <Panel title={view === 'in' ? 'Receitas do mês' : 'Despesas do mês'}>
+                            <Panel title={view === 'in' ? 'Receitas do mês' : 'Despesas do mês'} className="max-h-[320px] overflow-y-auto lg:max-h-none">
                               <EntryList entries={view === 'in' ? k.ins : k.outs} lastId={lastId} onToggle={toggle} />
                             </Panel>
                           </div>
@@ -794,11 +815,11 @@ export const DashboardSimulator: React.FC = () => {
           </div>
         </Reveal>
 
-        <Reveal className="mt-10 text-center">
-          <a href="#planos" className="btn-gold rounded-full px-7 py-4 text-[16px]">
-            Quero esse painel no meu dia a dia <ArrowRight className="h-5 w-5" />
+        <Reveal className="mt-6 flex flex-col items-center gap-2 text-center sm:flex-row sm:justify-center sm:gap-5">
+          <p className="text-[13px] text-slate-500">No sistema real, o que você manda pelo WhatsApp aparece aqui sozinho.</p>
+          <a href="#planos" className="btn-gold rounded-full px-6 py-3 text-[15px]">
+            Quero esse painel <ArrowRight className="h-4 w-4" />
           </a>
-          <p className="mt-3 text-[13px] text-slate-500">No sistema real, tudo o que você manda pelo WhatsApp aparece aqui sozinho.</p>
         </Reveal>
       </div>
     </section>

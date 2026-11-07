@@ -53,16 +53,16 @@ export const SectionTitle: React.FC<{
   center?: boolean;
   light?: boolean;
 }> = ({ eyebrow, title, sub, center = true, light }) => (
-  <Reveal className={`${center ? 'mx-auto text-center' : ''} mb-10 max-w-3xl sm:mb-14`}>
+  <Reveal className={`${center ? 'mx-auto text-center' : ''} mb-7 max-w-3xl sm:mb-9`}>
     {eyebrow && <div className="mb-4"><Eyebrow light={light}>{eyebrow}</Eyebrow></div>}
     <h2
-      className={`font-display text-3xl font-bold leading-[1.1] tracking-tight text-balance sm:text-4xl md:text-5xl ${
+      className={`font-display text-[1.75rem] font-bold leading-[1.1] tracking-tight text-balance sm:text-4xl lg:text-[2.75rem] ${
         light ? 'text-navy-900' : 'text-white'
       }`}
     >
       {title}
     </h2>
-    {sub && <p className={`mt-4 text-base leading-relaxed sm:text-lg ${light ? 'text-slate-600' : 'text-slate-300'}`}>{sub}</p>}
+    {sub && <p className={`mt-3 text-[15px] leading-relaxed sm:text-[17px] ${light ? 'text-slate-600' : 'text-slate-300'}`}>{sub}</p>}
   </Reveal>
 );
 
@@ -111,7 +111,7 @@ export const PhoneFrame: React.FC<{
   return (
     <div className={`relative mx-auto w-full max-w-[340px] ${className}`}>
       <div className="rounded-[46px] border border-slate-600/60 bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 p-[9px] shadow-2xl shadow-black/50">
-        <div className="relative flex h-[620px] flex-col overflow-hidden rounded-[38px] bg-[#efeae2]">
+        <div className="relative flex h-[440px] flex-col overflow-hidden rounded-[38px] bg-[#efeae2] sm:h-[580px]">
           {/* barra de status do celular */}
           <div className="flex items-center justify-between bg-[#008069] px-7 pb-1 pt-3 text-[12px] font-semibold text-white">
             <span>{agora()}</span>

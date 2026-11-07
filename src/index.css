@@ -14,6 +14,12 @@
   --color-mist: #f2f5fb;
 }
 
+@media (min-width: 640px) {
+  html {
+    scroll-padding-top: 76px;
+  }
+}
+
 @layer base {
   html,
   body {
@@ -23,7 +29,7 @@
   }
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 140px;
+    scroll-padding-top: 100px;
     background-color: #0d2050;
     color: #f8fafc;
   }
@@ -244,4 +250,14 @@
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 4px;
+}
+
+/* Simulador: detalhe dos totais só aparece em telas altas, para a janela caber inteira */
+.kpi-note {
+  display: none;
+}
+@media (min-width: 640px) and (min-height: 860px) {
+  .kpi-note {
+    display: block;
+  }
 }

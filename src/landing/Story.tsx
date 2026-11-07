@@ -31,10 +31,10 @@ const DEPOIMENTOS = [
   { n: 'Ricardo M.', r: 'Agente de segurança · Porto Alegre/RS', t: 'Mando áudio saindo do plantão e ele já lança tudo. Primeira vez que eu sei pra onde vai o meu salário.' },
   { n: 'Anderson L.', r: 'Servidor estadual · Curitiba/PR', t: 'Eu e minha esposa usamos juntos. Acabou a discussão de "quem gastou isso?" no fim do mês.' },
   { n: 'Juliana P.', r: 'Servidora municipal · Belo Horizonte/MG', t: 'Tiro foto da nota fiscal do mercado e pronto. Não acredito que demorei tanto pra começar.' },
-  { n: 'Marcos V.', r: 'Agente de segurança · Goiânia/GO', t: 'A escala extra entrava e sumia. Agora fica separado e eu sei quanto é extra de verdade.' },
+  { n: 'Marcos V.', r: 'Professor da rede estadual · Goiânia/GO', t: 'O 13º entrava e sumia. Agora eu planejo antes de ele cair na conta.' },
   { n: 'Fernanda C.', r: 'Servidora federal · Brasília/DF', t: 'Planilha eu abandonava em uma semana. Isso aqui eu uso todo dia porque é no WhatsApp.' },
   { n: 'Rafael S.', r: 'Servidor estadual · Recife/PE', t: 'Pergunto "quanto sobrou?" e ele responde na hora. Simples demais.' },
-  { n: 'Thiago R.', r: 'Agente de segurança · Florianópolis/SC', t: 'O relatório do mês me mostrou que eu gastava quase R$ 600 só com lanche no plantão. Cortei metade.' },
+  { n: 'Thiago R.', r: 'Técnico de enfermagem, servidor municipal · Florianópolis/SC', t: 'O relatório do mês me mostrou que eu gastava quase R$ 600 só com lanche no plantão. Cortei metade.' },
   { n: 'Patrícia A.', r: 'Servidora estadual · Salvador/BA', t: 'Comecei no teste grátis e assinei o anual no segundo dia. Vale cada centavo.' },
 ];
 
@@ -104,7 +104,7 @@ export const SocialProof: React.FC = () => {
 const NOTIFS = [
   { t: '✅ Despesa registrada', v: 'Almoço · R$ 42,00' },
   { t: '✅ Nota fiscal lida', v: 'Mercado · R$ 184,30' },
-  { t: '🟢 Receita registrada', v: 'Escala extra · + R$ 960,00' },
+  { t: '🟢 Receita registrada', v: 'Renda extra · + R$ 960,00' },
   { t: '💰 Saldo livre do mês', v: 'R$ 3.214,70' },
 ];
 
@@ -213,7 +213,7 @@ const ENTREGAVEIS = [
   { icon: Smartphone, tag: 'Principal', t: 'Assistente financeiro no WhatsApp', d: 'Registros ilimitados por texto, áudio e foto da nota fiscal, 24 horas por dia.' },
   { icon: BarChart3, tag: 'Incluso', t: 'App do painel financeiro', d: 'Gráficos, categorias e histórico mês a mês no aplicativo que você instala no celular.' },
   { icon: Gift, tag: 'Bônus 1', t: 'Relatório mensal no WhatsApp', d: 'Todo fim de mês, um resumo com entradas, saídas, saldo e onde você mais gastou.' },
-  { icon: BookOpen, tag: 'Bônus 2', t: 'Guia Salário em Ordem', d: 'Passo a passo para se planejar para o 13º, as férias e a escala extra sem sufoco.' },
+  { icon: BookOpen, tag: 'Bônus 2', t: 'Guia Salário em Ordem', d: 'Passo a passo para se planejar para o 13º, as férias e os gastos do ano sem sufoco.' },
   { icon: Users, tag: 'Bônus 3', t: 'Dependente incluso', d: 'No Plano Anual, quem divide as contas com você usa sem pagar nada a mais.' },
   { icon: Headphones, tag: 'Bônus 4', t: 'Suporte humano no WhatsApp', d: 'Gente de verdade para tirar dúvidas. No Plano Anual, com atendimento prioritário.' },
 ];
@@ -260,8 +260,8 @@ export const Deliverables: React.FC = () => (
    DOBRA 6 — PARA QUEM É
    ===================================================================== */
 const SIM = [
-  'Trabalha em escala ou plantão e não tem tempo para planilha',
-  'Recebe salário mais extras: escala extra, diárias, adicionais',
+  'É servidor público, de qualquer área, e não tem tempo para planilha',
+  'Quer saber para onde vai o salário e quanto sobra no fim do mês',
   'Chega no fim do mês sem saber para onde foi o dinheiro',
   'Quer organizar as contas da casa junto com a família',
   'Já usa o WhatsApp todos os dias',
@@ -368,15 +368,15 @@ export const Authority: React.FC = () => (
           <div className="mt-6 space-y-4 text-[17px] leading-relaxed text-slate-300">
             <p>
               O <strong className="text-white">Finanças do Servidor</strong> nasceu de uma pergunta simples: por que é tão difícil
-              para quem trabalha em escala saber quanto sobra no fim do mês?
+              para o servidor público saber quanto sobra no fim do mês?
             </p>
             <p>
-              Planilha exige tempo que o plantão não deixa. Aplicativo de banco mostra o extrato, mas não organiza a vida. Por isso
+              Planilha exige tempo que a rotina não deixa. Aplicativo de banco mostra o extrato, mas não organiza a vida. Por isso
               juntamos inteligência artificial e educação financeira num assistente que cabe no lugar onde você já está todo dia:
               o WhatsApp.
             </p>
             <p>
-              Cada detalhe foi pensado para a realidade do servidor: salário mais extras, diárias, 13º, férias e contas da casa
+              Cada detalhe foi pensado para a realidade do servidor: salário fixo, 13º, férias, imposto de renda e contas da casa
               divididas com a família.
             </p>
           </div>

@@ -42,7 +42,7 @@ const CATS: [string, number][] = [
 const RECURSOS = [
   'Entradas, saídas e saldo livre do mês em tempo real',
   'Gastos separados por categoria, sem você fazer nada',
-  'Salário, escala extra e diárias como fontes separadas',
+  'Salário, 13º, férias e rendas extras como fontes separadas',
   'Contas pagas e contas pendentes lado a lado',
   'Evolução mês a mês para comparar com o mês anterior',
   'Lance pelo WhatsApp ou direto no painel',
@@ -199,7 +199,7 @@ const MobileMock: React.FC = () => (
         <p className="text-[9.5px] font-semibold text-navy-900">Últimos lançamentos</p>
         {[
           ['Café na padaria', '− 8,50', false],
-          ['Escala extra', '+ 960,00', true],
+          ['Renda extra', '+ 960,00', true],
           ['Supermercado', '− 184,30', false],
           ['Combustível', '− 150,00', false],
         ].map(([d, v, inc]) => (
@@ -287,7 +287,7 @@ type View = 'geral' | Tipo;
 
 const CATEGORIAS: Record<Tipo, string[]> = {
   out: ['Casa e contas', 'Mercado', 'Alimentação', 'Transporte', 'Saúde', 'Educação', 'Lazer', 'Outros'],
-  in: ['Salário', 'Escala extra', 'Diárias', 'Restituição', 'Outros'],
+  in: ['Salário', '13º e férias', 'Renda extra', 'Restituição', 'Outros'],
 };
 
 const ATALHOS: Record<Tipo, [string, number, string][]> = {
@@ -298,8 +298,8 @@ const ATALHOS: Record<Tipo, [string, number, string][]> = {
     ['Luz', 212.4, 'Casa e contas'],
   ],
   in: [
-    ['Escala extra', 960, 'Escala extra'],
-    ['Diárias', 540, 'Diárias'],
+    ['Renda extra', 960, 'Renda extra'],
+    ['13º salário', 4225, '13º e férias'],
     ['Restituição IR', 1320, 'Restituição'],
   ],
 };
@@ -319,7 +319,7 @@ const INICIAIS: Entry[] = [
   { id: 4, type: 'out', desc: 'Combustível', cat: 'Transporte', v: 610, date: dia(10), paid: true },
   { id: 5, type: 'out', desc: 'Plano de saúde', cat: 'Saúde', v: 420, date: dia(15), paid: false },
   { id: 6, type: 'out', desc: 'Escola das crianças', cat: 'Educação', v: 680, date: dia(20), paid: false },
-  { id: 7, type: 'in', desc: 'Escala extra', cat: 'Escala extra', v: 960, date: dia(22), paid: false },
+  { id: 7, type: 'in', desc: 'Renda extra', cat: 'Renda extra', v: 960, date: dia(22), paid: false },
   { id: 8, type: 'out', desc: 'Internet', cat: 'Casa e contas', v: 119.9, date: dia(25), paid: false },
 ];
 
@@ -532,7 +532,7 @@ const EntryForm: React.FC<{ type: Tipo; saldo: number; onType: (t: Tipo) => void
         <input
           className={field}
           aria-label="Descrição"
-          placeholder={isIn ? 'Descrição (ex.: Escala extra)' : 'Descrição (ex.: Mercado)'}
+          placeholder={isIn ? 'Descrição (ex.: Restituição do IR)' : 'Descrição (ex.: Mercado)'}
           value={desc}
           maxLength={60}
           onChange={(e) => setDesc(e.target.value)}

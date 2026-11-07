@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Calculator, Check, ClipboardCheck, ShieldCheck, Star, User, Users } from 'lucide-react';
+import { ArrowRight, Calculator, Check, ClipboardCheck, Landmark, ShieldCheck, Star, User, Users } from 'lucide-react';
 import { motion } from 'motion/react';
 import { LINKS, PRECOS, brl } from './data';
 import { Reveal, SectionTitle } from './ui';
@@ -9,13 +9,14 @@ const BASE = [
   'Texto, áudio e foto da nota fiscal',
   'Painel financeiro completo',
   'Relatórios de entradas e saídas',
+  'Calculadora de distribuição da renda',
 ];
 
 /* Recursos que só o Plano Anual tem */
-const EXCLUSIVOS_ANUAL = ['Calculadora de distribuição da renda', 'Diagnóstico financeiro completo com plano RSC'];
+const EXCLUSIVOS_ANUAL = ['Diagnóstico financeiro completo', 'Simuladores de crédito e amortização'];
 
 const SeloAnual: React.FC = () => (
-  <span className="ml-1.5 inline-block whitespace-nowrap rounded-full bg-amber-400 px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-slate-950">
+  <span className="inline-block whitespace-nowrap rounded-full bg-amber-400 px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-slate-950">
     Exclusivo do anual
   </span>
 );
@@ -35,53 +36,64 @@ const Feature: React.FC<{ children: React.ReactNode; gold?: boolean; light?: boo
   </li>
 );
 
-/* ---------- Exclusivos do Plano Anual (seção antes dos planos) ---------- */
-const RECURSOS_ANUAL = [
+/* ---------- Ferramentas do app (seção antes dos planos) ---------- */
+const FERRAMENTAS = [
   {
     icon: Calculator,
     t: 'Calculadora de distribuição da renda',
-    d: 'Informe sua renda fixa e a extra e veja quanto vai para despesas obrigatórias, despesas variáveis e reservas, por mês, por semana e por dia.',
-    extra: 'Padrão Ideal 50/30/20, Aceitável 60/30/10 ou do seu jeito. Com um clique, os valores viram as metas do mês no app.',
+    anual: false,
+    d: 'Informe sua renda fixa e extra e veja quanto separar por mês, por semana e por dia para despesas obrigatórias, despesas variáveis e reservas.',
+    extra: 'Padrão Ideal 50/30/20, Aceitável 60/30/10 ou personalizado. Com um clique, os valores viram as metas do mês no app.',
   },
   {
     icon: ClipboardCheck,
-    t: 'Diagnóstico financeiro completo com plano RSC',
-    d: 'Em 4 etapas, veja se você está no Ideal, Aceitável ou Crítico pelo quanto da renda já começa o mês comprometida, e onde o dinheiro está pesando.',
-    extra: 'Depois, escolha Reduzir, Substituir ou Cortar em cada despesa, veja a economia por mês e em 12 meses e exporte tudo em PDF.',
+    t: 'Diagnóstico financeiro completo',
+    anual: true,
+    d: 'Em 4 etapas (Receitas, Despesas, Diagnóstico e Plano RSC), veja se você está no Ideal, Aceitável ou Crítico pelo quanto da renda já começa o mês comprometida.',
+    extra: 'Termômetro das despesas fixas e onde o dinheiro está pesando. Escolha Reduzir, Substituir ou Cortar, veja a economia em 12 meses e exporte em PDF.',
+  },
+  {
+    icon: Landmark,
+    t: 'Simuladores de crédito e amortização',
+    anual: true,
+    d: 'Simule consignado, empréstimo pessoal e financiamento e compare Price (parcelas fixas) e SAC (parcelas decrescentes) lado a lado.',
+    extra: 'Teste amortizações extras e veja quanto de juros deixa de pagar e quantas parcelas a menos, com tabela mês a mês, gráfico e PDF.',
   },
 ];
 
 export const AnnualExclusives: React.FC = () => (
-  <section id="exclusivos-anual" className="relative overflow-hidden bg-white py-12 sm:py-16">
-    <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+  <section id="ferramentas" className="relative overflow-hidden bg-white py-12 sm:py-16">
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
         light
-        eyebrow="Exclusivo do Plano Anual"
-        title="Descubra onde seu dinheiro está pesando."
-        sub="Duas ferramentas para entender quanto da sua renda já está comprometida e o que mudar para chegar ao padrão ideal."
+        eyebrow="Ferramentas do app"
+        title="Ferramentas para organizar e planejar seu dinheiro."
+        sub="O Diagnóstico e os Simuladores são exclusivos do Plano Anual."
       />
-      <div className="grid gap-5 md:grid-cols-2">
-        {RECURSOS_ANUAL.map((r, i) => (
+      <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
+        {FERRAMENTAS.map((r, i) => (
           <Reveal key={r.t} delay={i * 0.1}>
-            <div className="card-light flex h-full flex-col p-5 sm:p-6 sm:p-8">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-navy-900 text-amber-400">
-                  <r.icon className="h-7 w-7" />
+            <div className="card-light flex h-full flex-col p-5 sm:p-6">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-navy-900 text-amber-400">
+                  <r.icon className="h-6 w-6" />
                 </div>
-                <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wide text-amber-800">
-                  Exclusivo do anual
-                </span>
+                {r.anual && (
+                  <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wide text-amber-800">
+                    Plano Anual
+                  </span>
+                )}
               </div>
-              <h3 className="font-display mt-5 text-xl font-bold text-navy-900 sm:text-2xl">{r.t}</h3>
-              <p className="mt-2 leading-relaxed text-slate-600">{r.d}</p>
-              <p className="mt-2 leading-relaxed text-slate-600">{r.extra}</p>
+              <h3 className="font-display mt-4 text-lg font-bold leading-snug text-navy-900 sm:text-xl">{r.t}</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-slate-600">{r.d}</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-slate-600">{r.extra}</p>
             </div>
           </Reveal>
         ))}
       </div>
-      <Reveal className="mt-10 text-center">
+      <Reveal className="mt-8 text-center">
         <a href="#planos" className="btn-gold rounded-full px-7 py-4 text-[16px]">
-          Ver o Plano Anual <ArrowRight className="h-5 w-5" />
+          Ver os planos <ArrowRight className="h-5 w-5" />
         </a>
       </Reveal>
     </div>
@@ -100,16 +112,16 @@ export const Pricing: React.FC = () => {
   const anualPct = Math.round((anualEconomia / anualDe) * 100);
 
   return (
-    <section id="planos" className="relative overflow-hidden bg-mist pb-10 pt-8 sm:pb-12 sm:pt-9">
+    <section id="planos" className="relative overflow-hidden bg-mist pb-10 pt-7 sm:pb-12 sm:pt-6">
       <div className="pointer-events-none absolute left-1/2 top-40 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-amber-200/40 blur-[150px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* título compacto para os cards caberem na tela */}
-        <Reveal className="mb-5 text-center">
+        <Reveal className="mb-4 text-center">
           <span className="inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-700">
             Planos
           </span>
           <h2 className="font-display mt-3 text-[1.75rem] font-bold leading-[1.15] tracking-tight text-balance text-navy-900 sm:text-3xl lg:text-[2.25rem]">
-            Menos que um lanche no plantão por mês.
+            Menos que um lanche por mês.
           </h2>
           <p className="mt-2 text-[15px] text-slate-600 sm:text-[16px]">
             O assistente completo em todos os planos. O Anual inclui dependente e as ferramentas exclusivas.
@@ -117,7 +129,7 @@ export const Pricing: React.FC = () => {
         </Reveal>
 
         {/* seletor único de dependente */}
-        <Reveal className="mb-5 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-4">
+        <Reveal className="mb-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-4">
           <p className="text-[14px] text-slate-600">Vai usar sozinho ou com alguém da família?</p>
           <div className="relative grid grid-cols-2 rounded-full border border-slate-200 bg-white shadow-sm p-1">
             <motion.span
@@ -148,18 +160,21 @@ export const Pricing: React.FC = () => {
               <p className="mt-1 text-[13px] text-slate-300">12 meses, dependente incluso</p>
               <div className="mt-4">
                 <p className="text-[13px] text-slate-400"><span className="line-through">De R$ {brl(anualDe)}</span> <span className="text-[11px]">(12x mensal c/ dependente)</span></p>
-                <p className="font-display text-[2.6rem] leading-none font-bold text-white">
+                <p className="font-display text-[2.35rem] leading-none font-bold text-white">
                   <span className="text-2xl">R$</span> {brl(PRECOS.anual)}
                 </p>
                 <p className="mt-1 text-[14px] text-amber-300">equivale a R$ {brl(PRECOS.anual / 12)} por mês</p>
                 <p className="mt-1 text-[13px] font-semibold text-emerald-400">Você economiza R$ {brl(anualEconomia)}</p>
               </div>
-              <ul className="my-4 flex-1 space-y-1.5 border-t border-white/10 pt-4">
+              <ul className="my-3.5 flex-1 space-y-1.5 border-t border-white/10 pt-4">
                 {BASE.map((f) => <Feature key={f}>{f}</Feature>)}
+                {/* grupo com um selo só, para o card caber na tela */}
+                <li className="pt-1">
+                  <SeloAnual />
+                </li>
                 {EXCLUSIVOS_ANUAL.map((f) => (
                   <Feature gold key={f}>
                     {f}
-                    <SeloAnual />
                   </Feature>
                 ))}
                 <Feature gold>Dependente incluso sem custo</Feature>
@@ -178,10 +193,10 @@ export const Pricing: React.FC = () => {
               <p className="mt-1 text-[13px] text-slate-600">Use o assistente por 7 dias</p>
               <div className="mt-4">
                 <p className="text-[13px] text-transparent">.</p>
-                <p className="font-display text-[2.6rem] leading-none font-bold text-navy-900"><span className="text-2xl">R$</span> 0</p>
+                <p className="font-display text-[2.35rem] leading-none font-bold text-navy-900"><span className="text-2xl">R$</span> 0</p>
                 <p className="mt-1 text-[14px] text-emerald-600">sem cartão de crédito</p>
               </div>
-              <ul className="my-4 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
+              <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
                 {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}
               </ul>
               <a href={LINKS.testeGratis} target="_blank" rel="noopener noreferrer" className="btn-ghost-light w-full rounded-xl py-3.5 text-[15px]">
@@ -197,12 +212,12 @@ export const Pricing: React.FC = () => {
               <p className="mt-1 text-[13px] text-slate-600">{dep ? 'Titular + 1 dependente' : 'Só o titular'}</p>
               <div className="mt-4">
                 <p className="text-[13px] text-transparent">.</p>
-                <p className="font-display text-[2.6rem] leading-none font-bold text-navy-900">
+                <p className="font-display text-[2.35rem] leading-none font-bold text-navy-900">
                   <span className="text-2xl">R$</span> {brl(mensal)}
                 </p>
                 <p className="mt-1 text-[14px] text-slate-600">por mês · cancele quando quiser</p>
               </div>
-              <ul className="my-4 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
+              <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
                 {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}
                 {dep && <Feature light gold>1 dependente incluso</Feature>}
               </ul>
@@ -219,12 +234,12 @@ export const Pricing: React.FC = () => {
               <p className="mt-1 text-[13px] text-slate-600">{dep ? 'Titular + 1 dependente' : 'Só o titular'}</p>
               <div className="mt-4">
                 <p className="text-[13px] text-slate-500 line-through">De R$ {brl(triDe)}</p>
-                <p className="font-display text-[2.6rem] leading-none font-bold text-navy-900">
+                <p className="font-display text-[2.35rem] leading-none font-bold text-navy-900">
                   <span className="text-2xl">R$</span> {brl(tri)}
                 </p>
                 <p className="mt-1 text-[14px] text-slate-600">a cada 3 meses · R$ {brl(tri / 3)}/mês</p>
               </div>
-              <ul className="my-4 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
+              <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
                 {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}
                 {dep && <Feature light gold>1 dependente incluso</Feature>}
               </ul>

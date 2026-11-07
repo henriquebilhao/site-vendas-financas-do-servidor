@@ -37,7 +37,7 @@ const FAQ = [
   },
   {
     q: 'O que o Plano Anual tem a mais?',
-    a: 'Além de tudo dos outros planos, o anual libera a Calculadora de distribuição da renda e o Diagnóstico financeiro completo, para você saber exatamente quanto da sua renda já está comprometida e o que mudar para chegar ao padrão ideal.',
+    a: 'Além de tudo dos outros planos, incluindo a Calculadora de distribuição da renda, o anual libera o Diagnóstico financeiro completo e os Simuladores de crédito e amortização, para você saber quanto da sua renda já está comprometida e quanto economiza ao amortizar suas dívidas.',
   },
   {
     q: 'Tem limite de mensagens ou de registros?',

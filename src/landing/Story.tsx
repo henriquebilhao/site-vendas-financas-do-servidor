@@ -71,7 +71,7 @@ export const SocialProof: React.FC = () => {
   const linha1 = DEPOIMENTOS.slice(0, 4);
   const linha2 = DEPOIMENTOS.slice(4);
   return (
-    <section id="depoimentos" className="relative overflow-hidden bg-mist py-20 sm:py-28">
+    <section id="depoimentos" className="relative overflow-hidden bg-mist py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionTitle
           light
@@ -133,7 +133,7 @@ export const VideoSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="como-funciona" className="relative overflow-hidden bg-white py-20 sm:py-28">
+    <section id="como-funciona" className="relative overflow-hidden bg-white py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionTitle
           light
@@ -219,7 +219,7 @@ const ENTREGAVEIS = [
 ];
 
 export const Deliverables: React.FC = () => (
-  <section id="bonus" className="relative overflow-hidden bg-navy-900 py-20 sm:py-28">
+  <section id="bonus" className="relative overflow-hidden bg-navy-900 py-12 sm:py-16">
     <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[140px]" />
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
@@ -273,7 +273,7 @@ const NAO = [
 ];
 
 export const ForWhom: React.FC = () => (
-  <section id="para-quem" className="bg-white py-20 sm:py-28">
+  <section id="para-quem" className="bg-white py-12 sm:py-16">
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
       <SectionTitle light eyebrow="Para quem é" title="O Finanças do Servidor foi feito para você se…" />
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
@@ -334,7 +334,7 @@ const COMPROMISSOS = [
 ];
 
 export const Authority: React.FC = () => (
-  <section id="quem-somos" className="relative overflow-hidden bg-navy-800 py-20 sm:py-28">
+  <section id="quem-somos" className="relative overflow-hidden bg-navy-800 py-12 sm:py-16">
     <div className="pointer-events-none absolute -right-40 top-10 h-[500px] w-[500px] rounded-full bg-blue-500/15 blur-[140px]" />
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]">

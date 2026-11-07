@@ -6,7 +6,7 @@ export const LINKS = {
   trimestralCom: 'https://pay.hotmart.com/P108349038G?off=020d4o7v',
   anual: 'https://pay.hotmart.com/P108349038G?off=tllte0hp',
   testeGratis:
-    'https://wa.me/5554994197878?text=Ol%C3%A1%21+Gostaria+de+iniciar+meu+teste+gr%C3%A1tis+de+3+dias+no+Finan%C3%A7as+do+Servidor.',
+    'https://wa.me/5554994197878?text=Ol%C3%A1%21+Gostaria+de+iniciar+meu+teste+gr%C3%A1tis+de+7+dias+no+Finan%C3%A7as+do+Servidor.',
   areaCliente: 'https://membros.appfinancasdoservidor.digital',
   suporteEmail: 'suporte@appfinancasdoservidor.digital',
   cadastroPainel: 'https://membros.appfinancasdoservidor.digital/cadastro',

@@ -56,7 +56,7 @@ const FAQ = [
 export const Faq: React.FC = () => {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="bg-navy-900 py-20 sm:py-28">
+    <section id="faq" className="bg-navy-900 py-12 sm:py-16">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <SectionTitle eyebrow="Dúvidas" title="Perguntas frequentes." sub="Não achou a sua? Fale com o nosso suporte humano." />
         <div className="divide-y divide-white/10 border-y border-white/10">
@@ -112,7 +112,7 @@ export const Faq: React.FC = () => {
 
 /* ---------- Chamada final ---------- */
 export const FinalCta: React.FC = () => (
-  <section className="bg-white px-4 py-20 sm:px-6 sm:py-24">
+  <section className="bg-white px-4 py-12 sm:px-6 sm:py-16">
     <Reveal>
       <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[32px] border border-amber-400/30 bg-gradient-to-br from-navy-700 via-navy-800 to-navy-900 px-6 py-14 text-center sm:px-12 sm:py-20">
         <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[600px] -translate-x-1/2 rounded-full bg-amber-400/20 blur-[100px]" />
@@ -129,7 +129,7 @@ export const FinalCta: React.FC = () => (
               Escolher meu plano <ArrowRight className="h-5 w-5" />
             </a>
             <a href={LINKS.testeGratis} target="_blank" rel="noopener noreferrer" className="btn-ghost rounded-full px-8 py-4 text-[16px]">
-              Testar 3 dias grátis
+              Testar 7 dias grátis
             </a>
           </div>
         </div>

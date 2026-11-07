@@ -134,7 +134,7 @@ type Msg = { key: number; node: React.ReactNode };
 
 const welcome = (time: string) => (
   <Bubble from="bot" time={time}>
-    Oi! 👋 Eu sou seu assistente financeiro.{'\n'}Toque num pedido aqui embaixo e veja como eu respondo.
+    Oi! 👋 Eu sou seu assistente financeiro.{'\n'}Toque num pedido e veja como eu respondo.
   </Bubble>
 );
 
@@ -222,32 +222,21 @@ export const LiveDemo: React.FC = () => {
   const max = cats[0]?.[1] || 1;
 
   return (
-    <section id="teste" className="relative overflow-hidden bg-mist py-20 sm:py-28">
+    <section id="teste" className="relative overflow-hidden bg-mist py-12 sm:py-16">
       <div className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-blue-200/50 blur-[140px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionTitle light
+        {/* celular: texto → WhatsApp → botões (como respostas rápidas) → painel. Computador: WhatsApp à esquerda, o resto à direita */}
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[340px_1fr] lg:items-center lg:gap-x-14 lg:gap-y-6">
+        <div className="min-w-0 text-center lg:col-start-2 lg:row-start-1 lg:self-end lg:text-left">
+        <SectionTitle light center={false}
           eyebrow="Teste agora, sem cadastro"
           title="Se você sabe mandar mensagem no WhatsApp, já sabe usar."
-          sub="Toque em qualquer pedido e veja a resposta e o painel atualizarem na hora, do jeito que acontece de verdade."
+          sub="Toque num pedido e veja a resposta e o painel atualizarem na hora."
         />
 
-        <div className="mb-8 flex flex-wrap justify-center gap-2.5">
-          {ACTIONS.map((a) => (
-            <button
-              key={a.id}
-              onClick={() => run(a)}
-              disabled={busy}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-medium text-navy-900 shadow-sm transition hover:border-amber-400 hover:bg-amber-50 active:scale-95 disabled:opacity-50"
-            >
-              <a.icon className="h-4 w-4 text-amber-500" /> {a.label}
-            </button>
-          ))}
-          <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-full px-3 py-2.5 text-[13px] text-slate-500 hover:text-navy-900">
-            <RotateCcw className="h-3.5 w-3.5" /> Recomeçar
-          </button>
         </div>
 
-        <div className="grid items-center gap-10 lg:grid-cols-[auto_1fr] lg:gap-16">
+          <div className="min-w-0 lg:col-start-1 lg:row-span-3 lg:row-start-1">
           <PhoneFrame
             className="lg:mx-0 lg:w-[340px]"
             status={status}
@@ -261,15 +250,40 @@ export const LiveDemo: React.FC = () => {
               <React.Fragment key={m.key}>{m.node}</React.Fragment>
             ))}
           </PhoneFrame>
+          {/* no celular o painel fica abaixo: mostra o saldo aqui para a mudança aparecer na hora */}
+          <p className="mt-2 text-center text-[13px] text-slate-600 lg:hidden">
+            📊 Saldo livre no painel:{' '}
+            <motion.b key={t.saldo} initial={{ opacity: 0.3, y: -3 }} animate={{ opacity: 1, y: 0 }} className="inline-block tabular-nums text-navy-900">
+              R$ {brl(t.saldo)}
+            </motion.b>
+          </p>
+          </div>
+
+        {/* pedidos: no celular ficam logo abaixo do WhatsApp, numa linha que desliza para o lado */}
+        <div className="no-scrollbar -mx-4 -mt-2 flex min-w-0 gap-2 overflow-x-auto px-4 pb-1 lg:col-start-2 lg:row-start-2 lg:mx-0 lg:mt-0 lg:flex-wrap lg:overflow-visible lg:px-0">
+          {ACTIONS.map((a) => (
+            <button
+              key={a.id}
+              onClick={() => run(a)}
+              disabled={busy}
+              className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-medium text-navy-900 shadow-sm transition hover:border-amber-400 hover:bg-amber-50 active:scale-95 disabled:opacity-50"
+            >
+              <a.icon className="h-4 w-4 text-amber-500" /> {a.label}
+            </button>
+          ))}
+          <button onClick={reset} className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2.5 text-[13px] text-slate-500 hover:text-navy-900">
+            <RotateCcw className="h-3.5 w-3.5" /> Recomeçar
+          </button>
+        </div>
 
           {/* mini painel sincronizado */}
-          <div className="card-light p-5 sm:p-7">
-            <div className="mb-5 flex items-center justify-between">
+          <div className="card-light min-w-0 p-5 sm:p-6 lg:col-start-2 lg:row-start-3 lg:self-start">
+            <div className="mb-4 flex items-center justify-between">
               <div>
                 <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" /> Atualiza ao vivo
                 </p>
-                <p className="font-display mt-1 text-2xl font-bold text-navy-900">Seu painel</p>
+                <p className="font-display mt-0.5 text-xl font-bold text-navy-900">Seu painel</p>
               </div>
               <span className="rounded-full bg-slate-100 px-3 py-1 text-[12px] text-slate-600">{new Date().toLocaleString('pt-BR', { month: 'long' })}</span>
             </div>
@@ -294,7 +308,7 @@ export const LiveDemo: React.FC = () => {
               ))}
             </div>
 
-            <p className="mb-3 mt-6 text-[13px] font-semibold text-navy-900">Gastos por categoria</p>
+            <p className="mb-2.5 mt-5 text-[13px] font-semibold text-navy-900">Gastos por categoria</p>
             <div className="space-y-3">
               {cats.map(([c, v]) => (
                 <motion.div layout key={c}>

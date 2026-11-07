@@ -34,7 +34,7 @@ const DORES = [
 ];
 
 export const ForWho: React.FC = () => (
-  <section id="dores" className="relative overflow-hidden bg-navy-800 py-20 sm:py-28">
+  <section id="dores" className="relative overflow-hidden bg-navy-800 py-12 sm:py-16">
     <div className="pointer-events-none absolute -left-40 bottom-0 h-[420px] w-[420px] rounded-full bg-rose-500/10 blur-[140px]" />
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
@@ -141,7 +141,7 @@ const PLANTAO = [
 export const ShiftTimeline: React.FC = () => {
   const [active, setActive] = useState(0);
   return (
-    <section id="plantao" className="relative bg-navy-800 py-20 sm:py-28">
+    <section id="plantao" className="relative bg-navy-800 py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionTitle
           eyebrow="Como funciona"
@@ -212,7 +212,7 @@ export const ShiftTimeline: React.FC = () => {
 
 /* ---------- Dependente / casal ---------- */
 export const Together: React.FC = () => (
-  <section className="bg-mist py-20 sm:py-28">
+  <section className="bg-mist py-12 sm:py-16">
     <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
       <Reveal>
         <div className="mb-4"><span className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-700">Família</span></div>
@@ -275,7 +275,7 @@ const SEG = [
 ];
 
 export const Security: React.FC = () => (
-  <section id="seguranca" className="bg-navy-800 py-20 sm:py-28">
+  <section id="seguranca" className="bg-navy-800 py-12 sm:py-16">
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
         eyebrow="Segurança"

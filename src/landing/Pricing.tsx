@@ -109,7 +109,7 @@ export const Pricing: React.FC = () => {
             Planos
           </span>
           <h2 className="font-display mt-3 text-[1.75rem] font-bold leading-[1.15] tracking-tight text-balance text-navy-900 sm:text-3xl lg:text-[2.25rem]">
-            Menos que um lanche no plantão por mês.
+            Menos que um lanche por mês.
           </h2>
           <p className="mt-2 text-[15px] text-slate-600 sm:text-[16px]">
             O assistente completo em todos os planos. O Anual inclui dependente e as ferramentas exclusivas.

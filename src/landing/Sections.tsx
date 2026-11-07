@@ -9,7 +9,6 @@ import {
   Lock,
   TrendingUp,
   UserPlus,
-  Wallet,
 } from 'lucide-react';
 import { AudioBubble, Bubble, PhoneFrame, PhotoBubble, Receipt, Reveal, SectionTitle } from './ui';
 
@@ -18,18 +17,13 @@ import { AudioBubble, Bubble, PhoneFrame, PhotoBubble, Receipt, Reveal, SectionT
 const DORES = [
   {
     icon: CalendarClock,
-    t: 'Escala que não para',
-    d: '12x36, 24x72, plantão de fim de semana. Não sobra tempo para planilha, e o gasto fica sem anotar.',
-  },
-  {
-    icon: Wallet,
-    t: 'Salário que entra picado',
-    d: 'Vencimento, escala extra, diárias, adicional. Fica difícil saber o que é fixo e o que é extra.',
+    t: 'Rotina que não para',
+    d: 'Expediente, escala ou plantão. Não sobra tempo para planilha, e o gasto fica sem anotar.',
   },
   {
     icon: TrendingUp,
-    t: 'O mês acaba antes do salário',
-    d: 'Pequenos gastos do plantão somam no fim do mês, e a fatura chega maior do que você esperava.',
+    t: 'O salário acaba antes do mês acabar',
+    d: 'Pequenos gastos do dia a dia somam no fim do mês, e a fatura chega maior do que você esperava.',
   },
 ];
 
@@ -39,11 +33,11 @@ export const ForWho: React.FC = () => (
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
         eyebrow="Você se identifica?"
-        title={<>Quem protege todo mundo também merece ter o próprio dinheiro protegido.</>}
+        title={<>Quem cuida do serviço público também merece ter o próprio dinheiro em ordem.</>}
         sub="Se alguma dessas situações parece familiar, você não está sozinho. E não é falta de esforço: é falta da ferramenta certa."
       />
 
-      <div className="grid gap-5 md:grid-cols-3">
+      <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-2">
         {DORES.map(({ icon: I, t, d }, i) => (
           <Reveal key={t} delay={i * 0.1}>
             <motion.div whileHover={{ y: -6 }} className="card h-full p-7">
@@ -69,7 +63,7 @@ export const ForWho: React.FC = () => (
 const PLANTAO = [
   {
     h: '06:50',
-    t: 'Rendição do turno. O café já está anotado.',
+    t: 'Começo do expediente. O café já está anotado.',
     d: 'Escreva do jeito que vier na cabeça. O assistente entende valor, local e categoria.',
     chat: (
       <>
@@ -83,7 +77,7 @@ const PLANTAO = [
   {
     h: '12:40',
     t: 'Sem tempo para digitar? Mande um áudio.',
-    d: 'Na viatura, no quartel ou entre uma ocorrência e outra. Um áudio com vários gastos vira vários registros.',
+    d: 'No intervalo, no deslocamento ou entre um atendimento e outro. Um áudio com vários gastos vira vários registros.',
     chat: (
       <>
         <AudioBubble duration="0:06" caption="almoço 32 e 15 de estacionamento" />
@@ -95,7 +89,7 @@ const PLANTAO = [
   },
   {
     h: '18:20',
-    t: 'Mercado depois do plantão? Mande a nota fiscal.',
+    t: 'Mercado depois do trabalho? Mande a nota fiscal.',
     d: 'Tire uma foto da nota fiscal e pronto. O valor é lido e lançado na categoria certa.',
     chat: (
       <>
@@ -108,11 +102,11 @@ const PLANTAO = [
   },
   {
     h: 'Dia 20',
-    t: 'Caiu a escala extra? Entra como receita.',
-    d: 'Salário, escala extra, diárias e restituição ficam separados, para você saber de onde vem cada real.',
+    t: 'Entrou um dinheiro a mais? Entra como receita.',
+    d: 'Salário, 13º, férias, restituição e rendas extras ficam separados, para você saber de onde vem cada real.',
     chat: (
       <>
-        <Bubble from="me" time="09:12">recebi 960 da escala extra</Bubble>
+        <Bubble from="me" time="09:12">recebi 960 de renda extra</Bubble>
         <Bubble from="bot" time="09:12">
           <Receipt tone="in" title="🟢 Receita registrada" rows={[['Valor', '+ R$ 960,00'], ['Categoria', 'Renda extra']]} />
         </Bubble>
@@ -145,7 +139,7 @@ export const ShiftTimeline: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionTitle
           eyebrow="Como funciona"
-          title="Um plantão normal. Só que o seu dinheiro está sob controle."
+          title="Um dia normal de trabalho. Só que o seu dinheiro está sob controle."
           sub="Cinco momentos de um dia comum e o que o assistente resolve em cada um, pelo WhatsApp."
         />
 
@@ -221,7 +215,7 @@ export const Together: React.FC = () => (
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-slate-600">
           Adicione um dependente: cada um usa o próprio WhatsApp, e os gastos dos dois aparecem juntos no mesmo painel.
-          Enquanto você está de plantão, a casa continua organizada.
+          Enquanto você trabalha, a casa continua organizada.
         </p>
         <ul className="mt-6 space-y-3 text-slate-700">
           {['Cada pessoa registra pelo próprio WhatsApp', 'Um painel só com as contas da casa', 'Já incluso no Plano Anual'].map((t) => (
@@ -280,7 +274,7 @@ export const Security: React.FC = () => (
       <SectionTitle
         eyebrow="Segurança"
         title="Você confia o seu dinheiro. A gente leva isso a sério."
-        sub="Quem trabalha na segurança pública sabe o valor da discrição. Por isso o assistente não acessa nada além do que você manda."
+        sub="Servidor público sabe o valor da discrição. Por isso o assistente não acessa nada além do que você manda."
       />
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {SEG.map(({ icon: I, t, d }, i) => (

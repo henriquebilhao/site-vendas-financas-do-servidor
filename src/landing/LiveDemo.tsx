@@ -77,9 +77,9 @@ const ACTIONS: Action[] = [
   },
   {
     id: 'extra',
-    label: 'Registrar escala extra',
+    label: 'Registrar renda extra',
     icon: BadgeDollarSign,
-    send: { kind: 'text', text: 'recebi 960 da escala extra' },
+    send: { kind: 'text', text: 'recebi 960 de renda extra' },
     txs: [{ cat: 'Renda extra', v: 960, type: 'in' }],
     reply: (_, time) => (
       <Bubble from="bot" time={time}>

@@ -16,20 +16,20 @@ const FAQ = [
     a: 'Os registros são feitos no WhatsApp que você já usa. Depois da assinatura, você recebe o aplicativo do Finanças do Servidor para instalar e acompanhar o seu painel completo.',
   },
   {
-    q: 'Funciona para quem trabalha em escala ou plantão?',
-    a: 'Foi pensado para isso. Você registra na hora, por áudio, enquanto está na viatura, no quartel ou saindo do plantão, sem precisar parar para digitar.',
+    q: 'Funciona para quem tem a rotina corrida?',
+    a: 'Foi pensado para isso. Você registra na hora, por áudio, no intervalo, no deslocamento ou saindo do expediente ou do plantão, sem precisar parar para digitar.',
   },
   {
     q: 'Ele entende áudio com vários gastos de uma vez?',
     a: 'Sim. Um áudio como "almoço 32 e 15 de estacionamento" vira dois lançamentos, cada um na sua categoria.',
   },
   {
-    q: 'Consigo separar salário, escala extra e diárias?',
-    a: 'Sim. Cada entrada é registrada como receita na categoria que você indicar, para você saber quanto vem do vencimento e quanto vem dos extras.',
+    q: 'Consigo separar o salário de outras entradas?',
+    a: 'Sim. Salário, 13º, férias, restituição e qualquer renda extra ficam em categorias separadas, para você saber de onde vem cada real.',
   },
   {
-    q: 'Funciona só para segurança pública?',
-    a: 'Não. A linguagem e os exemplos são da segurança pública, mas o assistente atende qualquer servidor ou trabalhador que queira organizar o dinheiro pelo WhatsApp.',
+    q: 'É só para quem trabalha na segurança pública?',
+    a: 'Não. É para servidores públicos em geral: educação, saúde, administração, segurança pública e outras áreas, nas esferas municipal, estadual e federal. Quem não é servidor também pode usar.',
   },
   {
     q: 'Posso usar junto com minha esposa ou meu marido?',
@@ -148,7 +148,7 @@ export const Footer: React.FC = () => (
           <span className="font-display text-[17px] font-bold text-white">Finanças do Servidor</span>
         </div>
         <p className="mt-4 max-w-sm leading-relaxed text-slate-400">
-          O assistente financeiro no WhatsApp feito para quem trabalha na segurança pública e no serviço público.
+          O assistente financeiro no WhatsApp feito para servidores públicos, inclusive quem trabalha na segurança pública.
         </p>
         <div className="mt-4 flex gap-4 text-slate-400">
           <span className="flex items-center gap-1.5"><Lock className="h-4 w-4 text-amber-400" /> Dados protegidos</span>

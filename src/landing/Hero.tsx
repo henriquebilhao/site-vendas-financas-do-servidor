@@ -124,7 +124,7 @@ export const Nav: React.FC = () => {
 type Step = { node: (k: string) => React.ReactNode; bot?: boolean };
 
 const SCRIPT: Step[] = [
-  { node: (k) => <Bubble key={k} from="me" time="06:52">café 8,50 na padaria antes da rendição</Bubble> },
+  { node: (k) => <Bubble key={k} from="me" time="06:52">café 8,50 na padaria antes do expediente</Bubble> },
   {
     bot: true,
     node: (k) => (
@@ -151,7 +151,7 @@ const SCRIPT: Step[] = [
       </Bubble>
     ),
   },
-  { node: (k) => <Bubble key={k} from="me" time="09:12">recebi 960 da escala extra</Bubble> },
+  { node: (k) => <Bubble key={k} from="me" time="09:12">recebi 960 de renda extra</Bubble> },
   {
     bot: true,
     node: (k) => (
@@ -244,7 +244,7 @@ export const Hero: React.FC = () => (
           className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-300 lg:mx-0"
         >
           Mande um texto, um áudio ou a foto da nota fiscal no WhatsApp. O assistente registra cada gasto e cada extra, e você
-          sabe quanto sobra, até no meio da escala.
+          sabe quanto sobra, mesmo na correria do dia a dia.
         </motion.p>
 
         <motion.div
@@ -290,7 +290,7 @@ export const Hero: React.FC = () => (
           <p className="font-display text-xl font-bold text-emerald-400">R$ 3.214,70</p>
         </div>
         <div className="float-slower absolute -right-20 top-52 z-10 hidden rounded-2xl border border-white/10 bg-slate-900/90 px-4 py-3 shadow-xl backdrop-blur xl:block">
-          <p className="text-[11px] text-slate-400">Escala extra</p>
+          <p className="text-[11px] text-slate-400">Renda extra</p>
           <p className="font-display text-xl font-bold text-amber-300">+ R$ 960,00</p>
         </div>
       </motion.div>

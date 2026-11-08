@@ -8,7 +8,6 @@ import {
   FileBarChart,
   LayoutDashboard,
   Lock,
-  MessageCircle,
   Plus,
   Smartphone,
   Users,
@@ -22,22 +21,6 @@ const MES = new Date().toLocaleString('pt-BR', { month: 'long' });
 /* ==========================================================================
    Dobra: o painel por dentro (computador + celular, como na Finest)
    ========================================================================== */
-
-const MESES = [
-  { m: 'jun', e: 8450, s: 8320 },
-  { m: 'jul', e: 9410, s: 7140 },
-  { m: 'ago', e: 8450, s: 6820 },
-  { m: 'set', e: 9890, s: 6510 },
-  { m: 'out', e: 9410, s: 6195 },
-  { m: 'nov', e: 9410, s: 5880 },
-];
-const CATS: [string, number][] = [
-  ['Mercado', 31],
-  ['Casa e contas', 24],
-  ['Transporte', 18],
-  ['Alimentação', 15],
-  ['Outros', 12],
-];
 
 const RECURSOS = [
   'Entradas, saídas e saldo livre do mês em tempo real',
@@ -61,164 +44,35 @@ const BrowserBar: React.FC<{ url: string; dark?: boolean }> = ({ url, dark }) =>
   </div>
 );
 
-/* Mini painel do computador */
-const DesktopMock: React.FC = () => {
-  const max = 10000;
-  return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-2xl shadow-black/50">
-      <BrowserBar url="painel.financasdoservidor.com.br/visao-geral" />
-      <div className="flex">
-        {/* menu lateral */}
-        <div className="hidden w-36 shrink-0 flex-col gap-1 bg-navy-900 p-3 sm:flex">
-          <div className="mb-3 flex items-center gap-2 px-1">
-            <LogoFS size={22} />
-            <span className="text-[10px] font-bold leading-tight text-white">Finanças do Servidor</span>
-          </div>
-          {[
-            [LayoutDashboard, 'Visão geral', true],
-            [ArrowDownLeft, 'Despesas'],
-            [ArrowUpRight, 'Receitas'],
-            [FileBarChart, 'Relatórios'],
-            [Users, 'Família'],
-          ].map(([Icon, l, on]) => {
-            const I = Icon as React.ElementType;
-            return (
-              <span
-                key={l as string}
-                className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-[10.5px] ${on ? 'bg-amber-400 font-semibold text-navy-950' : 'text-slate-300'}`}
-              >
-                <I className="h-3.5 w-3.5" /> {l as string}
-              </span>
-            );
-          })}
-        </div>
+/* Print real do painel no computador (conta com dados de exemplo) */
+const DesktopMock: React.FC = () => (
+  <div className="overflow-hidden rounded-2xl border border-white/10 bg-navy-950 shadow-2xl shadow-black/50">
+    <BrowserBar dark url="membros.appfinancasdoservidor.digital/dashboard" />
+    <img
+      src="/prints/painel-computador.png"
+      alt="Painel do Finanças do Servidor no computador: saldo do mês, receitas, despesas, fluxo de caixa de 12 meses e despesas por categoria"
+      width={800}
+      height={499}
+      loading="lazy"
+      decoding="async"
+      className="block h-auto w-full"
+    />
+  </div>
+);
 
-        {/* conteúdo */}
-        <div className="min-w-0 flex-1 bg-slate-50 p-3 sm:p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <div>
-              <p className="text-[13px] font-bold text-navy-900">Visão geral</p>
-              <p className="text-[10px] text-slate-500">Resumo de {MES}</p>
-            </div>
-            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[9.5px] font-semibold text-emerald-700">● ao vivo</span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              ['Entradas', 'R$ 9.410', 'bg-emerald-500'],
-              ['Saídas', 'R$ 5.880', 'bg-rose-500'],
-              ['Saldo livre', 'R$ 3.530', 'bg-amber-400'],
-            ].map(([l, v, c]) => (
-              <div key={l} className="rounded-xl border border-slate-200 bg-white p-2.5">
-                <p className="flex items-center gap-1 text-[9.5px] text-slate-500">
-                  <span className={`h-1.5 w-1.5 rounded-full ${c}`} /> {l}
-                </p>
-                <p className="font-display mt-0.5 text-[13px] font-bold tabular-nums text-navy-900 sm:text-[15px]">{v}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-[1.4fr_1fr]">
-            {/* entradas x saídas */}
-            <div className="rounded-xl border border-slate-200 bg-white p-3">
-              <div className="mb-2 flex items-center justify-between">
-                <p className="text-[10.5px] font-semibold text-navy-900">Entradas x saídas</p>
-                <div className="flex gap-2 text-[9px] text-slate-500">
-                  <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Entradas</span>
-                  <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-rose-400" />Saídas</span>
-                </div>
-              </div>
-              <div className="flex h-28 items-end justify-between gap-1.5">
-                {MESES.map((x, i) => (
-                  <div key={x.m} className="flex flex-1 flex-col items-center gap-1" title={`${x.m}: entradas R$ ${brl(x.e)} · saídas R$ ${brl(x.s)}`}>
-                    <div className="flex h-24 w-full items-end justify-center gap-[2px]">
-                      {[
-                        [x.e, 'bg-emerald-500'],
-                        [x.s, 'bg-rose-400'],
-                      ].map(([v, c], j) => (
-                        <motion.div
-                          key={j}
-                          className={`w-full max-w-[10px] rounded-t-[3px] ${c}`}
-                          initial={{ height: 0 }}
-                          whileInView={{ height: `${((v as number) / max) * 100}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.8, delay: 0.08 * i + j * 0.05, ease: 'easeOut' }}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-[9px] text-slate-500">{x.m}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* categorias */}
-            <div className="rounded-xl border border-slate-200 bg-white p-3">
-              <p className="mb-2 text-[10.5px] font-semibold text-navy-900">Gastos por categoria</p>
-              <div className="space-y-2">
-                {CATS.map(([n, p], i) => (
-                  <div key={n}>
-                    <div className="mb-0.5 flex justify-between text-[9.5px]">
-                      <span className="text-slate-600">{n}</span>
-                      <span className="tabular-nums text-slate-500">{p}%</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
-                      <motion.div
-                        className="h-full rounded-full bg-navy-600"
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${(p / CATS[0][1]) * 100}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.9, delay: 0.1 * i }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* Mini painel no celular */
+/* Print real do painel no celular (conta com dados de exemplo) */
 const MobileMock: React.FC = () => (
   <div className="rounded-[28px] border border-slate-600/60 bg-gradient-to-b from-slate-700 to-slate-900 p-[6px] shadow-2xl shadow-black/60">
-    <div className="overflow-hidden rounded-[23px] bg-slate-50">
-      <div className="bg-navy-900 px-3 pb-4 pt-4 text-white">
-        <p className="text-[9px] text-slate-300">Olá, Carlos 👋</p>
-        <p className="mt-2 text-[9px] text-slate-300">Saldo livre em {MES}</p>
-        <p className="font-display text-[19px] font-bold leading-tight">R$ 3.530,00</p>
-        <div className="mt-2 flex gap-2 text-[8.5px]">
-          <span className="rounded-full bg-emerald-400/15 px-1.5 py-0.5 text-emerald-300">↑ R$ 9.410</span>
-          <span className="rounded-full bg-rose-400/15 px-1.5 py-0.5 text-rose-300">↓ R$ 5.880</span>
-        </div>
-      </div>
-      <div className="space-y-1.5 p-2.5">
-        <p className="text-[9.5px] font-semibold text-navy-900">Últimos lançamentos</p>
-        {[
-          ['Café na padaria', '− 8,50', false],
-          ['Renda extra', '+ 960,00', true],
-          ['Supermercado', '− 184,30', false],
-          ['Combustível', '− 150,00', false],
-        ].map(([d, v, inc]) => (
-          <div key={d as string} className="flex items-center gap-1.5 rounded-lg bg-white p-1.5 shadow-sm">
-            <span
-              className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${inc ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}
-            >
-              {inc ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownLeft className="h-3 w-3" />}
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[9px] font-medium text-navy-900">{d as string}</p>
-              <p className="flex items-center gap-0.5 whitespace-nowrap text-[7.5px] text-[#00a884]">
-                <MessageCircle className="h-2 w-2" /> via WhatsApp
-              </p>
-            </div>
-            <span className="text-[9px] font-semibold tabular-nums text-navy-900">{v as string}</span>
-          </div>
-        ))}
-      </div>
+    <div className="overflow-hidden rounded-[23px] bg-navy-950">
+      <img
+        src="/prints/painel-celular.png"
+        alt="Painel do Finanças do Servidor no celular: saldo do mês, receitas, despesas, valores a receber e compras parceladas"
+        width={364}
+        height={788}
+        loading="lazy"
+        decoding="async"
+        className="block h-auto w-full"
+      />
     </div>
   </div>
 );

@@ -42,6 +42,8 @@ const FERRAMENTAS = [
     icon: Calculator,
     t: 'Calculadora de distribuição da renda',
     anual: false,
+    img: '/prints/calculadora.png',
+    alt: 'Tela da Calculadora no app: escolha do padrão de vida 50/30/20 ou 60/30/10 e gráfico de distribuição da renda',
     d: 'Informe sua renda fixa e extra e veja quanto separar por mês, por semana e por dia para despesas obrigatórias, despesas variáveis e reservas.',
     extra: 'Padrão Ideal 50/30/20, Aceitável 60/30/10 ou personalizado. Com um clique, os valores viram as metas do mês no app.',
   },
@@ -49,6 +51,8 @@ const FERRAMENTAS = [
     icon: ClipboardCheck,
     t: 'Diagnóstico financeiro completo',
     anual: true,
+    img: '/prints/diagnostico.png',
+    alt: 'Tela do Diagnóstico no app: classificação Ideal, renda líquida, despesas fixas, variáveis e reservas em porcentagem da renda',
     d: 'Em 4 etapas (Receitas, Despesas, Diagnóstico e Plano RSC), veja se você está no Ideal, Aceitável ou Crítico pelo quanto da renda já começa o mês comprometida.',
     extra: 'Termômetro das despesas fixas e onde o dinheiro está pesando. Escolha Reduzir, Substituir ou Cortar, veja a economia em 12 meses e exporte em PDF.',
   },
@@ -56,6 +60,8 @@ const FERRAMENTAS = [
     icon: Landmark,
     t: 'Simuladores de crédito e amortização',
     anual: true,
+    img: '/prints/simuladores.png',
+    alt: 'Tela dos Simuladores no app: valor da parcela, total a pagar, total de juros e comparação Price x SAC',
     d: 'Simule consignado, empréstimo pessoal e financiamento e compare Price (parcelas fixas) e SAC (parcelas decrescentes) lado a lado.',
     extra: 'Teste amortizações extras e veja quanto de juros deixa de pagar e quantas parcelas a menos, com tabela mês a mês, gráfico e PDF.',
   },
@@ -74,6 +80,19 @@ export const AnnualExclusives: React.FC = () => (
         {FERRAMENTAS.map((r, i) => (
           <Reveal key={r.t} delay={i * 0.1}>
             <div className="card-light flex h-full flex-col p-5 sm:p-6">
+              {/* print real da ferramenta (conta com dados de exemplo) */}
+              <div className="relative -mx-1 -mt-1 mb-5 h-56 overflow-hidden rounded-2xl bg-navy-950 ring-1 ring-slate-200 sm:h-64">
+                <img
+                  src={r.img}
+                  alt={r.alt}
+                  width={364}
+                  height={600}
+                  loading="lazy"
+                  decoding="async"
+                  className="mx-auto block h-full w-full max-w-[364px] object-cover object-top"
+                />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-navy-950 to-transparent" />
+              </div>
               <div className="flex items-start justify-between gap-3">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-navy-900 text-amber-400">
                   <r.icon className="h-6 w-6" />

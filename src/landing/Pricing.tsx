@@ -1,19 +1,48 @@
 import React, { useState } from 'react';
-import { ArrowRight, Calculator, Check, ClipboardCheck, Landmark, ShieldCheck, Star, User, Users } from 'lucide-react';
+import {
+  ArrowRight,
+  BarChart3,
+  Bell,
+  BookOpen,
+  Calculator,
+  Check,
+  ClipboardCheck,
+  Landmark,
+  LayoutDashboard,
+  MessagesSquare,
+  ShieldCheck,
+  Smartphone,
+  Star,
+  Target,
+  User,
+  Users,
+  Video,
+} from 'lucide-react';
 import { motion } from 'motion/react';
 import { LINKS, PRECOS, brl } from './data';
 import { Reveal, SectionTitle } from './ui';
 
+/* Tudo o que vem em todos os planos (as funcionalidades do painel) */
 const BASE = [
-  'Registros ilimitados',
-  'Texto, áudio e foto da nota fiscal',
-  'Painel financeiro completo',
-  'Relatórios de entradas e saídas',
+  'Assistente no WhatsApp 24h, registros ilimitados',
+  'Registro por texto, áudio, foto e PDF',
+  'Painel financeiro no computador e no celular',
+  'Receitas, despesas e saldo do mês em tempo real',
+  'Gastos separados por categoria',
+  'Contas futuras, parcelas e lembretes de vencimento',
+  'Metas de gastos e de economia, com alertas',
+  'Relatórios de entradas, saídas e categorias',
+  'Resumo semanal das metas no WhatsApp',
   'Calculadora de distribuição da renda',
 ];
 
 /* Recursos que só o Plano Anual tem */
-const EXCLUSIVOS_ANUAL = ['Diagnóstico financeiro completo', 'Simuladores de crédito e amortização'];
+const EXCLUSIVOS_ANUAL = [
+  'Diagnóstico financeiro completo',
+  'Simuladores de crédito e amortização',
+  'Comunidade VIP no WhatsApp para tirar dúvidas entre membros',
+  'Encontro mensal ao vivo com especialista financeiro',
+];
 
 const SeloAnual: React.FC = () => (
   <span className="inline-block whitespace-nowrap rounded-full bg-amber-400 px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-slate-950">
@@ -67,14 +96,27 @@ const FERRAMENTAS = [
   },
 ];
 
+/* O que vem junto com o assistente */
+const ENTREGAVEIS = [
+  { icon: Smartphone, tag: 'Principal', t: 'Assistente financeiro no WhatsApp', d: 'Registros ilimitados por texto, áudio, foto da nota fiscal e PDF, 24 horas por dia.' },
+  { icon: LayoutDashboard, tag: 'Incluso', t: 'App do painel financeiro', d: 'Saldo, receitas, despesas, categorias e fluxo de caixa de 12 meses, no computador e no celular.' },
+  { icon: BarChart3, tag: 'Incluso', t: 'Relatórios e resumo semanal', d: 'Relatórios de entradas, saídas e categorias no painel, e o resumo das suas metas toda semana no WhatsApp.' },
+  { icon: Target, tag: 'Incluso', t: 'Metas e alertas', d: 'Defina limites por categoria, teto de gastos e metas de economia. O assistente avisa quando chegar perto.' },
+  { icon: Bell, tag: 'Incluso', t: 'Contas futuras e lembretes', d: 'Parcelas, faturas e contas agendadas, com lembrete no WhatsApp antes de vencer.' },
+  { icon: BookOpen, tag: 'Bônus', t: 'Guia Salário em Ordem', d: 'Passo a passo para organizar o salário, as contas fixas e os gastos do ano sem sufoco.' },
+  { icon: Users, tag: 'Plano Anual', t: 'Dependente incluso', d: 'Quem divide as contas com você usa o próprio WhatsApp, no mesmo painel, sem pagar nada a mais.' },
+  { icon: MessagesSquare, tag: 'Plano Anual', t: 'Comunidade VIP no WhatsApp', d: 'Grupo exclusivo para tirar dúvidas e trocar experiências com outros membros.' },
+  { icon: Video, tag: 'Plano Anual', t: 'Encontros mensais com especialista', d: 'Todo mês, um encontro ao vivo com um especialista financeiro para tirar suas dúvidas.' },
+];
+
 export const AnnualExclusives: React.FC = () => (
   <section id="ferramentas" className="relative overflow-hidden bg-white py-12 sm:py-16">
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
       <SectionTitle
         light
-        eyebrow="Ferramentas do app"
-        title="Ferramentas para organizar e planejar seu dinheiro."
-        sub="O Diagnóstico e os Simuladores são exclusivos do Plano Anual."
+        eyebrow="Ferramentas e entregáveis"
+        title="Muito mais do que um assistente: todas as ferramentas para organizar e planejar seu dinheiro."
+        sub="Ao assinar, você leva o assistente no WhatsApp, o painel completo e as ferramentas abaixo. O Diagnóstico e os Simuladores são exclusivos do Plano Anual."
       />
       <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
         {FERRAMENTAS.map((r, i) => (
@@ -110,9 +152,34 @@ export const AnnualExclusives: React.FC = () => (
           </Reveal>
         ))}
       </div>
+
+      {/* o resto do que vem junto (antes ficava na dobra "Muito mais do que um assistente") */}
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+        {ENTREGAVEIS.map(({ icon: I, tag, t, d }, k) => (
+          <Reveal key={t} delay={(k % 3) * 0.06}>
+            <motion.div whileHover={{ y: -4 }} className="card-light relative flex h-full gap-4 p-5">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 text-navy-900 shadow-md shadow-amber-500/20">
+                <I className="h-6 w-6" />
+              </div>
+              <div className="min-w-0">
+                <span
+                  className={`mb-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                    tag === 'Plano Anual' ? 'bg-amber-100 text-amber-800' : tag.startsWith('Bônus') ? 'bg-navy-900 text-amber-300' : 'bg-slate-100 text-slate-600'
+                  }`}
+                >
+                  {tag}
+                </span>
+                <h3 className="font-display text-[17px] font-bold leading-snug text-navy-900">{t}</h3>
+                <p className="mt-1 text-[14.5px] leading-relaxed text-slate-600">{d}</p>
+              </div>
+            </motion.div>
+          </Reveal>
+        ))}
+      </div>
+
       <Reveal className="mt-8 text-center">
         <a href="#planos" className="btn-gold rounded-full px-7 py-4 text-[16px]">
-          Ver os planos <ArrowRight className="h-5 w-5" />
+          Quero receber tudo isso <ArrowRight className="h-5 w-5" />
         </a>
       </Reveal>
     </div>
@@ -256,7 +323,7 @@ export const Pricing: React.FC = () => {
                 <p className="font-display text-[2.35rem] leading-none font-bold text-navy-900">
                   <span className="text-2xl">R$</span> {brl(tri)}
                 </p>
-                <p className="mt-1 text-[14px] text-slate-600">a cada 3 meses · R$ {brl(tri / 3)}/mês</p>
+                <p className="mt-1 text-[14px] text-slate-600">a cada 3 meses</p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
                 {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}

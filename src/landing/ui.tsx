@@ -111,7 +111,9 @@ export const PhoneFrame: React.FC<{
   return (
     <div className={`relative mx-auto w-full max-w-[340px] ${className}`}>
       <div className="rounded-[46px] border border-slate-600/60 bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 p-[9px] shadow-2xl shadow-black/50">
-        <div className="relative flex h-[440px] flex-col overflow-hidden rounded-[38px] bg-[#efeae2] sm:h-[580px]">
+        {/* proporção de tela de celular de verdade (9:18), também no mobile */}
+        <div className="relative flex aspect-[9/18] min-h-[560px] flex-col overflow-hidden rounded-[38px] bg-[#efeae2] sm:min-h-0">
+
           {/* barra de status do celular */}
           <div className="flex items-center justify-between bg-[#008069] px-7 pb-1 pt-3 text-[12px] font-semibold text-white">
             <span>{agora()}</span>
@@ -366,6 +368,42 @@ export const PhotoBubble: React.FC<{ time?: string }> = ({ time = '17:42' }) => 
           <Ticks light />
         </span>
       </div>
+    </div>
+  </motion.div>
+);
+
+/* PDF enviado pelo usuário (boleto, fatura, comprovante), igual ao documento do WhatsApp */
+export const PdfBubble: React.FC<{ time?: string; name?: string; info?: string }> = ({
+  time = '17:42',
+  name = 'fatura-cartao-novembro.pdf',
+  info = '2 páginas · PDF · 148 kB',
+}) => (
+  <motion.div {...bubbleMotion} className="mt-1.5 flex justify-end pr-2">
+    <div className={`relative w-[78%] rounded-lg rounded-tr-none p-[3px] ${bubbleShadow}`} style={{ background: BG.me }}>
+      <Tail side="me" />
+      {/* prévia da primeira página */}
+      <div className="relative h-24 overflow-hidden rounded-t-md bg-white px-3 py-2 font-mono text-[7px] leading-tight text-slate-500">
+        <span className="block font-bold text-slate-700">FATURA DO CARTÃO · NOVEMBRO</span>
+        <span className="block">Vencimento: 15/11 · Total: R$ 1.240,00</span>
+        <span className="mt-1 block border-t border-slate-200 pt-1">MERCADO ......... 412,30</span>
+        <span className="block">POSTO ........... 189,90</span>
+        <span className="block">FARMÁCIA ......... 95,40</span>
+        <span className="block">OUTROS .......... 542,40</span>
+        <span className="scan-line absolute inset-x-0 h-6 bg-gradient-to-b from-transparent via-emerald-400/40 to-transparent" />
+      </div>
+      <div className="flex items-center gap-2.5 rounded-b-md bg-[#cfe9c7] px-2.5 py-2">
+        <span className="flex h-9 w-7 shrink-0 items-center justify-center rounded-[3px] bg-[#e5252a] text-[8px] font-bold text-white">PDF</span>
+        <span className="min-w-0">
+          <span className="block truncate text-[13px] text-[#111b21]">{name}</span>
+          <span className="block text-[11px] text-[#667781]">{info}</span>
+        </span>
+      </div>
+      <span className="flex justify-end px-1 pt-1">
+        <span className="flex items-center gap-[3px] text-[11px] leading-none text-[#667781]">
+          {time}
+          <Ticks />
+        </span>
+      </span>
     </div>
   </motion.div>
 );

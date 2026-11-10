@@ -3,10 +3,11 @@ import { MotionConfig } from 'motion/react';
 import { Hero, Nav, TopBar, TopBarOffer, TrustMarquee } from './landing/Hero';
 import { ForWho, ShiftTimeline, Together } from './landing/Sections';
 import { DashboardFeatures, DashboardSimulator } from './landing/Dashboard';
-import { Authority, Deliverables, ForWhom, SocialProof, VideoSection } from './landing/Story';
+import { Authority, ForWhom, SocialProof, VideoSection } from './landing/Story';
 import { LiveDemo } from './landing/LiveDemo';
+import { AssistantReplies } from './landing/Respostas';
 import { AnnualExclusives, Pricing } from './landing/Pricing';
-import { Faq, FinalCta, Footer } from './landing/Closing';
+import { Faq, Footer } from './landing/Closing';
 
 export default function App() {
   return (
@@ -32,12 +33,10 @@ export default function App() {
           <VideoSection />
           <ShiftTimeline />
           <LiveDemo />
+          <AssistantReplies />
           <DashboardFeatures />
           <DashboardSimulator />
           <Together />
-
-          {/* 5. Entregáveis e bônus */}
-          <Deliverables />
 
           {/* 6. Para quem é */}
           <ForWhom />
@@ -45,13 +44,12 @@ export default function App() {
           {/* 7. Autoridade */}
           <Authority />
 
-          {/* 8. Planos */}
+          {/* 5. Ferramentas e entregáveis + 8. Planos */}
           <AnnualExclusives />
           <Pricing />
 
           {/* 9. Dúvidas */}
           <Faq />
-          <FinalCta />
         </main>
         <Footer />
       </div>

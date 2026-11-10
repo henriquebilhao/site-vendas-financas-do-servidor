@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { Camera, MessageSquareText, Mic, PiggyBank, FileBarChart, BadgeDollarSign, RotateCcw } from 'lucide-react';
+import { Camera, MessageSquareText, Mic, PiggyBank, FileBarChart, FileText, BadgeDollarSign, RotateCcw } from 'lucide-react';
 import { brl } from './data';
-import { AudioBubble, Bubble, DateChip, EncryptionNotice, PhoneFrame, PhotoBubble, Receipt, SectionTitle, TypingBubble, agora } from './ui';
+import { AudioBubble, Bubble, DateChip, EncryptionNotice, PdfBubble, PhoneFrame, PhotoBubble, Receipt, SectionTitle, TypingBubble, agora } from './ui';
 
 type Tx = { cat: string; v: number; type: 'in' | 'out' };
 
@@ -17,8 +17,8 @@ type Action = {
   id: string;
   label: string;
   icon: React.ElementType;
-  /* o que o usuário manda: texto digitado, áudio gravado ou foto */
-  send: { kind: 'text'; text: string } | { kind: 'audio'; caption: string; duration: string } | { kind: 'photo' };
+  /* o que o usuário manda: texto digitado, áudio gravado, foto ou PDF */
+  send: { kind: 'text'; text: string } | { kind: 'audio'; caption: string; duration: string } | { kind: 'photo' } | { kind: 'pdf' };
   txs?: Tx[];
   reply: (state: Tx[], time: string) => React.ReactNode;
 };
@@ -72,6 +72,18 @@ const ACTIONS: Action[] = [
     reply: (_, time) => (
       <Bubble from="bot" time={time}>
         <Receipt title="🧾 Nota fiscal lida!" rows={[['🏪 Local', 'Supermercado Bom Preço'], ['💸 Valor', 'R$ 184,30'], ['🏷️ Categoria', 'Mercado']]} />
+      </Bubble>
+    ),
+  },
+  {
+    id: 'pdf',
+    label: 'Enviar um PDF',
+    icon: FileText,
+    send: { kind: 'pdf' },
+    txs: [{ cat: 'Cartão de crédito', v: 1240, type: 'out' }],
+    reply: (_, time) => (
+      <Bubble from="bot" time={time}>
+        <Receipt title="📄 Li o seu PDF e registrei a fatura:" rows={[['🏦 Fatura do cartão', 'R$ 1.240,00'], ['📅 Vencimento', '15/11'], ['🏷️ Categoria', 'Cartão de crédito']]} />
       </Bubble>
     ),
   },
@@ -181,6 +193,10 @@ export const LiveDemo: React.FC = () => {
       if (!alive()) return;
       setRecording(false);
       push(<AudioBubble time={agora()} duration={a.send.duration} caption={a.send.caption} />);
+    } else if (a.send.kind === 'pdf') {
+      await wait(400);
+      if (!alive()) return;
+      push(<PdfBubble time={agora()} />);
     } else {
       await wait(400);
       if (!alive()) return;

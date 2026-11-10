@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, Lock, Mail, Minus, Plus, ShieldCheck } from 'lucide-react';
+import { Lock, Mail, Minus, Plus, ShieldCheck } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
-import { LINKS, PRECOS, brl } from './data';
-import { Reveal, SectionTitle } from './ui';
+import { LINKS } from './data';
+import { SectionTitle } from './ui';
 
 /* ---------- FAQ ---------- */
 const FAQ = [
   {
     q: 'Preciso dar senha do banco, do Gov.br ou do Portal do Servidor?',
-    a: 'Não. Nunca vamos pedir senha de banco, Gov.br, Portal do Servidor, Siape ou consignatária. O assistente trabalha só com as mensagens, áudios e fotos que você mesmo envia no WhatsApp.',
+    a: 'Não. Nunca vamos pedir senha de banco, Gov.br, Portal do Servidor, Siape ou consignatária. O assistente trabalha só com as mensagens, áudios, fotos e PDFs que você mesmo envia no WhatsApp.',
   },
   {
     q: 'Como eu acesso o meu painel?',
@@ -22,6 +22,10 @@ const FAQ = [
   {
     q: 'Ele entende áudio com vários gastos de uma vez?',
     a: 'Sim. Um áudio como "almoço 32 e 15 de estacionamento" vira dois lançamentos, cada um na sua categoria.',
+  },
+  {
+    q: 'Posso mandar PDF de fatura, boleto ou comprovante?',
+    a: 'Pode. Além de texto, áudio e foto da nota fiscal, o assistente lê arquivos PDF enviados no WhatsApp e registra o lançamento com valor, data e categoria.',
   },
   {
     q: 'Consigo separar o salário de outras entradas?',
@@ -37,7 +41,7 @@ const FAQ = [
   },
   {
     q: 'O que o Plano Anual tem a mais?',
-    a: 'Além de tudo dos outros planos, incluindo a Calculadora de distribuição da renda, o anual libera o Diagnóstico financeiro completo e os Simuladores de crédito e amortização, para você saber quanto da sua renda já está comprometida e quanto economiza ao amortizar suas dívidas.',
+    a: 'Além de tudo dos outros planos, o anual libera o Diagnóstico financeiro completo e os Simuladores de crédito e amortização, inclui um dependente sem custo, suporte prioritário, acesso à comunidade VIP no WhatsApp para tirar dúvidas entre membros e um encontro ao vivo todo mês com um especialista financeiro.',
   },
   {
     q: 'Tem limite de mensagens ou de registros?',
@@ -109,34 +113,6 @@ export const Faq: React.FC = () => {
     </section>
   );
 };
-
-/* ---------- Chamada final ---------- */
-export const FinalCta: React.FC = () => (
-  <section className="bg-white px-4 py-12 sm:px-6 sm:py-16">
-    <Reveal>
-      <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[32px] border border-amber-400/30 bg-gradient-to-br from-navy-700 via-navy-800 to-navy-900 px-6 py-14 text-center sm:px-12 sm:py-20">
-        <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[600px] -translate-x-1/2 rounded-full bg-amber-400/20 blur-[100px]" />
-        <div className="relative">
-          <LogoFS size={56} className="mx-auto" />
-          <h2 className="font-display mx-auto mt-6 max-w-2xl text-3xl font-bold leading-tight text-white text-balance sm:text-5xl">
-            Você cuida da sociedade. Deixa que a gente ajuda a cuidar do seu salário.
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-slate-300">
-            Comece hoje pelo WhatsApp. A partir de R$ {brl(PRECOS.anual / 12)} por mês no plano anual, com 7 dias de garantia.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <a href="#planos" className="btn-gold rounded-full px-8 py-4 text-[16px]">
-              Escolher meu plano <ArrowRight className="h-5 w-5" />
-            </a>
-            <a href={LINKS.testeGratis} target="_blank" rel="noopener noreferrer" className="btn-ghost rounded-full px-8 py-4 text-[16px]">
-              Testar 7 dias grátis
-            </a>
-          </div>
-        </div>
-      </div>
-    </Reveal>
-  </section>
-);
 
 /* ---------- Rodapé ---------- */
 export const Footer: React.FC = () => (

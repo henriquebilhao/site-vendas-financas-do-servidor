@@ -69,7 +69,7 @@ const NAV = [
   ['Como funciona', '#como-funciona'],
   ['Teste agora', '#teste'],
   ['Painel', '#painel'],
-  ['Bônus', '#bonus'],
+  ['Ferramentas', '#ferramentas'],
   ['Quem somos', '#quem-somos'],
   ['Planos', '#planos'],
   ['Dúvidas', '#faq'],
@@ -243,7 +243,7 @@ export const Hero: React.FC = () => (
           transition={{ duration: 0.7, delay: 0.2 }}
           className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-300 lg:mx-0"
         >
-          Mande um texto, um áudio ou a foto da nota fiscal no WhatsApp. O assistente registra cada gasto e cada extra, e você
+          Mande um texto, um áudio, a foto da nota fiscal ou um PDF no WhatsApp. O assistente registra cada gasto e cada extra, e você
           sabe quanto sobra, mesmo na correria do dia a dia.
         </motion.p>
 
@@ -302,7 +302,7 @@ export const Hero: React.FC = () => (
 const TRUST = [
   ['Sem senha de banco', 'NINGUÉM MEXE NO SEU DINHEIRO'],
   ['Sem senha do Gov.br', 'NEM DO PORTAL DO SERVIDOR'],
-  ['Registro pelo WhatsApp', 'TEXTO, ÁUDIO OU NOTA FISCAL'],
+  ['Registro pelo WhatsApp', 'TEXTO, ÁUDIO, FOTO OU PDF'],
   ['Pagamento pela Hotmart', 'COMPRA 100% SEGURA'],
   ['Garantia de 7 dias', 'SEU DINHEIRO DE VOLTA'],
   ['Seus dados são seus', 'NÃO VENDEMOS INFORMAÇÕES'],

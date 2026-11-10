@@ -263,7 +263,7 @@ export const Together: React.FC = () => (
 /* ---------- Segurança ---------- */
 const SEG = [
   { icon: KeyRound, t: 'Nenhuma senha', d: 'Não pedimos senha de banco, do Gov.br, do Portal do Servidor ou de consignatária.' },
-  { icon: Eye, t: 'Só o que você manda', d: 'O assistente trabalha apenas com as mensagens, áudios e fotos que você envia.' },
+  { icon: Eye, t: 'Só o que você manda', d: 'O assistente trabalha apenas com as mensagens, áudios, fotos e PDFs que você envia.' },
   { icon: Lock, t: 'Dados protegidos', d: 'Suas informações ficam guardadas com segurança e nunca são vendidas a terceiros.' },
   { icon: HeartHandshake, t: 'Risco zero', d: 'Não gostou em 7 dias? Pede o reembolso pela Hotmart e recebe tudo de volta.' },
 ];

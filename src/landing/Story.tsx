@@ -1,22 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import {
-  ArrowRight,
-  BarChart3,
-  BookOpen,
-  Check,
-  Eye,
-  Gift,
-  HeartHandshake,
-  Headphones,
-  KeyRound,
-  Lock,
-  ShieldCheck,
-  Smartphone,
-  Star,
-  Users,
-  X,
-} from 'lucide-react';
+import { Check, Eye, HeartHandshake, KeyRound, Lock, ShieldCheck, Star, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { Reveal, SectionTitle } from './ui';
 
@@ -109,7 +93,7 @@ const NOTIFS = [
 ];
 
 const PASSOS = [
-  { n: '01', t: 'Você manda', d: 'Texto, áudio ou foto da nota fiscal, do jeito que vier na cabeça.' },
+  { n: '01', t: 'Você manda', d: 'Texto, áudio, foto da nota fiscal ou PDF, do jeito que vier na cabeça.' },
   { n: '02', t: 'Ele organiza', d: 'O assistente entende o valor, separa despesa de receita e coloca na categoria certa.' },
   { n: '03', t: 'Você acompanha', d: 'Pergunte quanto sobrou, peça o relatório e veja tudo no painel.' },
 ];
@@ -207,56 +191,6 @@ export const VideoSection: React.FC = () => {
 };
 
 /* =====================================================================
-   DOBRA 5 — ENTREGÁVEIS / BÔNUS  (sugestões — revisar antes de publicar)
-   ===================================================================== */
-const ENTREGAVEIS = [
-  { icon: Smartphone, tag: 'Principal', t: 'Assistente financeiro no WhatsApp', d: 'Registros ilimitados por texto, áudio e foto da nota fiscal, 24 horas por dia.' },
-  { icon: BarChart3, tag: 'Incluso', t: 'App do painel financeiro', d: 'Gráficos, categorias e histórico mês a mês no aplicativo que você instala no celular.' },
-  { icon: Gift, tag: 'Bônus 1', t: 'Relatório mensal no WhatsApp', d: 'Todo fim de mês, um resumo com entradas, saídas, saldo e onde você mais gastou.' },
-  { icon: BookOpen, tag: 'Bônus 2', t: 'Guia Salário em Ordem', d: 'Passo a passo para se planejar para o 13º, as férias e os gastos do ano sem sufoco.' },
-  { icon: Users, tag: 'Bônus 3', t: 'Dependente incluso', d: 'No Plano Anual, quem divide as contas com você usa sem pagar nada a mais.' },
-  { icon: Headphones, tag: 'Bônus 4', t: 'Suporte humano no WhatsApp', d: 'Gente de verdade para tirar dúvidas. No Plano Anual, com atendimento prioritário.' },
-];
-
-export const Deliverables: React.FC = () => (
-  <section id="bonus" className="relative overflow-hidden bg-navy-900 py-12 sm:py-16">
-    <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[140px]" />
-    <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-      <SectionTitle
-        eyebrow="O que você recebe"
-        title="Muito mais do que um assistente."
-        sub="Ao assinar, você leva tudo isso. Sem custo escondido e sem taxa de instalação."
-      />
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {ENTREGAVEIS.map(({ icon: I, tag, t, d }, k) => (
-          <Reveal key={t} delay={(k % 3) * 0.08}>
-            <motion.div whileHover={{ y: -6 }} className="card relative h-full overflow-hidden p-7">
-              <span
-                className={`absolute right-5 top-5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${
-                  tag.startsWith('Bônus') ? 'bg-amber-400 text-navy-900' : 'bg-white/10 text-slate-200'
-                }`}
-              >
-                {tag}
-              </span>
-              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 text-navy-900 shadow-lg shadow-amber-500/20">
-                <I className="h-7 w-7" />
-              </div>
-              <h3 className="font-display text-xl font-bold text-white">{t}</h3>
-              <p className="mt-2 leading-relaxed text-slate-300">{d}</p>
-            </motion.div>
-          </Reveal>
-        ))}
-      </div>
-      <Reveal className="mt-12 text-center">
-        <a href="#planos" className="btn-gold rounded-full px-8 py-4 text-[16px]">
-          Quero receber tudo isso <ArrowRight className="h-5 w-5" />
-        </a>
-      </Reveal>
-    </div>
-  </section>
-);
-
-/* =====================================================================
    DOBRA 6 — PARA QUEM É
    ===================================================================== */
 const SIM = [
@@ -328,7 +262,7 @@ export const ForWhom: React.FC = () => (
    ===================================================================== */
 const COMPROMISSOS = [
   { icon: KeyRound, t: 'Nenhuma senha', d: 'Nunca pedimos senha de banco, Gov.br, Portal do Servidor ou consignatária.' },
-  { icon: Eye, t: 'Só o que você manda', d: 'O assistente trabalha apenas com as mensagens, áudios e fotos que você envia.' },
+  { icon: Eye, t: 'Só o que você manda', d: 'O assistente trabalha apenas com as mensagens, áudios, fotos e PDFs que você envia.' },
   { icon: Lock, t: 'Dados protegidos', d: 'Suas informações são guardadas com segurança e nunca são vendidas.' },
   { icon: HeartHandshake, t: 'Risco zero', d: '7 dias de garantia: não gostou, devolvemos 100% pela Hotmart.' },
 ];
@@ -348,36 +282,36 @@ export const Authority: React.FC = () => (
               <LogoFS size={150} className="rounded-3xl shadow-2xl" />
             </div>
             <div className="float-slow absolute left-0 top-10 rounded-2xl border border-white/10 bg-navy-900/90 px-4 py-3 shadow-xl">
-              <p className="text-[11px] text-slate-400">Feito para</p>
-              <p className="font-display font-bold text-white">quem serve o país</p>
+              <p className="text-[11px] text-slate-400">Feito por</p>
+              <p className="font-display font-bold text-white">servidor público</p>
             </div>
             <div className="float-slower absolute bottom-10 right-0 rounded-2xl border border-white/10 bg-navy-900/90 px-4 py-3 shadow-xl">
-              <p className="text-[11px] text-slate-400">Missão</p>
-              <p className="font-display font-bold text-amber-300">salário que sobra</p>
+              <p className="text-[11px] text-slate-400">Feito para</p>
+              <p className="font-display font-bold text-amber-300">servidor público</p>
             </div>
           </div>
         </Reveal>
 
         <Reveal delay={0.1}>
           <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300">
-            Quem está por trás
+            Quem criou o assistente
           </span>
           <h2 className="font-display mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-white text-balance sm:text-4xl md:text-5xl">
-            Feito por quem entende a rotina de quem serve.
+            Feito por servidor público, para servidor público.
           </h2>
           <div className="mt-6 space-y-4 text-[17px] leading-relaxed text-slate-300">
             <p>
-              O <strong className="text-white">Finanças do Servidor</strong> nasceu de uma pergunta simples: por que é tão difícil
-              para o servidor público saber quanto sobra no fim do mês?
+              O <strong className="text-white">Finanças do Servidor</strong> foi criado por quem vive a mesma rotina que você: salário que
+              cai certinho todo mês e, mesmo assim, some antes do fim do mês sem a gente entender para onde foi.
             </p>
             <p>
-              Planilha exige tempo que a rotina não deixa. Aplicativo de banco mostra o extrato, mas não organiza a vida. Por isso
-              juntamos inteligência artificial e educação financeira num assistente que cabe no lugar onde você já está todo dia:
-              o WhatsApp.
+              Como servidores, sabemos que planilha exige um tempo que a rotina não deixa, e que aplicativo de banco mostra o
+              extrato mas não organiza a vida. Por isso criamos o assistente que nós mesmos queríamos usar: inteligência artificial e
+              educação financeira dentro do WhatsApp, onde você já está todo dia.
             </p>
             <p>
-              Cada detalhe foi pensado para a realidade do servidor: salário fixo, 13º, férias, imposto de renda e contas da casa
-              divididas com a família.
+              Cada detalhe foi pensado de dentro, para a realidade de quem serve: salário fixo, consignado, férias, imposto de
+              renda, rendas extras e as contas da casa divididas com a família.
             </p>
           </div>
         </Reveal>

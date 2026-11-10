@@ -1,16 +1,25 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
+  Activity,
   ArrowDownLeft,
   ArrowRight,
   ArrowUpRight,
+  Calculator,
+  CalendarCheck,
+  CalendarClock,
   Check,
+  Clock,
   FileBarChart,
   LayoutDashboard,
-  Lock,
+  LineChart,
+  MessageCircle,
   Plus,
   Smartphone,
-  Users,
+  Tags,
+  Target,
+  TrendingDown,
+  TrendingUp,
 } from 'lucide-react';
 import { brl } from './data';
 import { Reveal, SectionTitle } from './ui';
@@ -122,7 +131,7 @@ export const DashboardFeatures: React.FC = () => (
 
         <Reveal delay={0.15} className="relative min-w-0 pb-24 pr-4 sm:pb-20 sm:pr-14">
           <DesktopMock />
-          <div className="float-slow absolute -bottom-2 right-0 w-[136px] sm:w-[180px]">
+          <div className="float-slow absolute -bottom-2 right-0 w-[150px] sm:w-[190px]">
             <MobileMock />
           </div>
         </Reveal>
@@ -195,6 +204,19 @@ const porCategoria = (es: Entry[]) => {
 
 const statusLabel = (e: Entry) => (e.type === 'in' ? (e.paid ? 'Recebido' : 'A receber') : e.paid ? 'Pago' : 'Pendente');
 
+/* ---------- identidade visual do sistema real (membros.appfinancasdoservidor.digital) ---------- */
+const APP = {
+  bg: 'bg-[#0a0d12]',
+  side: 'bg-[#0c1016]',
+  card: 'rounded-2xl border border-[#1c232d] bg-[#10151c]',
+  line: 'border-[#1c232d]',
+  muted: 'text-[#8b95a5]',
+  green: '#00e676',
+};
+
+/* cores das categorias, como no gráfico "Despesas por Categoria" do sistema */
+const COR_CAT = ['#ef4444', '#f97316', '#eab308', '#8b5cf6', '#ec4899', '#22c55e', '#06b6d4', '#64748b'];
+
 /* ---------- peças do painel ---------- */
 
 const Panel: React.FC<{ title?: string; caption?: string; children: React.ReactNode; className?: string }> = ({
@@ -203,52 +225,74 @@ const Panel: React.FC<{ title?: string; caption?: string; children: React.ReactN
   children,
   className = '',
 }) => (
-  <div className={`rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4 ${className}`}>
-    {title && <p className="text-[14px] font-semibold text-navy-900">{title}</p>}
-    {caption && <p className="mt-0.5 text-[12px] text-slate-500">{caption}</p>}
+  <div className={`${APP.card} p-3.5 sm:p-4 ${className}`}>
+    {title && <p className="font-display text-[15px] font-bold text-white">{title}</p>}
+    {caption && <p className={`mt-0.5 text-[12px] ${APP.muted}`}>{caption}</p>}
     {children}
   </div>
 );
 
-const Kpi: React.FC<{ label: string; value: number; note?: string; dot: string }> = ({ label, value, note, dot }) => (
-  <div className="rounded-2xl border border-slate-200 bg-white px-3 py-2.5 sm:px-4 sm:py-3">
-    <p className="flex items-center gap-1.5 text-[11.5px] text-slate-500 sm:text-[12px]">
-      <span className={`h-2 w-2 rounded-full ${dot}`} /> {label}
-    </p>
-    <motion.p
-      key={value}
-      initial={{ opacity: 0.3, y: -4 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="font-display mt-0.5 text-[16px] font-bold tabular-nums text-navy-900 sm:text-[19px]"
-    >
-      R$ {brl(value)}
-    </motion.p>
-    {note && <p className="kpi-note mt-0.5 text-[11px] text-slate-500">{note}</p>}
-  </div>
-);
+const Kpi: React.FC<{ label: string; value: number; note?: string; tone: 'in' | 'out' | 'blue' | 'amber'; icon: React.ElementType }> = ({
+  label,
+  value,
+  note,
+  tone,
+  icon: I,
+}) => {
+  const t = {
+    in: 'bg-[#00e676]/12 text-[#00e676]',
+    out: 'bg-[#ef4444]/12 text-[#f87171]',
+    blue: 'bg-[#3b82f6]/12 text-[#60a5fa]',
+    amber: 'bg-[#eab308]/12 text-[#facc15]',
+  }[tone];
+  return (
+    <div className={`${APP.card} relative overflow-hidden px-3 py-3 sm:px-4`}>
+      <span className={`flex h-9 w-9 items-center justify-center rounded-full ${t}`}>
+        <I className="h-4 w-4" />
+      </span>
+      <p className={`mt-2 text-[12px] ${APP.muted}`}>{label}</p>
+      <motion.p
+        key={value}
+        initial={{ opacity: 0.3, y: -4 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="font-display text-[17px] font-bold tabular-nums text-white sm:text-[20px]"
+      >
+        R$ {brl(value)}
+      </motion.p>
+      {note && <p className={`kpi-note mt-0.5 truncate text-[11px] ${APP.muted}`}>{note}</p>}
+    </div>
+  );
+};
 
 const CategoryBars: React.FC<{ entries: Entry[]; highlight?: string }> = ({ entries, highlight }) => {
   const cats = porCategoria(entries);
-  const max = cats[0]?.[1] || 1;
-  if (!cats.length) return <p className="mt-4 text-[13px] text-slate-500">Nenhum lançamento ainda.</p>;
+  const total = cats.reduce((a, [, v]) => a + v, 0) || 1;
+  if (!cats.length) return <p className={`mt-4 text-[13px] ${APP.muted}`}>Nenhum lançamento ainda.</p>;
   return (
-    <div className="mt-3 space-y-2.5">
-      {cats.map(([c, v]) => (
-        <motion.div layout key={c} title={`${c}: R$ ${brl(v)}`}>
-          <div className="mb-1 flex justify-between gap-3 text-[13px]">
-            <span className={highlight === c ? 'font-semibold text-amber-600' : 'text-slate-700'}>{c}</span>
-            <span className="tabular-nums text-slate-600">R$ {brl(v)}</span>
-          </div>
-          <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">
-            <motion.div
-              className={`h-full rounded-full ${highlight === c ? 'bg-amber-400' : 'bg-navy-600'}`}
-              initial={false}
-              animate={{ width: `${(v / max) * 100}%` }}
-              transition={{ duration: 0.6 }}
-            />
-          </div>
-        </motion.div>
-      ))}
+    <div className="mt-3 space-y-3">
+      {cats.map(([c, v], i) => {
+        const cor = COR_CAT[i % COR_CAT.length];
+        const pct = (v / total) * 100;
+        return (
+          <motion.div layout key={c} title={`${c}: R$ ${brl(v)}`}>
+            <div className="mb-1 flex items-center gap-2 text-[13px]">
+              <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: cor }} />
+              <span className={`flex-1 truncate ${highlight === c ? 'font-semibold text-white' : 'text-slate-300'}`}>{c}</span>
+              <span className={`tabular-nums ${APP.muted}`}>{pct.toFixed(0)}%</span>
+              <span className="w-[86px] text-right font-semibold tabular-nums text-white">R$ {brl(v)}</span>
+            </div>
+            <div className="ml-4 h-1 overflow-hidden rounded-full bg-[#1c232d]">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ background: cor }}
+                initial={false}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 0.6 }}
+              />
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 };
@@ -258,7 +302,7 @@ const EntryList: React.FC<{ entries: Entry[]; lastId: number | null; onToggle: (
   lastId,
   onToggle,
 }) => (
-  <ul className="mt-3 divide-y divide-slate-100">
+  <ul className={`mt-3 divide-y ${APP.line.replace('border', 'divide')}`}>
     <AnimatePresence initial={false}>
       {entries.map((e) => (
         <motion.li
@@ -266,33 +310,33 @@ const EntryList: React.FC<{ entries: Entry[]; lastId: number | null; onToggle: (
           layout
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className={`flex items-center gap-3 py-2 transition-colors ${lastId === e.id ? 'rounded-xl bg-amber-50 px-2' : ''}`}
+          className={`flex items-center gap-3 py-2.5 transition-colors ${lastId === e.id ? 'rounded-xl bg-[#00e676]/8 px-2' : ''}`}
         >
           <span
             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
-              e.type === 'in' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
+              e.type === 'in' ? 'bg-[#00e676]/12 text-[#00e676]' : 'bg-[#ef4444]/12 text-[#f87171]'
             }`}
           >
             {e.type === 'in' ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownLeft className="h-4 w-4" />}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[14px] font-medium text-navy-900">{e.desc}</p>
-            <p className="truncate text-[12px] text-slate-500">
+            <p className="truncate text-[14px] font-medium text-white">{e.desc}</p>
+            <p className={`truncate text-[12px] ${APP.muted}`}>
               {e.cat} · {dataBR(e.date)}
             </p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-[14px] font-semibold tabular-nums text-navy-900">
-              {e.type === 'in' ? '+' : '−'} R$ {brl(e.v)}
+            <p className={`text-[14px] font-bold tabular-nums ${e.type === 'in' ? 'text-[#00e676]' : 'text-[#f87171]'}`}>
+              {e.type === 'in' ? '+' : '-'}R$ {brl(e.v)}
             </p>
             {e.paid ? (
-              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700">
-                <Check className="h-3 w-3" /> {statusLabel(e)}
+              <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${APP.muted}`}>
+                <Check className="h-3 w-3 text-[#00e676]" /> {statusLabel(e)}
               </span>
             ) : (
               <button
                 onClick={() => onToggle(e.id)}
-                className="text-[11px] font-semibold text-amber-700 underline-offset-2 hover:underline"
+                className="text-[11px] font-semibold text-[#facc15] underline-offset-2 hover:underline"
                 title={e.type === 'in' ? 'Marcar como recebido' : 'Marcar como pago'}
               >
                 {statusLabel(e)} · {e.type === 'in' ? 'receber' : 'pagar'}
@@ -305,7 +349,7 @@ const EntryList: React.FC<{ entries: Entry[]; lastId: number | null; onToggle: (
   </ul>
 );
 
-/* ---------- formulário de novo lançamento ---------- */
+/* ---------- formulário de novo lançamento (igual ao "Nova Transação" do sistema) ---------- */
 
 const EntryForm: React.FC<{ type: Tipo; saldo: number; onType: (t: Tipo) => void; onAdd: (e: Omit<Entry, 'id'>) => void }> = ({
   type,
@@ -343,28 +387,44 @@ const EntryForm: React.FC<{ type: Tipo; saldo: number; onType: (t: Tipo) => void
   };
 
   const field =
-    'w-full min-w-0 rounded-xl border border-slate-200 bg-white px-3 py-2 text-[16px] text-navy-900 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 sm:text-[14px]';
+    'w-full min-w-0 rounded-xl border border-[#1c232d] bg-[#0a0d12] px-3 py-2.5 text-[16px] text-white outline-none transition [color-scheme:dark] placeholder:text-[#5b6573] focus:border-[#00e676] focus:ring-2 focus:ring-[#00e676]/20 sm:text-[14px]';
+  const label = 'mb-1 block text-[12.5px] font-semibold text-slate-300';
 
   return (
-    <Panel title="Novo lançamento">
-      {/* despesa / receita */}
-      <div className="mt-3 grid grid-cols-2 rounded-xl bg-slate-100 p-1 text-[13px] font-semibold">
-        {(['out', 'in'] as Tipo[]).map((t) => (
+    <Panel>
+      <div className="flex items-center gap-3">
+        <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${isIn ? 'bg-[#00e676]/12 text-[#00e676]' : 'bg-[#ef4444]/12 text-[#f87171]'}`}>
+          {isIn ? <ArrowUpRight className="h-5 w-5" /> : <ArrowDownLeft className="h-5 w-5" />}
+        </span>
+        <div>
+          <p className="font-display text-[17px] font-bold text-white">Nova Transação</p>
+          <p className={`text-[12px] ${APP.muted}`}>Registre uma movimentação já realizada.</p>
+        </div>
+      </div>
+
+      {/* receita / despesa */}
+      <div className="mt-4 grid grid-cols-2 gap-2 text-[14px] font-semibold">
+        {(['in', 'out'] as Tipo[]).map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => onType(t)}
             aria-pressed={type === t}
-            className={`rounded-lg py-1.5 transition ${
-              type === t ? (t === 'in' ? 'bg-emerald-600 text-white shadow' : 'bg-rose-600 text-white shadow') : 'text-slate-600'
+            className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 transition ${
+              type === t
+                ? t === 'in'
+                  ? 'border-[#00e676] bg-[#00e676]/10 text-[#00e676]'
+                  : 'border-[#ef4444] bg-[#ef4444]/10 text-[#f87171]'
+                : 'border-[#1c232d] text-slate-300 hover:border-slate-600'
             }`}
           >
+            {t === 'in' ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownLeft className="h-4 w-4" />}
             {t === 'in' ? 'Receita' : 'Despesa'}
           </button>
         ))}
       </div>
 
-      <div className="no-scrollbar -mx-1 mt-2.5 flex gap-1.5 overflow-x-auto px-1 pb-0.5 lg:flex-wrap lg:overflow-visible">
+      <div className="no-scrollbar -mx-1 mt-3 flex gap-1.5 overflow-x-auto px-1 pb-0.5 lg:flex-wrap lg:overflow-visible">
         {ATALHOS[type].map(([d, v, c]) => (
           <button
             key={d}
@@ -375,60 +435,86 @@ const EntryForm: React.FC<{ type: Tipo; saldo: number; onType: (t: Tipo) => void
               setCat(c);
               setMsg(null);
             }}
-            className="shrink-0 whitespace-nowrap rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[12px] text-slate-700 transition hover:border-amber-400 hover:bg-amber-50"
+            className="shrink-0 whitespace-nowrap rounded-full border border-[#1c232d] bg-[#0a0d12] px-2.5 py-1 text-[12px] text-slate-300 transition hover:border-[#00e676] hover:text-white"
           >
             {d} · R$ {Number.isInteger(v) ? v.toLocaleString('pt-BR') : brl(v)}
           </button>
         ))}
       </div>
 
-      <form onSubmit={submit} className="mt-2.5 space-y-2.5" noValidate>
-        <input
-          className={field}
-          aria-label="Descrição"
-          placeholder={isIn ? 'Descrição (ex.: Restituição do IR)' : 'Descrição (ex.: Mercado)'}
-          value={desc}
-          maxLength={60}
-          onChange={(e) => setDesc(e.target.value)}
-        />
-        <div className="grid grid-cols-2 gap-2.5">
+      <form onSubmit={submit} className="mt-3 space-y-3" noValidate>
+        <div>
+          <span className={label}>
+            Descrição <span className="text-[#f87171]">*</span>
+          </span>
           <input
             className={field}
-            aria-label="Valor"
-            inputMode="decimal"
-            placeholder="R$ 0,00"
-            value={valor}
-            onChange={(e) => setValor(e.target.value)}
+            aria-label="Descrição"
+            placeholder={isIn ? 'Ex: Salário, Rendimentos...' : 'Ex: Mercado, Conta de luz...'}
+            value={desc}
+            maxLength={60}
+            onChange={(e) => setDesc(e.target.value)}
           />
-          <input className={field} aria-label="Data" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </div>
         <div className="grid grid-cols-2 gap-2.5">
-        <select className={field} aria-label="Categoria" value={cat} onChange={(e) => setCat(e.target.value)}>
-          {CATEGORIAS[type].map((c) => (
-            <option key={c}>{c}</option>
-          ))}
-        </select>
-        <div className="grid grid-cols-2 gap-1 text-[12.5px]">
-          {[true, false].map((p) => (
-            <label
-              key={String(p)}
-              className={`flex cursor-pointer items-center justify-center rounded-xl border px-1 text-center leading-tight transition ${
-                paid === p ? 'border-navy-600 bg-navy-600/5 font-semibold text-navy-900' : 'border-slate-200 text-slate-600'
-              }`}
-            >
-              <input type="radio" name="status" className="sr-only" checked={paid === p} onChange={() => setPaid(p)} />
-              {p ? (isIn ? 'Já recebi' : 'Já paguei') : isIn ? 'A receber' : 'A pagar'}
-            </label>
-          ))}
+          <div className="min-w-0">
+            <span className={label}>
+              Valor <span className="text-[#f87171]">*</span>
+            </span>
+            <div className="relative">
+              <span className={`pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[13px] font-bold ${isIn ? 'text-[#00e676]' : 'text-[#f87171]'}`}>R$</span>
+              <input
+                className={`${field} pl-9`}
+                aria-label="Valor"
+                inputMode="decimal"
+                placeholder="0,00"
+                value={valor}
+                onChange={(e) => setValor(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="min-w-0">
+            <span className={label}>
+              Data <span className="text-[#f87171]">*</span>
+            </span>
+            <input className={field} aria-label="Data" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          </div>
         </div>
+        <div className="grid grid-cols-2 gap-2.5">
+          <div className="min-w-0">
+            <span className={label}>
+              Categoria <span className="text-[#f87171]">*</span>
+            </span>
+            <select className={field} aria-label="Categoria" value={cat} onChange={(e) => setCat(e.target.value)}>
+              {CATEGORIAS[type].map((c) => (
+                <option key={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+          <div className="min-w-0">
+            <span className={label}>Situação</span>
+            <div className="grid h-[42px] grid-cols-2 gap-1 text-[12px]">
+              {[true, false].map((p) => (
+                <label
+                  key={String(p)}
+                  className={`flex cursor-pointer items-center justify-center rounded-xl border px-1 text-center leading-tight transition ${
+                    paid === p ? 'border-[#00e676]/60 bg-[#00e676]/10 font-semibold text-white' : 'border-[#1c232d] text-[#8b95a5]'
+                  }`}
+                >
+                  <input type="radio" name="status" className="sr-only" checked={paid === p} onChange={() => setPaid(p)} />
+                  {p ? (isIn ? 'Já recebi' : 'Já paguei') : isIn ? 'A receber' : 'A pagar'}
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
         <button
           type="submit"
-          className={`flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-[15px] font-bold text-white transition active:scale-[0.98] ${
-            isIn ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-rose-600 hover:bg-rose-700'
+          className={`flex w-full items-center justify-center gap-2 rounded-xl py-3 text-[15px] font-bold transition active:scale-[0.98] ${
+            isIn ? 'bg-[#00e676] text-[#04130a] hover:brightness-110' : 'bg-[#ef4444] text-white hover:brightness-110'
           }`}
         >
-          <Plus className="h-4 w-4" /> Lançar {isIn ? 'receita' : 'despesa'}
+          <Plus className="h-4 w-4" /> Adicionar {isIn ? 'Receita' : 'Despesa'}
         </button>
         <AnimatePresence>
           {msg && (
@@ -439,11 +525,11 @@ const EntryForm: React.FC<{ type: Tipo; saldo: number; onType: (t: Tipo) => void
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               role={msg.ok ? 'status' : 'alert'}
-              className={`rounded-xl px-3 py-2 text-[13px] ${msg.ok ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'}`}
+              className={`rounded-xl px-3 py-2 text-[13px] ${msg.ok ? 'bg-[#00e676]/10 text-[#86efac]' : 'bg-[#ef4444]/10 text-[#fca5a5]'}`}
             >
               {msg.ok ? (
                 <>
-                  ✅ “{msg.text}” lançado! Saldo livre agora: <b>R$ {brl(saldo)}</b>
+                  ✅ “{msg.text}” lançado! Saldo do mês agora: <b className="text-white">R$ {brl(saldo)}</b>
                 </>
               ) : (
                 <>⚠️ {msg.text}</>
@@ -456,17 +542,29 @@ const EntryForm: React.FC<{ type: Tipo; saldo: number; onType: (t: Tipo) => void
   );
 };
 
-/* ---------- telas ---------- */
+/* ---------- menu lateral, igual ao sistema ---------- */
 
 const NAV: { key: View; label: string; icon: React.ElementType; url: string }[] = [
-  { key: 'geral', label: 'Visão geral', icon: LayoutDashboard, url: 'visao-geral' },
-  { key: 'out', label: 'Despesas', icon: ArrowDownLeft, url: 'despesas' },
+  { key: 'geral', label: 'Dashboard', icon: LayoutDashboard, url: 'dashboard' },
   { key: 'in', label: 'Receitas', icon: ArrowUpRight, url: 'receitas' },
+  { key: 'out', label: 'Despesas', icon: ArrowDownLeft, url: 'despesas' },
 ];
-const BLOQUEADOS: { label: string; icon: React.ElementType }[] = [
-  { label: 'Relatórios', icon: FileBarChart },
-  { label: 'Família', icon: Users },
+/* itens que existem no sistema completo, mostrados no menu como no app */
+const MENU_COMPLETO: { grupo: string; itens: { label: string; icon: React.ElementType; novo?: boolean }[] }[] = [
+  { grupo: 'Organização', itens: [{ label: 'Categorias', icon: Tags }, { label: 'Futuros', icon: CalendarClock }, { label: 'Metas', icon: Target }] },
+  {
+    grupo: 'Análise',
+    itens: [
+      { label: 'Relatórios', icon: FileBarChart },
+      { label: 'Calculadora', icon: Calculator, novo: true },
+      { label: 'Diagnóstico', icon: Activity, novo: true },
+      { label: 'Simuladores', icon: LineChart, novo: true },
+    ],
+  },
 ];
+
+const MESANO = new Date().toLocaleString('pt-BR', { month: 'short', year: 'numeric' }).replace('.', '').replace(' de ', ' ');
+const MESANO_UP = new Date().toLocaleString('pt-BR', { month: 'short' }).replace('.', '').toUpperCase() + ' ' + new Date().getFullYear();
 
 export const DashboardSimulator: React.FC = () => {
   const [entries, setEntries] = useState<Entry[]>(INICIAIS);
@@ -509,7 +607,7 @@ export const DashboardSimulator: React.FC = () => {
 
   return (
     <section id="simulador" className="relative overflow-hidden bg-white py-10 sm:py-12">
-      <div className="pointer-events-none absolute -right-40 top-10 h-[480px] w-[480px] rounded-full bg-amber-100/60 blur-[140px]" />
+      <div className="pointer-events-none absolute -right-40 top-10 h-[480px] w-[480px] rounded-full bg-emerald-100/60 blur-[140px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {/* título compacto: a janela do simulador precisa caber inteira na tela */}
         <Reveal className="mb-5 text-center sm:mb-6">
@@ -519,73 +617,94 @@ export const DashboardSimulator: React.FC = () => {
           <h2 className="font-display mt-3 text-[1.6rem] font-bold leading-[1.15] tracking-tight text-balance text-navy-900 sm:text-3xl lg:text-[2.1rem]">
             Lance uma receita ou despesa e veja o painel mudar na hora.
           </h2>
+          <p className="mt-2 text-[14.5px] text-slate-600">Este é o visual do sistema de verdade, com dados de exemplo.</p>
         </Reveal>
 
         <Reveal>
-          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-navy-900/15">
-            <BrowserBar url={`painel.financasdoservidor.com.br/${atual.url}`} />
+          <div className="overflow-hidden rounded-3xl border border-[#1c232d] bg-[#0a0d12] shadow-2xl shadow-navy-900/30">
+            <BrowserBar dark url={`membros.appfinancasdoservidor.digital/${atual.url}`} />
 
-            <div className="flex flex-col md:flex-row lg:h-[clamp(440px,calc(100svh-285px),600px)]">
+            <div className={`flex flex-col md:flex-row lg:h-[clamp(480px,calc(100svh-270px),640px)] ${APP.bg}`}>
               {/* menu: lateral no computador, abas no celular */}
-              <aside className="shrink-0 bg-navy-900 md:w-56 md:p-4">
-                <div className="mb-5 hidden items-center gap-2.5 px-1 md:flex">
+              <aside className={`flex shrink-0 flex-col border-b md:w-56 md:border-b-0 md:border-r ${APP.line} ${APP.side}`}>
+                <div className="hidden items-center gap-2.5 px-4 pb-3 pt-4 md:flex">
                   <LogoFS size={30} />
-                  <span className="text-[13px] font-bold leading-tight text-white">Finanças do Servidor</span>
+                  <span className="text-[11px] font-bold uppercase leading-tight tracking-wide text-white">
+                    Finanças do Servidor
+                    <span className={`block text-[8.5px] font-medium tracking-[0.18em] ${APP.muted}`}>Assistente financeiro</span>
+                  </span>
                 </div>
-                <nav className="no-scrollbar flex gap-1 overflow-x-auto p-2 md:flex-col md:overflow-visible md:p-0" aria-label="Menu do simulador">
+
+                <nav className="no-scrollbar flex gap-1 overflow-x-auto p-2 md:flex-1 md:flex-col md:overflow-y-auto md:px-3 md:py-1" aria-label="Menu do simulador">
+                  <p className={`hidden px-2 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.14em] md:block ${APP.muted}`}>Finanças</p>
                   {NAV.map((n) => (
                     <button
                       key={n.key}
                       onClick={() => setView(n.key)}
                       aria-current={view === n.key ? 'page' : undefined}
-                      className={`flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] transition ${
-                        view === n.key ? 'bg-amber-400 font-semibold text-navy-950' : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                      className={`flex shrink-0 items-center gap-2.5 rounded-lg border px-3 py-2 text-[13.5px] transition ${
+                        view === n.key
+                          ? 'border-[#00e676]/40 bg-[#00e676]/10 font-semibold text-[#00e676]'
+                          : 'border-transparent text-slate-300 hover:bg-white/5 hover:text-white'
                       }`}
                     >
                       <n.icon className="h-4 w-4" /> {n.label}
                     </button>
                   ))}
-                  {BLOQUEADOS.map((n) => (
-                    <span
-                      key={n.label}
-                      title={`${n.label}: disponível no painel completo`}
-                      className="flex shrink-0 cursor-not-allowed items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] text-slate-500"
-                    >
-                      <n.icon className="h-4 w-4" /> {n.label} <Lock className="ml-auto h-3 w-3" />
-                    </span>
+                  {MENU_COMPLETO.map((g) => (
+                    <React.Fragment key={g.grupo}>
+                      <p className={`hidden px-2 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-[0.14em] md:block ${APP.muted}`}>{g.grupo}</p>
+                      {g.itens.map((n) => (
+                        <span
+                          key={n.label}
+                          title={`${n.label}: disponível no sistema completo`}
+                          className="hidden shrink-0 cursor-not-allowed items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] text-slate-400 md:flex"
+                        >
+                          <n.icon className="h-4 w-4" /> {n.label}
+                          {n.novo && (
+                            <span className="ml-auto rounded-md bg-[#00e676] px-1.5 py-0.5 text-[9px] font-bold text-[#04130a]">NOVO</span>
+                          )}
+                        </span>
+                      ))}
+                    </React.Fragment>
                   ))}
                 </nav>
+
+                <div className={`hidden border-t p-3 md:block ${APP.line}`}>
+                  <span className="flex items-center gap-2 rounded-lg border border-[#00e676]/40 bg-[#00e676]/10 px-3 py-2 text-[13px] font-semibold text-[#00e676]">
+                    <MessageCircle className="h-4 w-4" /> IA no WhatsApp
+                  </span>
+                  <span className="mt-3 flex items-center gap-2 px-1">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00e676] text-[12px] font-bold text-[#04130a]">S</span>
+                    <span className="text-[12px] leading-tight text-white">
+                      Servidor
+                      <span className={`block text-[10.5px] ${APP.muted}`}>conta de demonstração</span>
+                    </span>
+                  </span>
+                </div>
               </aside>
 
-              <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-50">
-                <header className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-2.5 sm:px-5">
+              <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+                <header className={`flex shrink-0 flex-wrap items-center justify-between gap-2 border-b px-4 py-3 sm:px-5 ${APP.line}`}>
                   <div>
-                    <h3 className="font-display text-[17px] font-bold text-navy-900 sm:text-[18px]">{view === 'geral' ? 'Visão geral' : atual.label}</h3>
-                    <p className="text-[12.5px] text-slate-500">
-                      {view === 'geral' ? `Suas finanças em ${MES}` : 'Lançamentos do mês'}
-                    </p>
+                    <h3 className="font-display text-[18px] font-bold text-white">
+                      {view === 'geral' ? 'Olá! 👋' : view === 'in' ? 'Receitas' : 'Despesas'}
+                    </h3>
+                    <p className={`text-[12.5px] capitalize ${APP.muted}`}>{MESANO}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-800">Demonstração</span>
-                    <button onClick={reset} className="rounded-full px-2.5 py-1 text-[12px] text-slate-500 hover:text-navy-900">
+                    <span className={`hidden rounded-lg border p-0.5 text-[12px] sm:flex ${APP.line}`}>
+                      {['Dia', 'Semana', 'Mês', 'Ano'].map((p) => (
+                        <span key={p} className={`rounded-md px-2.5 py-1 ${p === 'Mês' ? 'bg-[#1c232d] font-semibold text-white' : APP.muted}`}>
+                          {p}
+                        </span>
+                      ))}
+                    </span>
+                    <button onClick={reset} className={`rounded-lg border px-2.5 py-1.5 text-[12px] text-slate-300 hover:text-white ${APP.line}`}>
                       Recomeçar
                     </button>
                   </div>
                 </header>
-
-                <div className="shrink-0 px-3 pt-3 sm:px-5">
-                  <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
-                    <Kpi label="Receitas" value={k.receitas} dot="bg-emerald-500" note={k.aReceber ? `R$ ${brl(k.aReceber)} a receber` : 'tudo recebido'} />
-                    <Kpi label="Despesas" value={k.despesas} dot="bg-rose-500" note={`R$ ${brl(k.pago)} já pagos`} />
-                    <Kpi label="Saldo livre" value={saldo} dot="bg-amber-400" note="receitas − despesas" />
-                    <Kpi
-                      label="A pagar"
-                      value={k.aPagar}
-                      dot="bg-slate-400"
-                      note={k.nPendentes ? `${k.nPendentes} conta${k.nPendentes > 1 ? 's' : ''} pendente${k.nPendentes > 1 ? 's' : ''}` : 'nada pendente 🎉'}
-                    />
-                  </div>
-                </div>
 
                 {/* só esta parte rola por dentro da janela */}
                 <div className="min-h-0 flex-1 p-3 sm:px-5 lg:overflow-y-auto">
@@ -596,61 +715,97 @@ export const DashboardSimulator: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
+                      className="space-y-3"
                     >
                       {view === 'geral' ? (
-                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-                          <Panel title="Situação das despesas" caption="O que já foi pago e o que ainda vence no mês">
-                            <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-200">
-                              <motion.div
-                                className="h-full rounded-full bg-emerald-500"
-                                initial={false}
-                                animate={{ width: `${pctPago}%` }}
-                                transition={{ duration: 0.6 }}
-                              />
-                            </div>
-                            <div className="mt-2 flex justify-between text-[12.5px] text-slate-600">
-                              <span>
-                                <b className="text-navy-900">Pago</b> {pctPago.toFixed(0)}% · R$ {brl(k.pago)}
-                              </span>
-                              <span>
-                                <b className="text-navy-900">Pendente</b> {(100 - pctPago).toFixed(0)}%
-                              </span>
-                            </div>
-                            {k.aPagar > 0 && (
-                              <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-[13px] text-amber-900">
-                                ⚡ Você tem <b>R$ {brl(k.aPagar)}</b> em contas pendentes este mês.
-                              </p>
-                            )}
-                            <div className="mt-3 flex flex-wrap gap-2">
-                              <button
-                                onClick={() => setView('out')}
-                                className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-rose-700"
+                        <>
+                          {/* card de saldo, igual ao topo do dashboard real */}
+                          <div className={`${APP.card} flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-end lg:justify-between`}>
+                            <div>
+                              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${APP.muted}`}>Saldo em {MESANO_UP}</p>
+                              <motion.p
+                                key={saldo}
+                                initial={{ opacity: 0.4, y: -4 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className={`font-display mt-1 text-[2rem] font-bold leading-none tabular-nums sm:text-[2.5rem] ${saldo < 0 ? 'text-[#f87171]' : 'text-white'}`}
                               >
-                                <Plus className="h-3.5 w-3.5" /> Nova despesa
-                              </button>
+                                {saldo < 0 ? '-' : ''}R$ {brl(Math.abs(saldo))}
+                              </motion.p>
+                              <p className="mt-2 flex items-center gap-1.5 text-[12.5px] text-slate-300">
+                                <span className={`h-1.5 w-1.5 rounded-full ${saldo >= 0 ? 'bg-[#00e676]' : 'bg-[#ef4444]'}`} />
+                                {saldo >= 0 ? 'Receitas excedem despesas em' : 'Despesas excedem receitas em'}
+                                <b className={saldo >= 0 ? 'text-[#00e676]' : 'text-[#f87171]'}>R$ {brl(Math.abs(saldo))}</b>
+                              </p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 lg:w-[300px]">
                               <button
                                 onClick={() => setView('in')}
-                                className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-emerald-700"
+                                className="flex items-center justify-center gap-1.5 rounded-xl bg-[#00e676] px-3 py-2.5 text-[13.5px] font-bold text-[#04130a] shadow-[0_0_24px_-6px_rgba(0,230,118,0.6)] hover:brightness-110"
                               >
-                                <Plus className="h-3.5 w-3.5" /> Nova receita
+                                <ArrowUpRight className="h-4 w-4" /> Nova Receita
+                              </button>
+                              <button
+                                onClick={() => setView('out')}
+                                className={`flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-[13.5px] font-bold text-white hover:bg-white/5 ${APP.line}`}
+                              >
+                                <ArrowDownLeft className="h-4 w-4" /> Nova Despesa
                               </button>
                             </div>
-                          </Panel>
+                          </div>
 
-                          <Panel title="Gastos por categoria" caption="Onde o seu dinheiro foi parar">
-                            <CategoryBars entries={k.outs} highlight={lastCat} />
-                          </Panel>
+                          <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
+                            <Kpi label="Receitas" value={k.receitas} tone="in" icon={TrendingUp} note={`${k.ins.length} transações`} />
+                            <Kpi label="Despesas" value={k.despesas} tone="out" icon={TrendingDown} note={`${k.outs.length} transações`} />
+                            <Kpi label="A Receber" value={k.aReceber} tone="blue" icon={CalendarCheck} note={k.aReceber ? 'previsto para o mês' : 'tudo recebido'} />
+                            <Kpi
+                              label="A Pagar"
+                              value={k.aPagar}
+                              tone="amber"
+                              icon={Clock}
+                              note={k.nPendentes ? `${k.nPendentes} conta${k.nPendentes > 1 ? 's' : ''} pendente${k.nPendentes > 1 ? 's' : ''}` : 'nada pendente 🎉'}
+                            />
+                          </div>
 
-                          <Panel title="Últimos lançamentos" caption="Toque em “pagar” para dar baixa numa conta" className="lg:col-span-2">
-                            <EntryList entries={entries.slice(0, 5)} lastId={lastId} onToggle={toggle} />
-                          </Panel>
-                        </div>
+                          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+                            <Panel title="Despesas por Categoria" caption={`${porCategoria(k.outs).length} categorias`}>
+                              <CategoryBars entries={k.outs} highlight={lastCat} />
+                            </Panel>
+
+                            <Panel title="Situação das despesas" caption="O que já foi pago e o que ainda vence no mês">
+                              <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-[#1c232d]">
+                                <motion.div
+                                  className="h-full rounded-full bg-[#00e676]"
+                                  initial={false}
+                                  animate={{ width: `${pctPago}%` }}
+                                  transition={{ duration: 0.6 }}
+                                />
+                              </div>
+                              <div className="mt-2 flex justify-between text-[12.5px] text-slate-300">
+                                <span>
+                                  <b className="text-white">Pago</b> {pctPago.toFixed(0)}% · R$ {brl(k.pago)}
+                                </span>
+                                <span>
+                                  <b className="text-white">Pendente</b> {(100 - pctPago).toFixed(0)}%
+                                </span>
+                              </div>
+                              {k.aPagar > 0 && (
+                                <p className="mt-3 rounded-xl bg-[#eab308]/10 px-3 py-2 text-[13px] text-[#fde68a]">
+                                  ⚡ Você tem <b className="text-white">R$ {brl(k.aPagar)}</b> em contas pendentes este mês.
+                                </p>
+                              )}
+                            </Panel>
+
+                            <Panel title="Transações Recentes" caption="Toque em “pagar” para dar baixa numa conta" className="lg:col-span-2">
+                              <EntryList entries={entries.slice(0, 5)} lastId={lastId} onToggle={toggle} />
+                            </Panel>
+                          </div>
+                        </>
                       ) : (
                         <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,390px)_1fr] lg:items-start">
                           <EntryForm key={view} type={view} saldo={saldo} onType={(t) => setView(t)} onAdd={add} />
                           <div className="space-y-3">
                             <Panel
-                              title={view === 'in' ? 'Receitas por fonte' : 'Despesas por categoria'}
+                              title={view === 'in' ? 'Receitas por Categoria' : 'Despesas por Categoria'}
                               caption={`${(view === 'in' ? k.ins : k.outs).length} lançamentos · R$ ${brl(view === 'in' ? k.receitas : k.despesas)}`}
                             >
                               <CategoryBars entries={view === 'in' ? k.ins : k.outs} highlight={lastCat} />

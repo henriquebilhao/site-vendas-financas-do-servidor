@@ -2,57 +2,82 @@ import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
+  BarChart3,
   CalendarClock,
+  CreditCard,
   Eye,
   HeartHandshake,
   KeyRound,
   Lock,
-  TrendingUp,
   UserPlus,
+  Wallet,
 } from 'lucide-react';
-import { AudioBubble, Bubble, PhoneFrame, PhotoBubble, Receipt, Reveal, SectionTitle } from './ui';
+import { AudioBubble, Bubble, PhoneFrame, PhotoBubble, Reveal, SectionTitle } from './ui';
+import { WaText, msgAlertaMeta, msgTransacao } from './Respostas';
 
 /* ---------- Dores do dia a dia ---------- */
 
 const DORES = [
   {
-    icon: CalendarClock,
-    t: 'Rotina que não para',
-    d: 'Expediente, escala ou plantão. Não sobra tempo para planilha, e o gasto fica sem anotar.',
+    icon: Wallet,
+    t: 'O salário cai, mas desaparece',
+    d: 'Você recebe e, em poucos dias, boa parte do dinheiro já está comprometida com contas e despesas.',
   },
   {
-    icon: TrendingUp,
-    t: 'O salário acaba antes do mês acabar',
-    d: 'Pequenos gastos do dia a dia somam no fim do mês, e a fatura chega maior do que você esperava.',
+    icon: CreditCard,
+    t: 'Cartões e empréstimos viraram uma bola de neve',
+    d: 'Parcelamentos, consignados e faturas acumuladas dificultam saber quanto realmente sobra do salário.',
+  },
+  {
+    icon: BarChart3,
+    t: 'Você não sabe para onde vai seu dinheiro',
+    d: 'Pequenos gastos se acumulam, as despesas fogem do controle e fica difícil entender onde está o problema.',
+  },
+  {
+    icon: CalendarClock,
+    t: 'Todo mês começa com preocupação',
+    d: 'Você vive esperando o próximo pagamento para colocar as contas em dia e acaba sem conseguir planejar o futuro.',
   },
 ];
 
 export const ForWho: React.FC = () => (
   <section id="dores" className="relative overflow-hidden bg-navy-800 py-12 sm:py-16">
     <div className="pointer-events-none absolute -left-40 bottom-0 h-[420px] w-[420px] rounded-full bg-rose-500/10 blur-[140px]" />
-    <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-      <SectionTitle
-        eyebrow="Você se identifica?"
-        title={<>Quem cuida do serviço público também merece ter o próprio dinheiro em ordem.</>}
-        sub="Se alguma dessas situações parece familiar, você não está sozinho. E não é falta de esforço: é falta da ferramenta certa."
-      />
+    <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
+      <Reveal className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
+        <span className="inline-flex items-center rounded-full border border-orange-400/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-orange-300">
+          Você se identifica?
+        </span>
+        <h2 className="font-display mt-4 text-3xl font-bold leading-[1.12] tracking-tight text-white text-balance sm:text-4xl md:text-5xl">
+          Você trabalha, recebe seu salário todo mês… mas parece que o dinheiro nunca é suficiente?
+        </h2>
+        <p className="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg">
+          Ser servidor público não significa ter a vida financeira organizada. Entre contas, empréstimos, cartões e despesas do
+          dia a dia, é fácil perder o controle do próprio dinheiro.
+        </p>
+      </Reveal>
 
-      <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         {DORES.map(({ icon: I, t, d }, i) => (
-          <Reveal key={t} delay={i * 0.1}>
-            <motion.div whileHover={{ y: -6 }} className="card h-full p-7">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-rose-500/15 text-rose-300">
-                <I className="h-6 w-6" />
-              </div>
-              <h3 className="font-display text-xl font-bold text-white">{t}</h3>
+          <Reveal key={t} delay={i * 0.08}>
+            <motion.div
+              whileHover={{ y: -4 }}
+              className={`card h-full p-6 sm:p-7 ${i === 0 ? '!border-amber-400/70' : ''}`}
+            >
+              <I className="h-6 w-6 text-pink-300" />
+              <h3 className="font-display mt-4 text-[1.2rem] font-bold leading-snug text-white">{t}</h3>
               <p className="mt-2 leading-relaxed text-slate-300">{d}</p>
             </motion.div>
           </Reveal>
         ))}
       </div>
-      <Reveal className="mt-12 text-center">
+
+      <Reveal className="mt-10 text-center">
         <p className="font-display text-xl font-bold text-white sm:text-2xl">
-          A boa notícia: dá para resolver com <span className="text-amber-300">uma mensagem</span>. 👇
+          A verdade é que você não precisa ganhar mais para começar a se organizar.
+        </p>
+        <p className="font-display mt-2 text-lg font-bold text-amber-300 sm:text-xl">
+          Precisa entender e organizar melhor o dinheiro que já recebe. 👇
         </p>
       </Reveal>
     </div>
@@ -60,17 +85,22 @@ export const ForWho: React.FC = () => (
 );
 
 /* ---------- Um plantão normal (linha do tempo + celular fixo) ---------- */
+/* resposta do assistente no formato real */
+const Real: React.FC<{ time: string; text: string }> = ({ time, text }) => (
+  <Bubble from="bot" time={time}>
+    <WaText text={text} />
+  </Bubble>
+);
+
 const PLANTAO = [
   {
     h: '06:50',
     t: 'Começo do expediente. O café já está anotado.',
-    d: 'Escreva do jeito que vier na cabeça. O assistente entende valor, local e categoria.',
+    d: 'Escreva do jeito que vier na cabeça. O assistente entende valor, local e categoria e confirma cada lançamento.',
     chat: (
       <>
         <Bubble from="me" time="06:50">café 8,50 na padaria</Bubble>
-        <Bubble from="bot" time="06:50">
-          <Receipt title="✅ Despesa registrada" rows={[['Valor', 'R$ 8,50'], ['Categoria', 'Alimentação']]} />
-        </Bubble>
+        <Real time="06:50" text={msgTransacao(1032, 'Café na padaria', '8,50', 'out', 'Alimentação')} />
       </>
     ),
   },
@@ -80,53 +110,41 @@ const PLANTAO = [
     d: 'No intervalo, no deslocamento ou entre um atendimento e outro. Um áudio com vários gastos vira vários registros.',
     chat: (
       <>
-        <AudioBubble duration="0:06" caption="almoço 32 e 15 de estacionamento" />
-        <Bubble from="bot" time="12:40">
-          <Receipt title="✅ Entendi 2 gastos" rows={[['Almoço', 'R$ 32,00'], ['Estacionamento', 'R$ 15,00']]} />
-        </Bubble>
+        <AudioBubble duration="0:06" time="12:40" caption="almoço 32 e 15 de estacionamento" />
+        <Real time="12:40" text={msgTransacao(1033, 'Almoço', '32,00', 'out', 'Alimentação')} />
+        <Real time="12:40" text={msgTransacao(1034, 'Estacionamento', '15,00', 'out', 'Transporte')} />
       </>
     ),
   },
   {
     h: '18:20',
     t: 'Mercado depois do trabalho? Mande a nota fiscal.',
-    d: 'Tire uma foto da nota fiscal e pronto. O valor é lido e lançado na categoria certa.',
+    d: 'Tire uma foto da nota fiscal, ou mande o PDF, e pronto. O valor é lido e lançado na categoria certa.',
     chat: (
       <>
-        <PhotoBubble />
-        <Bubble from="bot" time="18:20">
-          <Receipt title="✅ Nota fiscal lida" rows={[['Supermercado', 'R$ 184,30'], ['Categoria', 'Mercado']]} />
-        </Bubble>
+        <PhotoBubble time="18:20" />
+        <Real time="18:20" text={msgTransacao(1035, 'Supermercado Bom Preço', '184,30', 'out', 'Mercado')} />
       </>
     ),
   },
   {
     h: 'Dia 20',
     t: 'Entrou um dinheiro a mais? Entra como receita.',
-    d: 'Salário, 13º, férias, restituição e rendas extras ficam separados, para você saber de onde vem cada real.',
+    d: 'Salário, férias, restituição e rendas extras ficam separados, para você saber de onde vem cada real.',
     chat: (
       <>
         <Bubble from="me" time="09:12">recebi 960 de renda extra</Bubble>
-        <Bubble from="bot" time="09:12">
-          <Receipt tone="in" title="🟢 Receita registrada" rows={[['Valor', '+ R$ 960,00'], ['Categoria', 'Renda extra']]} />
-        </Bubble>
+        <Real time="09:12" text={msgTransacao(1041, 'Renda extra', '960,00', 'in', 'Renda extra')} />
       </>
     ),
   },
   {
-    h: '22:00',
-    t: 'Antes de dormir, você sabe quanto sobra.',
-    d: 'Pergunte como perguntaria a um amigo. A resposta chega na hora, com os seus números.',
+    h: '23:10',
+    t: 'Gastou perto do limite? O aviso chega sozinho.',
+    d: 'Quando um gasto chega perto da meta que você definiu, o assistente avisa na hora e mostra quanto ainda resta até o fim do mês.',
     chat: (
       <>
-        <Bubble from="me" time="22:00">quanto sobrou esse mês?</Bubble>
-        <Bubble from="bot" time="22:00">
-          <Receipt
-            tone="in"
-            title="💰 Saldo livre: R$ 3.214,70"
-            rows={[['Entradas', 'R$ 9.410,00'], ['Saídas', 'R$ 6.195,30'], ['Maior gasto', 'Mercado']]}
-          />
-        </Bubble>
+        <Real time="23:10" text={msgAlertaMeta('Combustível', 75, '447,25', '600,00', '152,75')} />
       </>
     ),
   },
@@ -248,11 +266,6 @@ export const Together: React.FC = () => (
           <div className="mt-4 flex items-center justify-between rounded-2xl border border-dashed border-slate-300 p-3 text-[13px] text-slate-600">
             <span className="flex items-center gap-2"><UserPlus className="h-4 w-4" /> Total da casa no mês</span>
             <span className="font-display font-bold text-navy-900">R$ 6.195,30</span>
-          </div>
-          <div className="wa-wallpaper mt-4 rounded-2xl p-3">
-            <Bubble from="bot" time="20:15">
-              <span className="text-[12px]">👋 Camila registrou <b>R$ 89,90</b> em Farmácia.</span>
-            </Bubble>
           </div>
         </div>
       </Reveal>

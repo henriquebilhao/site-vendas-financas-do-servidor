@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { Camera, MessageSquareText, Mic, PiggyBank, FileBarChart, FileText, BadgeDollarSign, RotateCcw } from 'lucide-react';
+import { Camera, MessageSquareText, Mic, FileText, BadgeDollarSign, RotateCcw } from 'lucide-react';
 import { brl } from './data';
-import { AudioBubble, Bubble, DateChip, EncryptionNotice, PdfBubble, PhoneFrame, PhotoBubble, Receipt, SectionTitle, TypingBubble, agora } from './ui';
+import { AudioBubble, Bubble, DateChip, EncryptionNotice, PdfBubble, PhoneFrame, PhotoBubble, SectionTitle, TypingBubble, agora } from './ui';
+import { WaText, msgTransacao } from './Respostas';
 
 type Tx = { cat: string; v: number; type: 'in' | 'out' };
 
@@ -20,7 +21,8 @@ type Action = {
   /* o que o usuário manda: texto digitado, áudio gravado, foto ou PDF */
   send: { kind: 'text'; text: string } | { kind: 'audio'; caption: string; duration: string } | { kind: 'photo' } | { kind: 'pdf' };
   txs?: Tx[];
-  reply: (state: Tx[], time: string) => React.ReactNode;
+  /* respostas do assistente (uma ou mais mensagens) */
+  reply: (state: Tx[], time: string) => React.ReactNode[];
 };
 
 const totals = (txs: Tx[]) => {
@@ -35,6 +37,15 @@ const byCat = (txs: Tx[]) => {
   return Object.entries(m).sort((a, b) => b[1] - a[1]);
 };
 
+/* identificador das transações, como o sistema numera */
+let proximoId = 1032;
+const real = (time: string, desc: string, valor: string, tipo: 'in' | 'out', cat: string) => (
+  <Bubble key={`r${proximoId}`} from="bot" time={time}>
+    <WaText text={msgTransacao(proximoId++, desc, valor, tipo, cat)} />
+  </Bubble>
+);
+
+/* Só mensagens que o sistema realmente envia (mesmo formato dos prints) */
 const ACTIONS: Action[] = [
   {
     id: 'texto',
@@ -42,11 +53,7 @@ const ACTIONS: Action[] = [
     icon: MessageSquareText,
     send: { kind: 'text', text: 'gastei 45 no almoço' },
     txs: [{ cat: 'Alimentação', v: 45, type: 'out' }],
-    reply: (_, time) => (
-      <Bubble from="bot" time={time}>
-        <Receipt title="✅ Despesa registrada!" rows={[['💸 Valor', 'R$ 45,00'], ['🏷️ Categoria', 'Alimentação'], ['📅 Data', 'hoje']]} />
-      </Bubble>
-    ),
+    reply: (_, time) => [real(time, 'Almoço', '45,00', 'out', 'Alimentação')],
   },
   {
     id: 'audio',
@@ -57,11 +64,7 @@ const ACTIONS: Action[] = [
       { cat: 'Transporte', v: 150, type: 'out' },
       { cat: 'Alimentação', v: 18, type: 'out' },
     ],
-    reply: (_, time) => (
-      <Bubble from="bot" time={time}>
-        <Receipt title="🎧 Ouvi seu áudio e registrei 2 gastos:" rows={[['⛽ Combustível', 'R$ 150,00'], ['🍔 Lanche', 'R$ 18,00']]} />
-      </Bubble>
-    ),
+    reply: (_, time) => [real(time, 'Combustível', '150,00', 'out', 'Transporte'), real(time, 'Lanche', '18,00', 'out', 'Alimentação')],
   },
   {
     id: 'foto',
@@ -69,11 +72,7 @@ const ACTIONS: Action[] = [
     icon: Camera,
     send: { kind: 'photo' },
     txs: [{ cat: 'Mercado', v: 184.3, type: 'out' }],
-    reply: (_, time) => (
-      <Bubble from="bot" time={time}>
-        <Receipt title="🧾 Nota fiscal lida!" rows={[['🏪 Local', 'Supermercado Bom Preço'], ['💸 Valor', 'R$ 184,30'], ['🏷️ Categoria', 'Mercado']]} />
-      </Bubble>
-    ),
+    reply: (_, time) => [real(time, 'Supermercado Bom Preço', '184,30', 'out', 'Mercado')],
   },
   {
     id: 'pdf',
@@ -81,11 +80,7 @@ const ACTIONS: Action[] = [
     icon: FileText,
     send: { kind: 'pdf' },
     txs: [{ cat: 'Cartão de crédito', v: 1240, type: 'out' }],
-    reply: (_, time) => (
-      <Bubble from="bot" time={time}>
-        <Receipt title="📄 Li o seu PDF e registrei a fatura:" rows={[['🏦 Fatura do cartão', 'R$ 1.240,00'], ['📅 Vencimento', '15/11'], ['🏷️ Categoria', 'Cartão de crédito']]} />
-      </Bubble>
-    ),
+    reply: (_, time) => [real(time, 'Fatura do cartão', '1.240,00', 'out', 'Cartão de crédito')],
   },
   {
     id: 'extra',
@@ -93,68 +88,17 @@ const ACTIONS: Action[] = [
     icon: BadgeDollarSign,
     send: { kind: 'text', text: 'recebi 960 de renda extra' },
     txs: [{ cat: 'Renda extra', v: 960, type: 'in' }],
-    reply: (_, time) => (
-      <Bubble from="bot" time={time}>
-        <Receipt title="🟢 Receita registrada!" rows={[['💰 Valor', '+ R$ 960,00'], ['🏷️ Categoria', 'Renda extra']]} />
-      </Bubble>
-    ),
-  },
-  {
-    id: 'sobra',
-    label: 'Quanto sobrou?',
-    icon: PiggyBank,
-    send: { kind: 'text', text: 'quanto sobrou esse mês?' },
-    reply: (st, time) => {
-      const t = totals(st);
-      return (
-        <Bubble from="bot" time={time}>
-          <Receipt title={`💰 Saldo livre: R$ ${brl(t.saldo)}`} rows={[['🟢 Entradas', `R$ ${brl(t.e)}`], ['🔴 Saídas', `R$ ${brl(t.s)}`]]} />
-        </Bubble>
-      );
-    },
-  },
-  {
-    id: 'relatorio',
-    label: 'Relatório',
-    icon: FileBarChart,
-    send: { kind: 'text', text: 'me manda o relatório do mês' },
-    reply: (st, time) => {
-      const t = totals(st);
-      const top = byCat(st).slice(0, 3).map(([c, v]) => [`• ${c}`, `R$ ${brl(v)}`] as [string, string]);
-      return (
-        <Bubble from="bot" time={time}>
-          <Receipt
-            title={`📊 Relatório de ${new Date().toLocaleString('pt-BR', { month: 'long' })}`}
-            rows={[
-              ['🟢 Entradas', `R$ ${brl(t.e)}`],
-              ['🔴 Saídas', `R$ ${brl(t.s)}`],
-              ['💰 Saldo livre', `R$ ${brl(t.saldo)}`],
-              ['Maiores gastos:', ''],
-              ...top,
-            ]}
-          />
-          {'\n\n'}
-          <span className="text-[#667781]">O relatório completo está no seu painel 👉 </span>
-          <span className="text-[#027eb5] underline">painel.financasdoservidor</span>
-        </Bubble>
-      );
-    },
+    reply: (_, time) => [real(time, 'Renda extra', '960,00', 'in', 'Renda extra')],
   },
 ];
 
 type Msg = { key: number; node: React.ReactNode };
 
-const welcome = (time: string) => (
-  <Bubble from="bot" time={time}>
-    Oi! 👋 Eu sou seu assistente financeiro.{'\n'}Toque num pedido e veja como eu respondo.
-  </Bubble>
-);
-
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export const LiveDemo: React.FC = () => {
   const [txs, setTxs] = useState<Tx[]>(INICIAL);
-  const [msgs, setMsgs] = useState<Msg[]>(() => [{ key: 0, node: welcome(agora()) }]);
+  const [msgs, setMsgs] = useState<Msg[]>([]);
   const [busy, setBusy] = useState(false);
   const [draft, setDraft] = useState('');
   const [recording, setRecording] = useState(false);
@@ -214,7 +158,18 @@ export const LiveDemo: React.FC = () => {
 
     // 3. resposta + painel atualizado
     setStatus('online');
-    setMsgs((m) => [...m.filter((x) => x.key !== typingKey), { key: keyRef.current++, node: a.reply(next, agora()) }].slice(-20));
+    const respostas = a.reply(next, agora());
+    setMsgs((m) => [...m.filter((x) => x.key !== typingKey), { key: keyRef.current++, node: respostas[0] }].slice(-20));
+    // quando o sistema manda mais de uma confirmação (ex.: áudio com 2 gastos)
+    for (const r of respostas.slice(1)) {
+      setStatus('digitando…');
+      const tk = keyRef.current++;
+      setMsgs((m) => [...m, { key: tk, node: <TypingBubble /> }]);
+      await wait(1100);
+      if (!alive()) return;
+      setStatus('online');
+      setMsgs((m) => [...m.filter((x) => x.key !== tk), { key: keyRef.current++, node: r }].slice(-20));
+    }
     if (a.txs) {
       setTxs(next);
       setFlash(a.txs[0].cat);
@@ -230,7 +185,7 @@ export const LiveDemo: React.FC = () => {
     setRecording(false);
     setStatus('online');
     setTxs(INICIAL);
-    setMsgs([{ key: keyRef.current++, node: <Bubble from="bot" time={agora()}>Tudo zerado. Pode testar de novo! 🙂</Bubble> }]);
+    setMsgs([]);
   };
 
   const t = totals(txs);

@@ -17,7 +17,7 @@ const DEPOIMENTOS = [
   { n: 'Juliana P.', r: 'Servidora municipal · Belo Horizonte/MG', t: 'Tiro foto da nota fiscal do mercado e pronto. Não acredito que demorei tanto pra começar.' },
   { n: 'Marcos V.', r: 'Professor da rede estadual · Goiânia/GO', t: 'O 13º entrava e sumia. Agora eu planejo antes de ele cair na conta.' },
   { n: 'Fernanda C.', r: 'Servidora federal · Brasília/DF', t: 'Planilha eu abandonava em uma semana. Isso aqui eu uso todo dia porque é no WhatsApp.' },
-  { n: 'Rafael S.', r: 'Servidor estadual · Recife/PE', t: 'Pergunto "quanto sobrou?" e ele responde na hora. Simples demais.' },
+  { n: 'Rafael S.', r: 'Servidor estadual · Recife/PE', t: 'Mando o gasto e a confirmação chega na hora, com tudo certinho. Simples demais.' },
   { n: 'Thiago R.', r: 'Técnico de enfermagem, servidor municipal · Florianópolis/SC', t: 'O relatório do mês me mostrou que eu gastava quase R$ 600 só com lanche no plantão. Cortei metade.' },
   { n: 'Patrícia A.', r: 'Servidora estadual · Salvador/BA', t: 'Comecei no teste grátis e assinei o anual no segundo dia. Vale cada centavo.' },
 ];
@@ -86,16 +86,16 @@ export const SocialProof: React.FC = () => {
    Vídeo: Pexels, "Close up on Man Hands Typing Message on Phone" (RDNE Stock project)
    ===================================================================== */
 const NOTIFS = [
-  { t: '✅ Despesa registrada', v: 'Almoço · R$ 42,00' },
-  { t: '✅ Nota fiscal lida', v: 'Mercado · R$ 184,30' },
-  { t: '🟢 Receita registrada', v: 'Renda extra · + R$ 960,00' },
-  { t: '💰 Saldo livre do mês', v: 'R$ 3.214,70' },
+  { t: 'Transação registrada com sucesso!', v: 'Almoço · R$ 42,00 · 🟥 Despesa' },
+  { t: 'Transação registrada com sucesso!', v: 'Supermercado · R$ 184,30 · 🟥 Despesa' },
+  { t: 'Transação registrada com sucesso!', v: 'Renda extra · R$ 960,00 · 🟩 Receita' },
+  { t: '⚠️ Alerta de meta — Combustível', v: 'Você já usou 75% do limite deste mês' },
 ];
 
 const PASSOS = [
   { n: '01', t: 'Você manda', d: 'Texto, áudio, foto da nota fiscal ou PDF, do jeito que vier na cabeça.' },
   { n: '02', t: 'Ele organiza', d: 'O assistente entende o valor, separa despesa de receita e coloca na categoria certa.' },
-  { n: '03', t: 'Você acompanha', d: 'Pergunte quanto sobrou, peça o relatório e veja tudo no painel.' },
+  { n: '03', t: 'Você acompanha', d: 'Receba a confirmação de cada lançamento, lembretes de contas e alertas de meta, e veja tudo no painel.' },
 ];
 
 export const VideoSection: React.FC = () => {

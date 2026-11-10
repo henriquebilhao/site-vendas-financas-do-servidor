@@ -39,9 +39,9 @@ export const PricingSection: React.FC = () => {
 
   const HOTMART_MENSAL_SEM = "https://pay.hotmart.com/P108349038G?off=jgetfxt8";
   const HOTMART_MENSAL_COM = "https://pay.hotmart.com/P108349038G?off=7uwqfyck";
-  const HOTMART_TRIMESTRAL_SEM = "https://pay.hotmart.com/P108349038G?off=hrxkq0o2";
-  const HOTMART_TRIMESTRAL_COM = "https://pay.hotmart.com/P108349038G?off=020d4o7v";
-  const HOTMART_ANUAL = "https://pay.hotmart.com/P108349038G?off=tllte0hp";
+  const HOTMART_TRIMESTRAL_SEM = "https://pay.hotmart.com/P108349038G?off=yrgr5ya5";
+  const HOTMART_TRIMESTRAL_COM = "https://pay.hotmart.com/P108349038G?off=llojfdtp";
+  const HOTMART_ANUAL = "https://pay.hotmart.com/P108349038G?off=hljd903u";
 
   return (
     <section id="planos" className="relative py-20 md:py-28 bg-slate-950 overflow-hidden border-t border-slate-900">

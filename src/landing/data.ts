@@ -2,9 +2,9 @@
 export const LINKS = {
   mensalSem: 'https://pay.hotmart.com/P108349038G?off=jgetfxt8',
   mensalCom: 'https://pay.hotmart.com/P108349038G?off=7uwqfyck',
-  trimestralSem: 'https://pay.hotmart.com/P108349038G?off=hrxkq0o2',
-  trimestralCom: 'https://pay.hotmart.com/P108349038G?off=020d4o7v',
-  anual: 'https://pay.hotmart.com/P108349038G?off=tllte0hp',
+  trimestralSem: 'https://pay.hotmart.com/P108349038G?off=yrgr5ya5',
+  trimestralCom: 'https://pay.hotmart.com/P108349038G?off=llojfdtp',
+  anual: 'https://pay.hotmart.com/P108349038G?off=hljd903u',
   testeGratis:
     'https://wa.me/5554994197878?text=Ol%C3%A1%21+Gostaria+de+iniciar+meu+teste+gr%C3%A1tis+de+7+dias+no+Finan%C3%A7as+do+Servidor.',
   areaCliente: 'https://membros.appfinancasdoservidor.digital',

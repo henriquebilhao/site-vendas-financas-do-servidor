@@ -160,9 +160,14 @@ export const AnnualExclusives: React.FC = () => (
       </div>
 
       {/* o resto do que vem junto (antes ficava na dobra "Muito mais do que um assistente") */}
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+      {/* 6 colunas no PC (cada card ocupa 2) para a última fileira, com 2 cards, ficar centralizada */}
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-6 lg:gap-5">
         {ENTREGAVEIS.map(({ icon: I, t, d }, k) => (
-          <Reveal key={t} delay={(k % 3) * 0.06}>
+          <Reveal
+            key={t}
+            delay={(k % 3) * 0.06}
+            className={`lg:col-span-2 ${k === ENTREGAVEIS.length - 2 && ENTREGAVEIS.length % 3 === 2 ? 'lg:col-start-2' : ''}`}
+          >
             <motion.div whileHover={{ y: -4 }} className="card-light relative flex h-full gap-4 p-5">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 text-navy-900 shadow-md shadow-amber-500/20">
                 <I className="h-6 w-6" />

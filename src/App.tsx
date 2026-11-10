@@ -5,7 +5,6 @@ import { ForWho, ShiftTimeline, Together } from './landing/Sections';
 import { DashboardFeatures, DashboardSimulator } from './landing/Dashboard';
 import { Authority, ForWhom, SocialProof, VideoSection } from './landing/Story';
 import { LiveDemo } from './landing/LiveDemo';
-import { AssistantReplies } from './landing/Respostas';
 import { AnnualExclusives, Pricing } from './landing/Pricing';
 import { Faq, Footer } from './landing/Closing';
 
@@ -33,7 +32,6 @@ export default function App() {
           <VideoSection />
           <ShiftTimeline />
           <LiveDemo />
-          <AssistantReplies />
           <DashboardFeatures />
           <DashboardSimulator />
           <Together />

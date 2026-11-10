@@ -51,6 +51,21 @@ export const msgTransacao = (id: number, desc: string, valor: string, tipo: 'in'
 export const msgAlertaMeta = (meta: string, pct: number, usado: string, limite: string, resta: string) =>
   `⚠️ *Alerta de meta — ${meta}*\n\n${NOME}, você já usou *${pct}%* do limite deste mês: R$ ${usado} de R$ ${limite}.\n\nAinda restam *R$ ${resta}* até ${fimDoMes()}. 💡`;
 
+export const msgParcelamento = (desc: string, total: string, n: number, parcela: string, primeiroId = 261) =>
+  `Parcelamento registrado com sucesso!\n\n📋 Resumo do parcelamento:\n${LINHA}\n\n🏷️ Descrição: ${desc}\n💸 Valor total: R$ ${total}\n🔄 Tipo: 🟥 Despesa\n🔢 Parcelas: ${n}x de R$ ${parcela}\n🏷️ Categoria: Compra parcelada\n\n🗓️ Detalhe das parcelas:\n${Array.from(
+    { length: n },
+    (_, i) => `${['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣'][i] ?? `${i + 1}.`} Parcela ${i + 1}/${n} - R$ ${parcela} - ${dia(0, i)} - ID: ${primeiroId + i}`,
+  ).join('\n')}\n\n✨ Todas as parcelas foram agendadas!\n\n📊 Consulte gráficos e relatórios completos em: ${LINK}`;
+
+export const msgLembretes = () =>
+  `👋 Olá, ${NOME}!\n\n📌 Você tem 3 Lembretes!\n\n📌 *${dia(1)}*\n🧾 *Tênis - Parcela 1/4*\n📅 *Data:* ${dia(1)}\n💸 Saída – *R$ 70,00*\n📁 Categoria: Compra parcelada\n\n📌 *${dia(5)}*\n🧾 *Fatura do cartão*\n📅 *Data:* ${dia(5)}\n💸 Saída – *R$ 1.240,00*\n📁 Categoria: Cartão de crédito\n\n📌 *${dia(10)}*\n🧾 *Plano de saúde*\n📅 *Data:* ${dia(10)}\n💸 Saída – *R$ 380,00*\n📁 Categoria: Saúde`;
+
+export const msgMetaBatida = (meta: string, juntou: string, alvo: string) =>
+  `🎉 *Meta batida — ${meta}*\n\nParabéns, ${NOME}! Você juntou *R$ ${juntou}* e completou a sua meta de economia deste mês (R$ ${alvo}). 👏`;
+
+export const msgResumoSemanal = () =>
+  `📊 *RESUMO SEMANAL DAS SUAS METAS*\n\nOlá, *${NOME}*!\nConfira seu desempenho na semana de *${dia(-7)}* a *${dia(-1)}*:\n\n*Mercado do mês*\n• Limite: R$ 1.400,00\n• Gasto acumulado: R$ 812,40 (58%)\n• Gasto na semana: R$ 214,30\n• Restante: R$ 587,60\n• Dias restantes: 21\n✅ Você está dentro do limite. Continue assim!\n\n${LINHA}\n\n*Lazer com a família*\n• Limite: R$ 400,00\n• Gasto acumulado: R$ 432,90 (108%)\n• Gasto na semana: R$ 160,00\n• Restante: R$ -32,90\n• Dias restantes: 21\n🚨 Limite ultrapassado! Atenção!\n\n${LINHA}\n\n*Combustível*\n• Limite: R$ 600,00\n• Gasto acumulado: R$ 379,80 (63%)\n• Gasto na semana: R$ 189,90\n• Restante: R$ 220,20\n• Dias restantes: 21\n✅ Você está dentro do limite. Continue assim!`;
+
 type Msg = { from: 'me' | 'bot' | 'audio' | 'date'; text?: string; caption?: string; time: string };
 type Tipo = {
   id: string;

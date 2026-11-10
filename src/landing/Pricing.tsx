@@ -66,16 +66,14 @@ const Feature: React.FC<{ children: React.ReactNode; gold?: boolean; light?: boo
   </li>
 );
 
-/* Lista dos cartões claros: no celular mostra os 3 primeiros itens e um resumo do resto
-   (a lista inteira já aparece no cartão do Anual, que vem primeiro). */
+/* Lista dos cartões claros: a mesma lista completa no celular e no computador. */
 const BaseCurta: React.FC = () => (
   <>
-    {BASE.map((f, i) => (
-      <Feature light key={f} so={i > 2 ? 'desktop' : undefined}>
+    {BASE.map((f) => (
+      <Feature light key={f}>
         {f}
       </Feature>
     ))}
-    <Feature light so="celular">Categorias, contas futuras, metas, relatórios e calculadora</Feature>
   </>
 );
 

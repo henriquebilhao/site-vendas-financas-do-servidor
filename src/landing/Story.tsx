@@ -1,53 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, Eye, HeartHandshake, KeyRound, Lock, ShieldCheck, Star, X } from 'lucide-react';
+import { ArrowRight, Check, Eye, HeartHandshake, KeyRound, Lock, ShieldCheck, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { Reveal, SectionTitle } from './ui';
 
 /* =====================================================================
-   DOBRA 2 — PROVA SOCIAL
-   ATENÇÃO: depoimentos ILUSTRATIVOS. Troque pelos reais assim que tiver
-   e mude MOSTRAR_AVISO para false.
+   DOBRA 2 — NO DIA A DIA (situações de uso)
+   Não são depoimentos: são exemplos de uso, sem pessoa identificada.
+   Quando houver depoimentos REAIS, volte a mostrar nome, cargo e cidade.
    ===================================================================== */
-const MOSTRAR_AVISO = true;
-
 const DEPOIMENTOS = [
-  { n: 'Ricardo M.', r: 'Agente de segurança · Porto Alegre/RS', t: 'Mando áudio saindo do plantão e ele já lança tudo. Primeira vez que eu sei pra onde vai o meu salário.' },
-  { n: 'Anderson L.', r: 'Servidor estadual · Curitiba/PR', t: 'Eu e minha esposa usamos juntos. Acabou a discussão de "quem gastou isso?" no fim do mês.' },
-  { n: 'Juliana P.', r: 'Servidora municipal · Belo Horizonte/MG', t: 'Tiro foto da nota fiscal do mercado e pronto. Não acredito que demorei tanto pra começar.' },
-  { n: 'Marcos V.', r: 'Professor da rede estadual · Goiânia/GO', t: 'O 13º entrava e sumia. Agora eu planejo antes de ele cair na conta.' },
-  { n: 'Fernanda C.', r: 'Servidora federal · Brasília/DF', t: 'Planilha eu abandonava em uma semana. Isso aqui eu uso todo dia porque é no WhatsApp.' },
-  { n: 'Rafael S.', r: 'Servidor estadual · Recife/PE', t: 'Mando o gasto e a confirmação chega na hora, com tudo certinho. Simples demais.' },
-  { n: 'Thiago R.', r: 'Técnico de enfermagem, servidor municipal · Florianópolis/SC', t: 'O relatório do mês me mostrou que eu gastava quase R$ 600 só com lanche no plantão. Cortei metade.' },
-  { n: 'Patrícia A.', r: 'Servidora estadual · Salvador/BA', t: 'Comecei no teste grátis e assinei o anual no segundo dia. Vale cada centavo.' },
+  { n: 'Saindo do plantão', t: 'Mande um áudio com os gastos do dia e o assistente lança tudo sozinho.' },
+  { n: 'Contas do casal', t: 'Cada um registra pelo próprio WhatsApp e as contas da casa aparecem juntas no mesmo painel.' },
+  { n: 'No mercado', t: 'Tire uma foto da nota fiscal e o valor entra na categoria certa.' },
+  { n: '13º e férias', t: 'Entram como receitas separadas do salário, para você decidir o destino de cada real.' },
+  { n: 'Sem planilha', t: 'Texto, áudio, foto da nota fiscal ou PDF: é só mandar no WhatsApp, que você já usa todo dia.' },
+  { n: 'Confirmação na hora', t: 'Cada registro volta com valor, categoria e data para você conferir.' },
+  { n: 'Fim do mês', t: 'O relatório mostra quanto foi em cada categoria, até os pequenos gastos do dia a dia.' },
+  { n: 'Teste grátis', t: 'Use por 7 dias, sem cartão de crédito, antes de escolher um plano.' },
 ];
 
-const CORES = ['from-blue-600 to-navy-800', 'from-amber-500 to-amber-700', 'from-emerald-500 to-emerald-700', 'from-sky-500 to-blue-700'];
+const CORES = ['bg-blue-600', 'bg-amber-500', 'bg-emerald-500', 'bg-sky-500'];
 
 const DepoCard: React.FC<{ d: (typeof DEPOIMENTOS)[number]; i: number }> = ({ d, i }) => (
   <div className="card-light w-[300px] shrink-0 p-5 sm:w-[340px]">
-    {/* balão de WhatsApp (modo claro) */}
-    <div className="relative rounded-xl rounded-tl-none bg-[#d9fdd3] px-3.5 pb-1.5 pt-2.5 text-[14px] leading-snug text-slate-800">
-      <svg viewBox="0 0 8 13" className="absolute -left-[7px] top-0 h-[13px] w-[8px] -scale-x-100" aria-hidden>
-        <path d="M0 0h8L1.5 8.5C1 9.2 0 8.8 0 8z" fill="#d9fdd3" />
-      </svg>
-      {d.t}
-      <div className="mt-1 text-right text-[10px] text-slate-500">{`${String(9 + (i % 10)).padStart(2, '0')}:${String((i * 7) % 60).padStart(2, '0')}`}</div>
-    </div>
-    <div className="mt-4 flex items-center gap-3">
-      <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${CORES[i % CORES.length]} text-[14px] font-bold text-white`}>
-        {d.n[0]}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[14px] font-semibold text-navy-900">{d.n}</p>
-        <p className="truncate text-[12px] text-slate-500">{d.r}</p>
-      </div>
-    </div>
-    <div className="mt-3 flex gap-0.5">
-      {Array.from({ length: 5 }).map((_, k) => (
-        <Star key={k} className="h-4 w-4 fill-amber-400 text-amber-400" />
-      ))}
-    </div>
+    <p className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.12em] text-navy-900">
+      <span className={`h-2 w-2 rounded-full ${CORES[i % CORES.length]}`} /> {d.n}
+    </p>
+    <p className="mt-2.5 text-[15px] leading-relaxed text-slate-700">{d.t}</p>
   </div>
 );
 
@@ -59,9 +39,9 @@ export const SocialProof: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionTitle
           light
-          eyebrow="Quem usa, recomenda"
-          title="Servidores que já colocaram o salário em ordem."
-          sub="Mensagens de quem trocou a planilha abandonada por uma conversa no WhatsApp."
+          eyebrow="No dia a dia"
+          title="O que muda quando o salário entra em ordem."
+          sub="Situações comuns de quem troca a planilha abandonada por uma conversa no WhatsApp."
         />
       </div>
 
@@ -75,8 +55,6 @@ export const SocialProof: React.FC = () => {
           {[...linha2, ...linha2, ...linha2].map((d, i) => <DepoCard key={i} d={d} i={i + 4} />)}
         </div>
       </div>
-
-      {MOSTRAR_AVISO && <p className="mt-8 text-center text-[11px] text-slate-400">Depoimentos ilustrativos.</p>}
     </section>
   );
 };
@@ -207,7 +185,7 @@ const NAO = [
 ];
 
 export const ForWhom: React.FC = () => (
-  <section id="para-quem" className="bg-white py-12 sm:py-16">
+  <section id="para-quem" className="bg-mist py-12 sm:py-16">
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
       <SectionTitle light eyebrow="Para quem é" title="O Finanças do Servidor foi feito para você se…" />
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
@@ -236,7 +214,7 @@ export const ForWhom: React.FC = () => (
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="h-full rounded-3xl border border-slate-200 bg-slate-50 p-7 sm:p-9">
+          <div className="h-full rounded-3xl border border-slate-200 bg-white/60 p-7 sm:p-9">
             <p className="mb-5 flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.12em] text-rose-600">
               <X className="h-4 w-4" /> Não é para você se
             </p>
@@ -253,6 +231,11 @@ export const ForWhom: React.FC = () => (
           </div>
         </Reveal>
       </div>
+      <Reveal className="mt-10 text-center">
+        <a href="#planos" className="btn-gold rounded-full px-7 py-4 text-[16px]">
+          Quero meu assistente <ArrowRight className="h-5 w-5" />
+        </a>
+      </Reveal>
     </div>
   </section>
 );
@@ -331,6 +314,11 @@ export const Authority: React.FC = () => (
       <p className="mt-8 flex items-center justify-center gap-2 text-[13px] text-slate-400">
         <ShieldCheck className="h-4 w-4 text-amber-400" /> Nossos compromissos com você
       </p>
+      <div className="mt-8 text-center">
+        <a href="#planos" className="btn-gold rounded-full px-7 py-4 text-[16px]">
+          Quero meu assistente <ArrowRight className="h-5 w-5" />
+        </a>
+      </div>
     </div>
   </section>
 );

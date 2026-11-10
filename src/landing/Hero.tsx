@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Lock, Menu, ShieldCheck, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
-import { LANCAMENTO_FIM, LINKS } from './data';
+import { CUPOM, LANCAMENTO_FIM, LINKS } from './data';
 import { AudioBubble, Bubble, DateChip, EncryptionNotice, PdfBubble, PhoneFrame, PhotoBubble, TypingBubble } from './ui';
 import { WaText, msgAlertaMeta, msgTransacao } from './Respostas';
 
@@ -59,14 +59,15 @@ export const TopBarOffer: React.FC = () => {
   if (t.ms <= 0) return null;
   return (
     <div className="border-b border-white/5 bg-[#160f2b] px-4 py-2 text-center text-[13.5px] leading-snug text-slate-200 sm:text-[15px]">
-      <b className="text-amber-300">7 dias grátis</b> para testar o assistente. Aproveite antes que a condição de lançamento acabe!
+      <b className="text-amber-300">{CUPOM.pct}% de desconto</b> com o cupom de lançamento
+      {CUPOM.codigo && <b className="text-white"> {CUPOM.codigo}</b>}. Quando o cronômetro zerar, o cupom acaba.
     </div>
   );
 };
 
 /* ---------- Navegação ---------- */
 const NAV = [
-  ['Depoimentos', '#depoimentos'],
+  ['No dia a dia', '#depoimentos'],
   ['Como funciona', '#como-funciona'],
   ['Teste agora', '#teste'],
   ['Painel', '#painel'],
@@ -118,6 +119,38 @@ export const Nav: React.FC = () => {
         </div>
       )}
     </header>
+  );
+};
+
+/* ---------- Botão fixo no rodapé (só celular e tablet) ----------
+   Aparece depois que o topo sai da tela e some enquanto os planos estão visíveis. */
+export const StickyCta: React.FC = () => {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      const planos = document.getElementById('planos')?.getBoundingClientRect();
+      const nosPlanos = !!planos && planos.top < window.innerHeight && planos.bottom > 0;
+      setShow(window.scrollY > 700 && !nosPlanos);
+    };
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+    };
+  }, []);
+  return (
+    <div
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-navy-950/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl transition-transform duration-300 xl:hidden ${
+        show ? 'translate-y-0' : 'pointer-events-none translate-y-full'
+      }`}
+      aria-hidden={!show}
+    >
+      <a href="#planos" tabIndex={show ? 0 : -1} className="btn-gold mx-auto w-full max-w-md rounded-xl py-3.5 text-[15px]">
+        Quero meu assistente <ArrowRight className="h-4 w-4" />
+      </a>
+    </div>
   );
 };
 

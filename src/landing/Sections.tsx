@@ -94,17 +94,6 @@ const Real: React.FC<{ time: string; text: string }> = ({ time, text }) => (
 
 const PLANTAO = [
   {
-    h: '06:50',
-    t: 'Começo do expediente. O café já está anotado.',
-    d: 'Escreva do jeito que vier na cabeça. O assistente entende valor, local e categoria e confirma cada lançamento.',
-    chat: (
-      <>
-        <Bubble from="me" time="06:50">café 8,50 na padaria</Bubble>
-        <Real time="06:50" text={msgTransacao(1032, 'Café na padaria', '8,50', 'out', 'Alimentação')} />
-      </>
-    ),
-  },
-  {
     h: '12:40',
     t: 'Sem tempo para digitar? Mande um áudio.',
     d: 'No intervalo, no deslocamento ou entre um atendimento e outro. Um áudio com vários gastos vira vários registros.',
@@ -128,17 +117,6 @@ const PLANTAO = [
     ),
   },
   {
-    h: 'Dia 20',
-    t: 'Entrou um dinheiro a mais? Entra como receita.',
-    d: 'Salário, férias, restituição e rendas extras ficam separados, para você saber de onde vem cada real.',
-    chat: (
-      <>
-        <Bubble from="me" time="09:12">recebi 960 de renda extra</Bubble>
-        <Real time="09:12" text={msgTransacao(1041, 'Renda extra', '960,00', 'in', 'Renda extra')} />
-      </>
-    ),
-  },
-  {
     h: '23:10',
     t: 'Gastou perto do limite? O aviso chega sozinho.',
     d: 'Quando um gasto chega perto da meta que você definiu, o assistente avisa na hora e mostra quanto ainda resta até o fim do mês.',
@@ -158,7 +136,7 @@ export const ShiftTimeline: React.FC = () => {
         <SectionTitle
           eyebrow="Como funciona"
           title="Um dia normal de trabalho. Só que o seu dinheiro está sob controle."
-          sub="Cinco momentos de um dia comum e o que o assistente resolve em cada um, pelo WhatsApp."
+          sub="Três momentos de um dia comum e o que o assistente resolve em cada um, pelo WhatsApp."
         />
 
         <div className="grid gap-12 lg:grid-cols-2">
@@ -224,7 +202,7 @@ export const ShiftTimeline: React.FC = () => {
 
 /* ---------- Dependente / casal ---------- */
 export const Together: React.FC = () => (
-  <section className="bg-mist py-12 sm:py-16">
+  <section id="familia" className="bg-mist py-12 sm:py-16">
     <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
       <Reveal>
         <div className="mb-4"><span className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-700">Família</span></div>
@@ -243,6 +221,9 @@ export const Together: React.FC = () => (
             </li>
           ))}
         </ul>
+        <a href="#planos" className="btn-gold mt-7 rounded-full px-7 py-4 text-[16px]">
+          Quero meu assistente <ArrowRight className="h-5 w-5" />
+        </a>
       </Reveal>
 
       <Reveal delay={0.15}>

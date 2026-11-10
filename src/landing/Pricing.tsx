@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
   ArrowRight,
   BarChart3,
   Bell,
-  BookOpen,
   Calculator,
   Check,
   ClipboardCheck,
+  Headphones,
   Landmark,
   LayoutDashboard,
   MessagesSquare,
@@ -19,7 +19,7 @@ import {
   Video,
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { LINKS, PRECOS, brl } from './data';
+import { CUPOM, LANCAMENTO_FIM, LINKS, PRECOS, brl } from './data';
 import { Reveal, SectionTitle } from './ui';
 
 /* Tudo o que vem em todos os planos (as funcionalidades do painel) */
@@ -50,9 +50,10 @@ const SeloAnual: React.FC = () => (
   </span>
 );
 
-const Feature: React.FC<{ children: React.ReactNode; gold?: boolean; light?: boolean }> = ({ children, gold, light }) => (
+/* so: 'desktop' some no celular, 'celular' some no computador */
+const Feature: React.FC<{ children: React.ReactNode; gold?: boolean; light?: boolean; so?: 'desktop' | 'celular' }> = ({ children, gold, light, so }) => (
   <li
-    className={`flex items-start gap-2.5 text-[13.5px] leading-snug ${
+    className={`${so === 'desktop' ? 'hidden md:flex' : so === 'celular' ? 'flex md:hidden' : 'flex'} items-start gap-2.5 text-[13.5px] leading-snug ${
       gold ? (light ? 'font-semibold text-amber-700' : 'font-semibold text-amber-200') : light ? 'text-slate-700' : 'text-slate-300'
     }`}
   >
@@ -63,6 +64,19 @@ const Feature: React.FC<{ children: React.ReactNode; gold?: boolean; light?: boo
     />
     <span>{children}</span>
   </li>
+);
+
+/* Lista dos cartões claros: no celular mostra os 3 primeiros itens e um resumo do resto
+   (a lista inteira já aparece no cartão do Anual, que vem primeiro). */
+const BaseCurta: React.FC = () => (
+  <>
+    {BASE.map((f, i) => (
+      <Feature light key={f} so={i > 2 ? 'desktop' : undefined}>
+        {f}
+      </Feature>
+    ))}
+    <Feature light so="celular">Categorias, contas futuras, metas, relatórios e calculadora</Feature>
+  </>
 );
 
 /* ---------- Ferramentas do app (seção antes dos planos) ---------- */
@@ -98,15 +112,14 @@ const FERRAMENTAS = [
 
 /* O que vem junto com o assistente */
 const ENTREGAVEIS = [
-  { icon: Smartphone, tag: 'Principal', t: 'Assistente financeiro no WhatsApp', d: 'Registros ilimitados por texto, áudio, foto da nota fiscal e PDF, 24 horas por dia.' },
-  { icon: LayoutDashboard, tag: 'Incluso', t: 'App do painel financeiro', d: 'Saldo, receitas, despesas, categorias e fluxo de caixa de 12 meses, no computador e no celular.' },
-  { icon: BarChart3, tag: 'Incluso', t: 'Relatórios e resumo semanal', d: 'Relatórios de entradas, saídas e categorias no painel, e o resumo das suas metas toda semana no WhatsApp.' },
-  { icon: Target, tag: 'Incluso', t: 'Metas e alertas', d: 'Defina limites por categoria, teto de gastos e metas de economia. O assistente avisa quando chegar perto.' },
-  { icon: Bell, tag: 'Incluso', t: 'Contas futuras e lembretes', d: 'Parcelas, faturas e contas agendadas, com lembrete no WhatsApp antes de vencer.' },
-  { icon: BookOpen, tag: 'Bônus', t: 'Guia Salário em Ordem', d: 'Passo a passo para organizar o salário, as contas fixas e os gastos do ano sem sufoco.' },
-  { icon: Users, tag: 'Plano Anual', t: 'Dependente incluso', d: 'Quem divide as contas com você usa o próprio WhatsApp, no mesmo painel, sem pagar nada a mais.' },
-  { icon: MessagesSquare, tag: 'Plano Anual', t: 'Comunidade VIP no WhatsApp', d: 'Grupo exclusivo para tirar dúvidas e trocar experiências com outros membros.' },
-  { icon: Video, tag: 'Plano Anual', t: 'Encontros mensais com especialista', d: 'Todo mês, um encontro ao vivo com um especialista financeiro para tirar suas dúvidas.' },
+  { icon: Smartphone, t: 'Assistente financeiro no WhatsApp', d: 'Registros ilimitados por texto, áudio, foto da nota fiscal e PDF, 24 horas por dia.' },
+  { icon: LayoutDashboard, t: 'App do painel financeiro', d: 'Saldo, receitas, despesas, categorias e fluxo de caixa de 12 meses, no computador e no celular.' },
+  { icon: BarChart3, t: 'Relatórios e resumo semanal', d: 'Relatórios de entradas, saídas e categorias no painel, e o resumo das suas metas toda semana no WhatsApp.' },
+  { icon: Target, t: 'Metas e alertas', d: 'Defina limites por categoria, teto de gastos e metas de economia. O assistente avisa quando chegar perto.' },
+  { icon: Bell, t: 'Contas futuras e lembretes', d: 'Parcelas, faturas e contas agendadas, com lembrete no WhatsApp antes de vencer.' },
+  { icon: Users, t: 'Dependente incluso', d: 'Quem divide as contas com você usa o próprio WhatsApp, no mesmo painel, sem pagar nada a mais.' },
+  { icon: MessagesSquare, t: 'Comunidade VIP no WhatsApp', d: 'Grupo exclusivo para tirar dúvidas e trocar experiências com outros membros.' },
+  { icon: Video, t: 'Encontros mensais com especialista', d: 'Todo mês, um encontro ao vivo com um especialista financeiro para tirar suas dúvidas.' },
 ];
 
 export const AnnualExclusives: React.FC = () => (
@@ -135,15 +148,8 @@ export const AnnualExclusives: React.FC = () => (
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-navy-950 to-transparent" />
               </div>
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-navy-900 text-amber-400">
-                  <r.icon className="h-6 w-6" />
-                </div>
-                {r.anual && (
-                  <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wide text-amber-800">
-                    Plano Anual
-                  </span>
-                )}
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-navy-900 text-amber-400">
+                <r.icon className="h-6 w-6" />
               </div>
               <h3 className="font-display mt-4 text-lg font-bold leading-snug text-navy-900 sm:text-xl">{r.t}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-slate-600">{r.d}</p>
@@ -155,20 +161,13 @@ export const AnnualExclusives: React.FC = () => (
 
       {/* o resto do que vem junto (antes ficava na dobra "Muito mais do que um assistente") */}
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-        {ENTREGAVEIS.map(({ icon: I, tag, t, d }, k) => (
+        {ENTREGAVEIS.map(({ icon: I, t, d }, k) => (
           <Reveal key={t} delay={(k % 3) * 0.06}>
             <motion.div whileHover={{ y: -4 }} className="card-light relative flex h-full gap-4 p-5">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 text-navy-900 shadow-md shadow-amber-500/20">
                 <I className="h-6 w-6" />
               </div>
               <div className="min-w-0">
-                <span
-                  className={`mb-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                    tag === 'Plano Anual' ? 'bg-amber-100 text-amber-800' : tag.startsWith('Bônus') ? 'bg-navy-900 text-amber-300' : 'bg-slate-100 text-slate-600'
-                  }`}
-                >
-                  {tag}
-                </span>
                 <h3 className="font-display text-[17px] font-bold leading-snug text-navy-900">{t}</h3>
                 <p className="mt-1 text-[14.5px] leading-relaxed text-slate-600">{d}</p>
               </div>
@@ -186,12 +185,124 @@ export const AnnualExclusives: React.FC = () => (
   </section>
 );
 
+/* ---------- Por que o Anual compensa (entre os planos e as dúvidas) ---------- */
+const BENEFICIOS_ANUAL = [
+  { icon: ClipboardCheck, t: 'Diagnóstico financeiro completo', d: 'Descubra se sua renda está no Ideal, Aceitável ou Crítico e saia com um plano do que reduzir, substituir ou cortar.' },
+  { icon: Landmark, t: 'Simuladores de crédito e amortização', d: 'Compare consignado, empréstimo e financiamento antes de assinar, e veja quanto de juros economiza amortizando.' },
+  { icon: Users, t: 'Dependente incluso sem custo', d: 'Quem divide as contas com você usa o próprio WhatsApp, no mesmo painel. Nos outros planos, o dependente é pago à parte.' },
+  { icon: MessagesSquare, t: 'Comunidade VIP no WhatsApp', d: 'Grupo exclusivo para tirar dúvidas e trocar experiências com outros membros.' },
+  { icon: Video, t: 'Encontro mensal ao vivo', d: 'Todo mês, um encontro com um especialista financeiro para tirar suas dúvidas.' },
+  { icon: Headphones, t: 'Suporte VIP prioritário', d: 'Atendimento prioritário no WhatsApp sempre que você precisar de ajuda.' },
+];
+
+export const AnnualBenefits: React.FC = () => {
+  // quanto custa ficar 12 meses em cada plano
+  const linhas = [
+    { t: 'Mensal com dependente', s: `12 x R$ ${brl(PRECOS.mensalCom)}`, v: PRECOS.mensalCom * 12 },
+    { t: 'Trimestral com dependente', s: `4 x R$ ${brl(PRECOS.trimestralCom)}`, v: PRECOS.trimestralCom * 4 },
+    { t: 'Mensal, só o titular', s: `12 x R$ ${brl(PRECOS.mensalSem)}`, v: PRECOS.mensalSem * 12 },
+    { t: 'Trimestral, só o titular', s: `4 x R$ ${brl(PRECOS.trimestralSem)}`, v: PRECOS.trimestralSem * 4 },
+  ];
+  const max = linhas[0].v;
+  const economia = max - PRECOS.anual;
+  const pct = Math.round((economia / max) * 100);
+
+  return (
+    <section id="anual" className="relative overflow-hidden bg-navy-800 py-12 sm:py-16">
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-amber-400/10 blur-[140px]" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <SectionTitle
+          eyebrow="Plano Anual VIP"
+          title="O Anual custa menos e entrega mais do que qualquer outro plano."
+          sub="Em 12 meses, ele sai mais barato até do que os planos sem dependente. E é o único com o Diagnóstico, os Simuladores, a Comunidade VIP e os encontros ao vivo."
+        />
+
+        <div className="grid items-start gap-5 lg:grid-cols-5">
+          {/* a conta de 12 meses, plano por plano */}
+          <Reveal className="lg:col-span-2">
+            <div className="rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-navy-700 to-navy-900 p-5 shadow-2xl shadow-navy-950/40 sm:p-6">
+              <h3 className="font-display text-xl font-bold text-white">Quanto custam 12 meses</h3>
+              <p className="mt-1 text-[14px] text-slate-300">A mesma conta, em cada plano.</p>
+
+              <ul className="mt-5 space-y-3.5">
+                {linhas.map((l) => (
+                  <li key={l.t}>
+                    <div className="flex items-baseline justify-between gap-3">
+                      <span className="text-[14px] text-slate-300">
+                        {l.t} <span className="whitespace-nowrap text-[12px] text-slate-400">({l.s})</span>
+                      </span>
+                      <span className="whitespace-nowrap text-[14px] font-semibold text-slate-200">R$ {brl(l.v)}</span>
+                    </div>
+                    <div className="mt-1.5 h-2 rounded-full bg-white/5">
+                      <div className="h-2 rounded-full bg-slate-500" style={{ width: `${(l.v / max) * 100}%` }} />
+                    </div>
+                  </li>
+                ))}
+                <li className="border-t border-white/10 pt-3.5">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-[15px] font-bold text-amber-300">
+                      Anual VIP <span className="whitespace-nowrap text-[12px] font-semibold text-amber-200/80">(dependente incluso)</span>
+                    </span>
+                    <span className="font-display whitespace-nowrap text-xl font-bold text-white">R$ {brl(PRECOS.anual)}</span>
+                  </div>
+                  <div className="mt-1.5 h-2 rounded-full bg-white/5">
+                    <div
+                      className="h-2 rounded-full bg-gradient-to-r from-amber-300 to-amber-500"
+                      style={{ width: `${(PRECOS.anual / max) * 100}%` }}
+                    />
+                  </div>
+                </li>
+              </ul>
+
+              <p className="mt-5 rounded-2xl bg-emerald-500/15 px-4 py-3 text-[15px] font-semibold leading-snug text-emerald-300">
+                Até R$ {brl(economia)} a menos em 12 meses ({pct}% de economia) em relação ao Mensal com dependente.
+              </p>
+
+              <a href={LINKS.anual} target="_blank" rel="noopener noreferrer" className="btn-gold mt-5 w-full rounded-xl py-3.5 text-[15px]">
+                Assinar plano anual <ArrowRight className="h-4 w-4" />
+              </a>
+              <p className="mt-3 flex items-center justify-center gap-1.5 text-[13px] text-slate-400">
+                <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-400" /> Garantia incondicional de 7 dias
+              </p>
+            </div>
+          </Reveal>
+
+          {/* o que só o Anual tem */}
+          <div className="lg:col-span-3">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {BENEFICIOS_ANUAL.map(({ icon: I, t, d }, k) => (
+                <Reveal key={t} delay={(k % 2) * 0.06}>
+                  <div className="card flex h-full gap-4 p-5">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 text-navy-900 shadow-md shadow-amber-500/20">
+                      <I className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-display text-[17px] font-bold leading-snug text-white">{t}</h3>
+                      <p className="mt-1 text-[14.5px] leading-relaxed text-slate-300">{d}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+            <Reveal className="mt-4">
+              <p className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-[14.5px] leading-relaxed text-slate-300">
+                <b className="text-white">E tudo o que os outros planos têm:</b> assistente no WhatsApp 24h com registros
+                ilimitados por texto, áudio, foto da nota fiscal e PDF, painel financeiro, metas com alertas, contas
+                futuras com lembretes, relatórios e calculadora de distribuição da renda.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 export const Pricing: React.FC = () => {
   const [dep, setDep] = useState(false);
 
   const mensal = dep ? PRECOS.mensalCom : PRECOS.mensalSem;
   const tri = dep ? PRECOS.trimestralCom : PRECOS.trimestralSem;
-  const triDe = mensal * 3;
   // o anual já inclui dependente, então compara com o mensal com dependente
   const anualDe = PRECOS.mensalCom * 12;
   const anualEconomia = anualDe - PRECOS.anual;
@@ -214,6 +325,17 @@ export const Pricing: React.FC = () => {
           </p>
         </Reveal>
 
+        {/* oferta de lançamento: some sozinha quando o prazo acaba */}
+        {Date.now() < LANCAMENTO_FIM.getTime() && (
+          <Reveal className="mb-4 text-center">
+            <p className="mx-auto inline-block rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-[14px] leading-snug text-amber-900 sm:text-[15px]">
+              🚀 <b>Oferta de lançamento:</b> {CUPOM.pct}% de desconto com o cupom
+              {CUPOM.codigo ? <b> {CUPOM.codigo}</b> : ' de lançamento'}, só até{' '}
+              {LANCAMENTO_FIM.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Sao_Paulo' })}.
+            </p>
+          </Reveal>
+        )}
+
         {/* seletor único de dependente */}
         <Reveal className="mb-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-4">
           <p className="text-[14px] text-slate-600">Vai usar sozinho ou com alguém da família?</p>
@@ -233,8 +355,8 @@ export const Pricing: React.FC = () => {
         </Reveal>
 
         <div className="grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {/* Anual — primeiro no celular */}
-          <Reveal className="order-first md:order-none xl:order-last" delay={0.15}>
+          {/* Anual — por último no celular (mesma ordem do PC: Grátis, Mensal, Trimestral, Anual) */}
+          <Reveal className="order-last md:order-none xl:order-last" delay={0.15}>
             <div className="relative flex h-full flex-col rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-navy-700 to-navy-900 p-5 shadow-2xl sm:p-6 shadow-navy-900/30">
               <span className="absolute -top-3.5 left-1/2 flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-amber-400 px-3.5 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-950">
                 <Star className="h-3 w-3 fill-slate-950" /> Mais escolhido
@@ -249,7 +371,6 @@ export const Pricing: React.FC = () => {
                 <p className="font-display text-[2.35rem] leading-none font-bold text-white">
                   <span className="text-2xl">R$</span> {brl(PRECOS.anual)}
                 </p>
-                <p className="mt-1 text-[14px] text-amber-300">equivale a R$ {brl(PRECOS.anual / 12)} por mês</p>
                 <p className="mt-1 text-[13px] font-semibold text-emerald-400">Você economiza R$ {brl(anualEconomia)}</p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-white/10 pt-4">
@@ -283,7 +404,7 @@ export const Pricing: React.FC = () => {
                 <p className="mt-1 text-[14px] text-emerald-600">sem cartão de crédito</p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
-                {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}
+                <BaseCurta />
               </ul>
               <a href={LINKS.testeGratis} target="_blank" rel="noopener noreferrer" className="btn-ghost-light w-full rounded-xl py-3.5 text-[15px]">
                 Começar pelo WhatsApp
@@ -304,7 +425,7 @@ export const Pricing: React.FC = () => {
                 <p className="mt-1 text-[14px] text-slate-600">por mês · cancele quando quiser</p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
-                {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}
+                <BaseCurta />
                 {dep && <Feature light gold>1 dependente incluso</Feature>}
               </ul>
               <a href={dep ? LINKS.mensalCom : LINKS.mensalSem} target="_blank" rel="noopener noreferrer" className="btn-ghost-light w-full rounded-xl py-3.5 text-[15px]">
@@ -319,14 +440,14 @@ export const Pricing: React.FC = () => {
               <h3 className="font-display text-xl font-bold text-navy-900">Trimestral</h3>
               <p className="mt-1 text-[13px] text-slate-600">{dep ? 'Titular + 1 dependente' : 'Só o titular'}</p>
               <div className="mt-4">
-                <p className="text-[13px] text-slate-500 line-through">De R$ {brl(triDe)}</p>
+                <p className="text-[13px] text-transparent">.</p>
                 <p className="font-display text-[2.35rem] leading-none font-bold text-navy-900">
                   <span className="text-2xl">R$</span> {brl(tri)}
                 </p>
                 <p className="mt-1 text-[14px] text-slate-600">a cada 3 meses</p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
-                {BASE.map((f) => <Feature light key={f}>{f}</Feature>)}
+                <BaseCurta />
                 {dep && <Feature light gold>1 dependente incluso</Feature>}
               </ul>
               <a href={dep ? LINKS.trimestralCom : LINKS.trimestralSem} target="_blank" rel="noopener noreferrer" className="btn-ghost-light w-full rounded-xl py-3.5 text-[15px]">

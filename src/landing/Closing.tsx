@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Lock, Mail, Minus, Plus, ShieldCheck } from 'lucide-react';
+import { ArrowUp, Lock, Mail, Minus, Plus, ShieldCheck } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { LINKS } from './data';
 import { SectionTitle } from './ui';
@@ -116,7 +116,7 @@ export const Faq: React.FC = () => {
 
 /* ---------- Rodapé ---------- */
 export const Footer: React.FC = () => (
-  <footer className="border-t border-white/5 bg-navy-950 pb-14 pt-14 text-[13px] text-slate-500">
+  <footer className="border-t border-white/5 bg-navy-950 pb-28 pt-14 text-[13px] xl:pb-14 text-slate-500">
     <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1.2fr]">
       <div>
         <div className="flex items-center gap-2.5">
@@ -155,8 +155,15 @@ export const Footer: React.FC = () => (
         </p>
       </div>
     </div>
-    <p className="mx-auto mt-10 max-w-7xl border-t border-white/5 px-4 pt-6 sm:px-6">
-      © {new Date().getFullYear()} Finanças do Servidor. Todos os direitos reservados.
-    </p>
+    <div className="mx-auto mt-10 flex max-w-7xl flex-col items-center gap-4 border-t border-white/5 px-4 pt-6 sm:flex-row sm:justify-between sm:px-6">
+      <p>© {new Date().getFullYear()} Finanças do Servidor. Todos os direitos reservados.</p>
+      <button
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="inline-flex shrink-0 items-center gap-2 rounded-full border border-amber-400/40 px-4 py-2.5 text-[14px] font-semibold text-amber-300 transition hover:bg-amber-400/10"
+      >
+        <ArrowUp className="h-4 w-4" /> Voltar ao topo
+      </button>
+    </div>
   </footer>
 );

@@ -25,7 +25,7 @@ const fimDoMes = () => {
 };
 
 /* Texto no padrão do WhatsApp: *negrito* e links em azul */
-const WaText: React.FC<{ text: string }> = ({ text }) => (
+export const WaText: React.FC<{ text: string }> = ({ text }) => (
   <>
     {text.split(/(\*[^*\n]+\*|https?:\/\/\S+)/g).map((p, i) => {
       if (p.startsWith('*') && p.endsWith('*') && p.length > 2) return <b key={i} className="font-semibold">{p.slice(1, -1)}</b>;
@@ -41,6 +41,15 @@ const WaText: React.FC<{ text: string }> = ({ text }) => (
 );
 
 const LINHA = '_____________________';
+
+/* Modelos de texto iguais às mensagens reais do assistente */
+export const msgTransacao = (id: number, desc: string, valor: string, tipo: 'in' | 'out', cat: string) =>
+  `Transação registrada com sucesso!\nIdentificador: ${id}\n\n📋 Resumo da transação:\n${LINHA}\n\n🏷️ Descrição: ${desc}\n💸 Valor: R$ ${valor}\n🔄 Tipo: ${
+    tipo === 'in' ? '🟩 Receita' : '🟥 Despesa'
+  }\n🏷️ Categoria: ${cat}\n🗓️ Data: ${dia()}\n\n❌ Para excluir diga: "Excluir transação ${id}".\n\n📊 Consulte gráficos e relatórios completos em: ${LINK}`;
+
+export const msgAlertaMeta = (meta: string, pct: number, usado: string, limite: string, resta: string) =>
+  `⚠️ *Alerta de meta — ${meta}*\n\n${NOME}, você já usou *${pct}%* do limite deste mês: R$ ${usado} de R$ ${limite}.\n\nAinda restam *R$ ${resta}* até ${fimDoMes()}. 💡`;
 
 type Msg = { from: 'me' | 'bot' | 'audio' | 'date'; text?: string; caption?: string; time: string };
 type Tipo = {

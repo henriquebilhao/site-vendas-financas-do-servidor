@@ -3,7 +3,8 @@ import { motion } from 'motion/react';
 import { ArrowRight, Lock, Menu, ShieldCheck, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { LANCAMENTO_FIM, LINKS } from './data';
-import { AudioBubble, Bubble, DateChip, EncryptionNotice, PhoneFrame, PhotoBubble, Receipt, TypingBubble } from './ui';
+import { AudioBubble, Bubble, DateChip, EncryptionNotice, PdfBubble, PhoneFrame, PhotoBubble, TypingBubble } from './ui';
+import { WaText, msgAlertaMeta, msgTransacao } from './Respostas';
 
 /* ---------- Faixa do topo: oferta de lançamento com cronômetro ---------- */
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -123,56 +124,29 @@ export const Nav: React.FC = () => {
 /* ---------- Conversa animada do hero (rola sem parar, como um chat real) ---------- */
 type Step = { node: (k: string) => React.ReactNode; bot?: boolean };
 
+/* respostas no mesmo formato das mensagens reais do assistente */
+const botMsg = (time: string, text: string) => ({
+  bot: true,
+  node: (k: string) => (
+    <Bubble key={k} from="bot" time={time}>
+      <WaText text={text} />
+    </Bubble>
+  ),
+});
+
 const SCRIPT: Step[] = [
   { node: (k) => <Bubble key={k} from="me" time="06:52">café 8,50 na padaria antes do expediente</Bubble> },
-  {
-    bot: true,
-    node: (k) => (
-      <Bubble key={k} from="bot" time="06:52">
-        <Receipt title="✅ Despesa registrada" rows={[['Valor', 'R$ 8,50'], ['Categoria', 'Alimentação']]} />
-      </Bubble>
-    ),
-  },
+  botMsg('06:52', msgTransacao(1032, 'Café na padaria', '8,50', 'out', 'Alimentação')),
   { node: (k) => <AudioBubble key={k} duration="0:06" time="12:41" caption="almoço 32 e 15 de estacionamento" /> },
-  {
-    bot: true,
-    node: (k) => (
-      <Bubble key={k} from="bot" time="12:41">
-        <Receipt title="✅ Entendi 2 gastos" rows={[['Almoço', 'R$ 32,00'], ['Estacionamento', 'R$ 15,00']]} />
-      </Bubble>
-    ),
-  },
+  botMsg('12:41', msgTransacao(1033, 'Almoço', '32,00', 'out', 'Alimentação')),
+  botMsg('12:41', msgTransacao(1034, 'Estacionamento', '15,00', 'out', 'Transporte')),
   { node: (k) => <PhotoBubble key={k} time="18:20" /> },
-  {
-    bot: true,
-    node: (k) => (
-      <Bubble key={k} from="bot" time="18:20">
-        <Receipt title="✅ Nota fiscal lida" rows={[['Supermercado', 'R$ 184,30'], ['Categoria', 'Mercado']]} />
-      </Bubble>
-    ),
-  },
-  { node: (k) => <Bubble key={k} from="me" time="09:12">recebi 960 de renda extra</Bubble> },
-  {
-    bot: true,
-    node: (k) => (
-      <Bubble key={k} from="bot" time="09:12">
-        <Receipt tone="in" title="🟢 Receita registrada" rows={[['Valor', '+ R$ 960,00'], ['Categoria', 'Renda extra']]} />
-      </Bubble>
-    ),
-  },
-  { node: (k) => <Bubble key={k} from="me" time="22:04">quanto sobrou esse mês?</Bubble> },
-  {
-    bot: true,
-    node: (k) => (
-      <Bubble key={k} from="bot" time="22:04">
-        <Receipt
-          tone="in"
-          title="💰 Saldo livre: R$ 3.214,70"
-          rows={[['Entradas', 'R$ 9.410,00'], ['Saídas', 'R$ 6.195,30']]}
-        />
-      </Bubble>
-    ),
-  },
+  botMsg('18:20', msgTransacao(1035, 'Supermercado Bom Preço', '184,30', 'out', 'Mercado')),
+  { node: (k) => <PdfBubble key={k} time="19:05" /> },
+  botMsg('19:05', msgTransacao(1036, 'Fatura do cartão', '1.240,00', 'out', 'Cartão de crédito')),
+  { node: (k) => <Bubble key={k} from="me" time="20:12">recebi 960 de renda extra</Bubble> },
+  botMsg('20:12', msgTransacao(1037, 'Renda extra', '960,00', 'in', 'Renda extra')),
+  botMsg('23:10', msgAlertaMeta('Mercado do mês', 86, '1.204,30', '1.400,00', '195,70')),
 ];
 
 const HeroChat: React.FC = () => {
@@ -191,7 +165,7 @@ const HeroChat: React.FC = () => {
       }, 1300);
     } else {
       const fimDoRoteiro = n > 0 && n % SCRIPT.length === 0;
-      t = setTimeout(() => setN((c) => c + 1), n === 0 ? 600 : fimDoRoteiro ? 2600 : 1500);
+      t = setTimeout(() => setN((c) => c + 1), n === 0 ? 600 : fimDoRoteiro ? 3800 : 2800);
     }
     return () => clearTimeout(t);
   }, [n]);

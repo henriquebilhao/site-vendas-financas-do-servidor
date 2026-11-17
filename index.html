@@ -12,6 +12,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Meta Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1107372538861247');
+      fbq('track', 'PageView');
+      // Eventos por clique (vale para todos os botões, sem mexer nos componentes):
+      // link da Hotmart = InitiateCheckout; link do WhatsApp = Lead (teste grátis).
+      document.addEventListener('click', function (ev) {
+        var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
+        if (!a) return;
+        var h = a.getAttribute('href') || '';
+        if (h.indexOf('pay.hotmart.com') !== -1) {
+          fbq('track', 'InitiateCheckout', { currency: 'BRL' });
+        } else if (h.indexOf('wa.me/') !== -1) {
+          fbq('track', 'Lead');
+        }
+      }, true);
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1107372538861247&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
   </head>
   <body class="bg-black text-slate-100 antialiased selection:bg-amber-400 selection:text-black">
     <div id="root"></div>

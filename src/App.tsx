@@ -1,6 +1,6 @@
 import React from 'react';
 import { MotionConfig } from 'motion/react';
-import { Hero, Nav, StickyCta, TopBar, TopBarOffer, TrustMarquee } from './landing/Hero';
+import { Hero, Nav, StickyCta, TopBar, TrustMarquee } from './landing/Hero';
 import { ForWho, ShiftTimeline, Together } from './landing/Sections';
 import { DashboardFeatures, DashboardSimulator } from './landing/Dashboard';
 import { Authority, ForWhom, SocialProof, VideoSection } from './landing/Story';
@@ -15,7 +15,6 @@ export default function App() {
       <div className="min-h-screen overflow-x-clip bg-navy-900 font-sans text-slate-100 antialiased selection:bg-amber-400 selection:text-slate-950">
         {/* só a faixa com a contagem regressiva fica fixa no topo */}
         <TopBar />
-        <TopBarOffer />
         <Nav />
         <main>
           {/* 1. Promessa principal */}

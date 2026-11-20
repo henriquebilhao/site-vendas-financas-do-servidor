@@ -19,6 +19,7 @@ import {
   Video,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { CopiarCupom } from './Hero';
 import { CUPOM, LANCAMENTO_FIM, LINKS, PRECOS, brl } from './data';
 import { Reveal, SectionTitle } from './ui';
 
@@ -331,11 +332,15 @@ export const Pricing: React.FC = () => {
         {/* oferta de lançamento: some sozinha quando o prazo acaba */}
         {Date.now() < LANCAMENTO_FIM.getTime() && (
           <Reveal className="mb-4 text-center">
-            <p className="mx-auto inline-block rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-[14px] leading-snug text-amber-900 sm:text-[15px]">
-              🚀 <b>Oferta de lançamento:</b> {CUPOM.pct}% de desconto com o cupom
-              {CUPOM.codigo ? <b> {CUPOM.codigo}</b> : ' de lançamento'}, só até{' '}
-              {LANCAMENTO_FIM.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Sao_Paulo' })}.
-            </p>
+            <div className="mx-auto inline-flex max-w-full flex-col items-center gap-2 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-[14px] leading-snug text-amber-900 sm:text-[15px]">
+              <p>
+                🚀 <b>Cupom de lançamento:</b> use <b className="rounded bg-amber-400 px-1.5 py-0.5 tracking-wide text-[#0b1020]">{CUPOM.codigo}</b> e ganhe {CUPOM.pct}% de desconto.
+              </p>
+              <p className="text-[13px] text-amber-800 sm:text-[14px]">
+                No pagamento, digite o cupom <b>{CUPOM.codigo}</b> no campo de cupom.
+              </p>
+              <CopiarCupom className="!bg-navy-900 !text-amber-300 hover:!bg-navy-800" />
+            </div>
           </Reveal>
         )}
 

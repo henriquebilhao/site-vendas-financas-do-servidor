@@ -31,4 +31,4 @@ export const LANCAMENTO_FIM = new Date('2026-11-30T23:59:59-03:00');
 
 /* Cupom de lançamento: vale até LANCAMENTO_FIM e some do site junto com o cronômetro.
    Preencha `codigo` com o cupom criado na Hotmart; enquanto estiver vazio, o site fala só "cupom de lançamento". */
-export const CUPOM = { pct: 25, codigo: '' };
+export const CUPOM = { pct: 25, codigo: 'SERVIDORVIP' };

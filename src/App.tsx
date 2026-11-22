@@ -7,6 +7,7 @@ import { Authority, ForWhom, SocialProof, VideoSection } from './landing/Story';
 import { LiveDemo } from './landing/LiveDemo';
 import { AnnualBenefits, AnnualExclusives, Pricing } from './landing/Pricing';
 import { Faq, Footer } from './landing/Closing';
+import { InstagramSection } from './landing/Instagram';
 
 export default function App() {
   return (
@@ -49,6 +50,9 @@ export default function App() {
 
           {/* 9. Dúvidas */}
           <Faq />
+
+          {/* 10. Convite para seguir no Instagram (fim da página) */}
+          <InstagramSection />
         </main>
         <Footer />
         <StickyCta />

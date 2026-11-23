@@ -18,7 +18,7 @@ const DEPOS = [
     alt: 'O aplicativo tem me ajudado muito no dia a dia! Hoje consigo ter um controle muito melhor do meu dinheiro, saber exatamente para onde ele está indo e identificar onde posso economizar. É muito diferente dos outros aplicativos que já testei, principalmente pela quantidade de ferramentas disponíveis. Além de registrar e acompanhar meus gastos pelo WhatsApp, ainda consigo utilizar recursos adicionais, como simular financiamentos e organizar melhor minha vida financeira. É uma ferramenta muito completa, prática e que realmente faz a diferença!',
   },
   {
-    nome: 'Witor',
+    nome: 'André',
     origem: 'WhatsApp',
     img: '/depoimentos/witor.jpg',
     w: 1080,

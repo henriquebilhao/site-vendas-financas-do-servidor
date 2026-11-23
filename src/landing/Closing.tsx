@@ -170,7 +170,7 @@ export const Footer: React.FC = () => (
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-[14px] font-semibold text-slate-200 transition hover:border-emerald-400/60 hover:text-white"
           >
-            <MessageCircle className="h-4 w-4 text-emerald-400" /> WhatsApp
+            <MessageCircle className="h-4 w-4 text-emerald-400" /> IA no WhatsApp
           </a>
         </div>
       </div>

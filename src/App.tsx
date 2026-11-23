@@ -3,7 +3,8 @@ import { MotionConfig } from 'motion/react';
 import { Hero, Nav, StickyCta, TopBar, TrustMarquee } from './landing/Hero';
 import { ForWho, ShiftTimeline, Together } from './landing/Sections';
 import { DashboardFeatures, DashboardSimulator } from './landing/Dashboard';
-import { Authority, ForWhom, SocialProof, VideoSection } from './landing/Story';
+import { Authority, ForWhom, VideoSection } from './landing/Story';
+import { Depoimentos } from './landing/Depoimentos';
 import { LiveDemo } from './landing/LiveDemo';
 import { AnnualBenefits, AnnualExclusives, Pricing } from './landing/Pricing';
 import { Faq, Footer } from './landing/Closing';
@@ -22,7 +23,7 @@ export default function App() {
           <TrustMarquee />
 
           {/* 2. Prova social */}
-          <SocialProof />
+          <Depoimentos />
 
           {/* 3. Dores do público */}
           <ForWho />

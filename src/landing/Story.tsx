@@ -5,61 +5,6 @@ import { LogoFS } from '../components/LogoFS';
 import { Reveal, SectionTitle } from './ui';
 
 /* =====================================================================
-   DOBRA 2 — NO DIA A DIA (situações de uso)
-   Não são depoimentos: são exemplos de uso, sem pessoa identificada.
-   Quando houver depoimentos REAIS, volte a mostrar nome, cargo e cidade.
-   ===================================================================== */
-const DEPOIMENTOS = [
-  { n: 'Saindo do plantão', t: 'Mande um áudio com os gastos do dia e o assistente lança tudo sozinho.' },
-  { n: 'Contas do casal', t: 'Cada um registra pelo próprio WhatsApp e as contas da casa aparecem juntas no mesmo painel.' },
-  { n: 'No mercado', t: 'Tire uma foto da nota fiscal e o valor entra na categoria certa.' },
-  { n: '13º e férias', t: 'Entram como receitas separadas do salário, para você decidir o destino de cada real.' },
-  { n: 'Sem planilha', t: 'Texto, áudio, foto da nota fiscal ou PDF: é só mandar no WhatsApp, que você já usa todo dia.' },
-  { n: 'Confirmação na hora', t: 'Cada registro volta com valor, categoria e data para você conferir.' },
-  { n: 'Fim do mês', t: 'O relatório mostra quanto foi em cada categoria, até os pequenos gastos do dia a dia.' },
-  { n: 'Teste grátis', t: 'Use por 7 dias, sem cartão de crédito, antes de escolher um plano.' },
-];
-
-const CORES = ['bg-blue-600', 'bg-amber-500', 'bg-emerald-500', 'bg-sky-500'];
-
-const DepoCard: React.FC<{ d: (typeof DEPOIMENTOS)[number]; i: number }> = ({ d, i }) => (
-  <div className="card-light w-[300px] shrink-0 p-5 sm:w-[340px]">
-    <p className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.12em] text-navy-900">
-      <span className={`h-2 w-2 rounded-full ${CORES[i % CORES.length]}`} /> {d.n}
-    </p>
-    <p className="mt-2.5 text-[15px] leading-relaxed text-slate-700">{d.t}</p>
-  </div>
-);
-
-export const SocialProof: React.FC = () => {
-  const linha1 = DEPOIMENTOS.slice(0, 4);
-  const linha2 = DEPOIMENTOS.slice(4);
-  return (
-    <section id="depoimentos" className="relative overflow-hidden bg-mist py-12 sm:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionTitle
-          light
-          eyebrow="No dia a dia"
-          title="O que muda quando o salário entra em ordem."
-          sub="Situações comuns de quem troca a planilha abandonada por uma conversa no WhatsApp."
-        />
-      </div>
-
-      <div className="relative space-y-5">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-mist to-transparent sm:w-32" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-mist to-transparent sm:w-32" />
-        <div className="marquee flex w-max gap-5 py-2 hover:[animation-play-state:paused]">
-          {[...linha1, ...linha1, ...linha1].map((d, i) => <DepoCard key={i} d={d} i={i} />)}
-        </div>
-        <div className="marquee-reverse flex w-max gap-5 py-2 hover:[animation-play-state:paused]">
-          {[...linha2, ...linha2, ...linha2].map((d, i) => <DepoCard key={i} d={d} i={i + 4} />)}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* =====================================================================
    DOBRA 4 (abertura) — VÍDEO: alguém mandando mensagem no WhatsApp
    Vídeo: Pexels, "Close up on Man Hands Typing Message on Phone" (RDNE Stock project)
    ===================================================================== */

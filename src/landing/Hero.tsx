@@ -90,7 +90,7 @@ export const CopiarCupom: React.FC<{ className?: string }> = ({ className = '' }
 };
 /* ---------- Navegação ---------- */
 const NAV = [
-  ['No dia a dia', '#depoimentos'],
+  ['Depoimentos', '#depoimentos'],
   ['Como funciona', '#como-funciona'],
   ['Teste agora', '#teste'],
   ['Painel', '#painel'],

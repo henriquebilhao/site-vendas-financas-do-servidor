@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Check, Copy, Lock, Menu, ShieldCheck, X } from 'lucide-react';
+import { ArrowRight, Check, Copy, Instagram, Lock, Menu, ShieldCheck, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { CUPOM, LANCAMENTO_FIM, LINKS } from './data';
 import { AudioBubble, Bubble, DateChip, EncryptionNotice, PdfBubble, PhoneFrame, PhotoBubble, TypingBubble } from './ui';
@@ -115,6 +115,16 @@ export const Nav: React.FC = () => {
           ))}
         </nav>
         <div className="hidden items-center gap-3 whitespace-nowrap xl:flex">
+          <a
+            href={LINKS.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Siga no Instagram @appfinancasdoservidor"
+            title="Instagram"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <Instagram className="h-5 w-5" />
+          </a>
           <a href={LINKS.areaCliente} target="_blank" rel="noopener noreferrer" className="text-[14px] text-slate-300 hover:text-white">
             Já sou cliente
           </a>
@@ -122,9 +132,20 @@ export const Nav: React.FC = () => {
             Começar agora <ArrowRight className="h-4 w-4" />
           </a>
         </div>
-        <button className="rounded-lg p-2 text-slate-300 xl:hidden" onClick={() => setOpen(!open)} aria-label="Abrir menu">
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-1 xl:hidden">
+          <a
+            href={LINKS.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Siga no Instagram @appfinancasdoservidor"
+            className="rounded-lg p-2 text-slate-300"
+          >
+            <Instagram className="h-5 w-5" />
+          </a>
+          <button className="rounded-lg p-2 text-slate-300" onClick={() => setOpen(!open)} aria-label="Abrir menu">
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
       {open && (
         <div className="space-y-1 border-t border-white/5 bg-navy-950 px-4 pb-5 pt-2 xl:hidden">

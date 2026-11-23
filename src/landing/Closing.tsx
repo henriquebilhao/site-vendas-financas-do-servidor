@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowUp, Instagram, Lock, Mail, Minus, Plus, ShieldCheck } from 'lucide-react';
+import { ArrowUp, Instagram, Lock, Mail, MessageCircle, Minus, Plus, ShieldCheck } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { LINKS } from './data';
 import { SectionTitle } from './ui';
@@ -117,36 +117,6 @@ export const Faq: React.FC = () => {
 /* ---------- Rodapé ---------- */
 export const Footer: React.FC = () => (
   <footer className="border-t border-white/5 bg-navy-950 pb-28 pt-14 text-[13px] xl:pb-14 text-slate-500">
-    {/* chamada para seguir nas redes sociais */}
-    <div className="mx-auto mb-12 max-w-7xl px-4 sm:px-6">
-      <a
-        href={LINKS.instagram}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group relative flex flex-col items-center gap-4 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-center transition hover:border-pink-400/50 sm:flex-row sm:justify-between sm:p-8 sm:text-left"
-      >
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-30 blur-3xl transition group-hover:opacity-50"
-          style={{ background: 'linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7)' }}
-        />
-        <div className="relative flex flex-col items-center gap-4 sm:flex-row">
-          <span
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-white shadow-lg"
-            style={{ background: 'linear-gradient(135deg, #f9ce34 0%, #ee2a7b 55%, #6228d7 100%)' }}
-          >
-            <Instagram className="h-7 w-7" />
-          </span>
-          <div>
-            <p className="font-display text-[20px] font-bold text-white sm:text-[24px]">Siga a gente nas redes sociais</p>
-            <p className="mt-0.5 text-[14px] text-slate-400">Dicas de finanças para servidor e novidades do app. @appfinancasdoservidor</p>
-          </div>
-        </div>
-        <span className="btn-gold relative inline-flex shrink-0 items-center gap-2 rounded-full px-6 py-3 text-[15px]">
-          <Instagram className="h-4 w-4" /> Seguir no Instagram
-        </span>
-      </a>
-    </div>
     <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1.2fr]">
       <div>
         <div className="flex items-center gap-2.5">
@@ -175,7 +145,34 @@ export const Footer: React.FC = () => (
         <a href={`mailto:${LINKS.suporteEmail}`} className="flex items-start gap-2 break-all text-slate-300 hover:text-white">
           <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" /> {LINKS.suporteEmail}
         </a>
-        <p className="mt-2 leading-relaxed">Dúvidas, cancelamento ou reembolso: fale com a gente por e-mail.</p>
+        <p className="mt-2 leading-relaxed">Dúvidas, cancelamento ou reembolso: fale com a gente por e-mail ou WhatsApp.</p>
+        <a
+          href={LINKS.suporteWhatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-flex items-center gap-2 rounded-full bg-emerald-500 px-4 py-2.5 text-[14px] font-semibold text-slate-950 transition hover:bg-emerald-400"
+        >
+          <MessageCircle className="h-4 w-4" /> WhatsApp do suporte
+        </a>
+        <p className="mb-3 mt-6 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">Redes sociais</p>
+        <div className="flex flex-wrap gap-2.5">
+          <a
+            href={LINKS.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-[14px] font-semibold text-slate-200 transition hover:border-pink-400/60 hover:text-white"
+          >
+            <Instagram className="h-4 w-4 text-pink-400" /> Instagram
+          </a>
+          <a
+            href={LINKS.whatsappAgente}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-[14px] font-semibold text-slate-200 transition hover:border-emerald-400/60 hover:text-white"
+          >
+            <MessageCircle className="h-4 w-4 text-emerald-400" /> WhatsApp
+          </a>
+        </div>
       </div>
       <div>
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">Aviso</p>

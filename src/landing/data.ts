@@ -1,18 +1,22 @@
+import { comOrigemHotmart, comOrigemPainel, comOrigemWhatsApp } from './origem';
+
 // Valores e links oficiais (produto Hotmart P108349038G)
+// Os "comOrigem..." só acrescentam por qual link o visitante chegou.
 export const LINKS = {
-  mensalSem: 'https://pay.hotmart.com/P108349038G?off=jgetfxt8',
-  mensalCom: 'https://pay.hotmart.com/P108349038G?off=7uwqfyck',
-  trimestralSem: 'https://pay.hotmart.com/P108349038G?off=yrgr5ya5',
-  trimestralCom: 'https://pay.hotmart.com/P108349038G?off=llojfdtp',
-  anual: 'https://pay.hotmart.com/P108349038G?off=hljd903u',
-  testeGratis:
+  mensalSem: comOrigemHotmart('https://pay.hotmart.com/P108349038G?off=jgetfxt8'),
+  mensalCom: comOrigemHotmart('https://pay.hotmart.com/P108349038G?off=7uwqfyck'),
+  trimestralSem: comOrigemHotmart('https://pay.hotmart.com/P108349038G?off=yrgr5ya5'),
+  trimestralCom: comOrigemHotmart('https://pay.hotmart.com/P108349038G?off=llojfdtp'),
+  anual: comOrigemHotmart('https://pay.hotmart.com/P108349038G?off=hljd903u'),
+  testeGratis: comOrigemWhatsApp(
     'https://wa.me/5554994197878?text=Ol%C3%A1%21+Gostaria+de+iniciar+meu+teste+gr%C3%A1tis+de+7+dias+no+Finan%C3%A7as+do+Servidor.',
+  ),
   instagram: 'https://www.instagram.com/appfinancasdoservidor/',
   suporteWhatsapp: 'https://wa.me/5554991412399',
   whatsappAgente: 'https://wa.me/5554994197878',
-  areaCliente: 'https://membros.appfinancasdoservidor.digital',
+  areaCliente: comOrigemPainel('https://membros.appfinancasdoservidor.digital'),
   suporteEmail: 'suporte@appfinancasdoservidor.digital',
-  cadastroPainel: 'https://membros.appfinancasdoservidor.digital/cadastro',
+  cadastroPainel: comOrigemPainel('https://membros.appfinancasdoservidor.digital/cadastro'),
   whatsappAssinante:
     'https://wa.me/5554994197878?text=Ol%C3%A1%21+Acabei+de+assinar+o+Finan%C3%A7as+do+Servidor.',
 };

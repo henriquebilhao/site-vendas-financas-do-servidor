@@ -20,7 +20,7 @@ const DEPOS = [
   {
     nome: 'André',
     origem: 'WhatsApp',
-    img: '/depoimentos/witor.jpg',
+    img: '/depoimentos/andre.jpg',
     w: 1080,
     h: 926,
     alt: 'Cara, esse app é simplesmente extraordinário, eu sempre tive bastante dificuldade de fazer uma organização financeira e com o finanças do servidor isso mudou, pois é muito prático e fácil de usar. Eu mando uma mensagem no WhatsApp com meu gasto e já era, não preciso ficar perdendo tempo tentando anotar em planilha ou bloco de notas. Parabéns pelo app, é muito top, de verdade.',

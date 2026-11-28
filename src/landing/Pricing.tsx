@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   ArrowRight,
   BarChart3,
@@ -19,8 +19,7 @@ import {
   Video,
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { CopiarCupom } from './Hero';
-import { CUPOM, LANCAMENTO_FIM, LINKS, PRECOS, brl } from './data';
+import { ANUAL_12X, CUPOM, LINKS, OFERTA_ATIVA, PRECOS, PRECOS_COM_CUPOM, brl } from './data';
 import { Reveal, SectionTitle } from './ui';
 
 /* Tudo o que vem em todos os planos (as funcionalidades do painel) */
@@ -135,7 +134,7 @@ export const AnnualExclusives: React.FC = () => (
           <Reveal key={r.t} delay={i * 0.1}>
             <div className="card-light flex h-full flex-col p-5 sm:p-6">
               {/* print real da ferramenta (conta com dados de exemplo) */}
-              <div className="relative -mx-1 -mt-1 mb-5 h-56 overflow-hidden rounded-2xl bg-navy-950 ring-1 ring-slate-200 sm:h-64">
+              <div className="relative -mx-1 -mt-1 mb-5 hidden h-64 overflow-hidden rounded-2xl bg-navy-950 ring-1 ring-slate-200 md:block">
                 <img
                   src={r.img}
                   alt={r.alt}
@@ -152,7 +151,7 @@ export const AnnualExclusives: React.FC = () => (
               </div>
               <h3 className="font-display mt-4 text-lg font-bold leading-snug text-navy-900 sm:text-xl">{r.t}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-slate-600">{r.d}</p>
-              <p className="mt-2 text-[15px] leading-relaxed text-slate-600">{r.extra}</p>
+              <p className="mt-2 hidden text-[15px] leading-relaxed text-slate-600 md:block">{r.extra}</p>
             </div>
           </Reveal>
         ))}
@@ -160,20 +159,20 @@ export const AnnualExclusives: React.FC = () => (
 
       {/* o resto do que vem junto (antes ficava na dobra "Muito mais do que um assistente") */}
       {/* 6 colunas no PC (cada card ocupa 2) para a última fileira, com 2 cards, ficar centralizada */}
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-6 lg:gap-5">
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6 lg:gap-5">
         {ENTREGAVEIS.map(({ icon: I, t, d }, k) => (
           <Reveal
             key={t}
             delay={(k % 3) * 0.06}
             className={`lg:col-span-2 ${k === ENTREGAVEIS.length - 2 && ENTREGAVEIS.length % 3 === 2 ? 'lg:col-start-2' : ''}`}
           >
-            <motion.div whileHover={{ y: -4 }} className="card-light relative flex h-full gap-4 p-5">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 text-navy-900 shadow-md shadow-amber-500/20">
-                <I className="h-6 w-6" />
+            <motion.div whileHover={{ y: -4 }} className="card-light relative flex h-full flex-col gap-2 p-3 sm:flex-row sm:gap-4 sm:p-5">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-300 to-amber-500 text-navy-900 shadow-md shadow-amber-500/20 sm:h-12 sm:w-12 sm:rounded-2xl">
+                <I className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <div className="min-w-0">
-                <h3 className="font-display text-[17px] font-bold leading-snug text-navy-900">{t}</h3>
-                <p className="mt-1 text-[14.5px] leading-relaxed text-slate-600">{d}</p>
+                <h3 className="font-display text-[14px] font-bold leading-snug text-navy-900 sm:text-[17px]">{t}</h3>
+                <p className="mt-1 hidden text-[14.5px] leading-relaxed text-slate-600 sm:block">{d}</p>
               </div>
             </motion.div>
           </Reveal>
@@ -210,6 +209,8 @@ export const AnnualBenefits: React.FC = () => {
   const max = linhas[0].v;
   const economia = max - PRECOS.anual;
   const pct = Math.round((economia / max) * 100);
+  const economiaTitular = PRECOS.mensalSem * 12 - PRECOS.anual;
+  const pctTitular = Math.round((economiaTitular / (PRECOS.mensalSem * 12)) * 100);
 
   return (
     <section id="anual" className="relative overflow-hidden bg-navy-800 py-12 sm:py-16">
@@ -226,7 +227,7 @@ export const AnnualBenefits: React.FC = () => {
           <Reveal className="lg:col-span-2">
             <div className="rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-navy-700 to-navy-900 p-5 shadow-2xl shadow-navy-950/40 sm:p-6">
               <h3 className="font-display text-xl font-bold text-white">Quanto custam 12 meses</h3>
-              <p className="mt-1 text-[14px] text-slate-300">A mesma conta, em cada plano.</p>
+              <p className="mt-1 text-[14px] text-slate-300">A mesma conta em cada plano{OFERTA_ATIVA ? ', com os preços sem cupom' : ''}.</p>
 
               <ul className="mt-5 space-y-3.5">
                 {linhas.map((l) => (
@@ -259,7 +260,8 @@ export const AnnualBenefits: React.FC = () => {
               </ul>
 
               <p className="mt-5 rounded-2xl bg-emerald-500/15 px-4 py-3 text-[15px] font-semibold leading-snug text-emerald-300">
-                Até R$ {brl(economia)} a menos em 12 meses ({pct}% de economia) em relação ao Mensal com dependente.
+                {OFERTA_ATIVA && 'Sem contar o cupom: '}R$ {brl(economiaTitular)} a menos ({pctTitular}%) que o Mensal só do titular e R$ {brl(economia)} a
+                menos ({pct}%) que o Mensal com dependente.
               </p>
 
               <a href={LINKS.anual} target="_blank" rel="noopener noreferrer" className="btn-gold mt-5 w-full rounded-xl py-3.5 text-[15px]">
@@ -307,10 +309,11 @@ export const Pricing: React.FC = () => {
 
   const mensal = dep ? PRECOS.mensalCom : PRECOS.mensalSem;
   const tri = dep ? PRECOS.trimestralCom : PRECOS.trimestralSem;
-  // o anual já inclui dependente, então compara com o mensal com dependente
-  const anualDe = PRECOS.mensalCom * 12;
-  const anualEconomia = anualDe - PRECOS.anual;
-  const anualPct = Math.round((anualEconomia / anualDe) * 100);
+  // compara com o mensal da opção escolhida no seletor (sempre com os preços sem cupom)
+  const anualEconomia = mensal * 12 - PRECOS.anual;
+  const anualPct = Math.round((anualEconomia / (mensal * 12)) * 100);
+  const mensalCupom = dep ? PRECOS_COM_CUPOM.mensalCom : PRECOS_COM_CUPOM.mensalSem;
+  const triCupom = dep ? PRECOS_COM_CUPOM.trimestralCom : PRECOS_COM_CUPOM.trimestralSem;
 
   return (
     <section id="planos" className="relative overflow-hidden bg-mist pb-10 pt-7 sm:pb-12 sm:pt-6">
@@ -330,17 +333,11 @@ export const Pricing: React.FC = () => {
         </Reveal>
 
         {/* oferta de lançamento: some sozinha quando o prazo acaba */}
-        {Date.now() < LANCAMENTO_FIM.getTime() && (
+        {OFERTA_ATIVA && (
           <Reveal className="mb-4 text-center">
-            <div className="mx-auto inline-flex max-w-full flex-col items-center gap-2 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-[14px] leading-snug text-amber-900 sm:text-[15px]">
-              <p>
-                🚀 <b>Cupom de lançamento:</b> use <b className="rounded bg-amber-400 px-1.5 py-0.5 tracking-wide text-[#0b1020]">{CUPOM.codigo}</b> e ganhe {CUPOM.pct}% de desconto.
-              </p>
-              <p className="text-[13px] text-amber-800 sm:text-[14px]">
-                No pagamento, digite o cupom <b>{CUPOM.codigo}</b> no campo de cupom.
-              </p>
-              <CopiarCupom className="!bg-navy-900 !text-amber-300 hover:!bg-navy-800" />
-            </div>
+            <p className="mx-auto inline-block max-w-full rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-[14px] leading-snug text-amber-900 sm:text-[15px]">
+              🚀 <b>Cupom de lançamento {CUPOM.codigo} ({CUPOM.pct}% de desconto)</b> já vai aplicado nos botões de assinatura.
+            </p>
           </Reveal>
         )}
 
@@ -363,23 +360,37 @@ export const Pricing: React.FC = () => {
         </Reveal>
 
         <div className="grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {/* Anual — por último no celular (mesma ordem do PC: Grátis, Mensal, Trimestral, Anual) */}
-          <Reveal className="order-last md:order-none xl:order-last" delay={0.15}>
+          {/* Anual — primeiro no celular e no tablet; por último no computador (4 colunas) */}
+          <Reveal className="xl:order-last" delay={0.15}>
             <div className="relative flex h-full flex-col rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-navy-700 to-navy-900 p-5 shadow-2xl sm:p-6 shadow-navy-900/30">
               <span className="absolute -top-3.5 left-1/2 flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-amber-400 px-3.5 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-950">
                 <Star className="h-3 w-3 fill-slate-950" /> Mais escolhido
               </span>
               <div className="flex items-center justify-between">
                 <h3 className="font-display text-xl font-bold text-white">Anual VIP</h3>
-                <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-[11px] font-bold text-emerald-400">−{anualPct}%</span>
+                <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-[11px] font-bold text-emerald-400">
+                  −{OFERTA_ATIVA ? CUPOM.pct : anualPct}%
+                </span>
               </div>
               <p className="mt-1 text-[13px] text-slate-300">12 meses, dependente incluso</p>
               <div className="mt-4">
-                <p className="text-[13px] text-slate-400"><span className="line-through">De R$ {brl(anualDe)}</span> <span className="text-[11px]">(12x mensal c/ dependente)</span></p>
+                {OFERTA_ATIVA && (
+                  <p className="text-[13px] text-slate-400">
+                    <span className="line-through">De R$ {brl(PRECOS.anual)}</span> com o cupom
+                  </p>
+                )}
                 <p className="font-display text-[2.35rem] leading-none font-bold text-white">
-                  <span className="text-2xl">R$</span> {brl(PRECOS.anual)}
+                  <span className="text-2xl">R$</span> {brl(OFERTA_ATIVA ? PRECOS_COM_CUPOM.anual : PRECOS.anual)}
                 </p>
-                <p className="mt-1 text-[13px] font-semibold text-emerald-400">Você economiza R$ {brl(anualEconomia)}</p>
+                <p className="mt-1 text-[14px] text-slate-200">
+                  à vista ou 12x de R$ {brl(OFERTA_ATIVA ? ANUAL_12X.comCupom : ANUAL_12X.normal)}*
+                </p>
+                <p className="text-[11px] text-slate-400">*parcelado no cartão, com acréscimo</p>
+                <p className="mt-2 text-[13px] font-semibold leading-snug text-emerald-400">
+                  {OFERTA_ATIVA ? 'Mesmo sem o cupom, são' : 'São'} R$ {brl(anualEconomia)} a menos ({anualPct}%) que 12 meses do Mensal{' '}
+                  {dep ? 'com dependente' : 'só do titular'}
+                  {dep ? '.' : ', e o dependente já vem incluso.'}
+                </p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-white/10 pt-4">
                 {BASE.map((f) => <Feature key={f}>{f}</Feature>)}
@@ -426,11 +437,17 @@ export const Pricing: React.FC = () => {
               <h3 className="font-display text-xl font-bold text-navy-900">Mensal</h3>
               <p className="mt-1 text-[13px] text-slate-600">{dep ? 'Titular + 1 dependente' : 'Só o titular'}</p>
               <div className="mt-4">
-                <p className="text-[13px] text-transparent">.</p>
+                {OFERTA_ATIVA ? (
+                  <p className="text-[13px] text-slate-500"><span className="line-through">De R$ {brl(mensal)}</span> com o cupom</p>
+                ) : (
+                  <p className="text-[13px] text-transparent">.</p>
+                )}
                 <p className="font-display text-[2.35rem] leading-none font-bold text-navy-900">
-                  <span className="text-2xl">R$</span> {brl(mensal)}
+                  <span className="text-2xl">R$</span> {brl(OFERTA_ATIVA ? mensalCupom : mensal)}
                 </p>
-                <p className="mt-1 text-[14px] text-slate-600">por mês · cancele quando quiser</p>
+                <p className="mt-1 text-[14px] text-slate-600">
+                  {OFERTA_ATIVA ? `no 1º pagamento · preço normal R$ ${brl(mensal)} por mês` : 'por mês'} · cancele quando quiser
+                </p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
                 <BaseCurta />
@@ -448,11 +465,17 @@ export const Pricing: React.FC = () => {
               <h3 className="font-display text-xl font-bold text-navy-900">Trimestral</h3>
               <p className="mt-1 text-[13px] text-slate-600">{dep ? 'Titular + 1 dependente' : 'Só o titular'}</p>
               <div className="mt-4">
-                <p className="text-[13px] text-transparent">.</p>
+                {OFERTA_ATIVA ? (
+                  <p className="text-[13px] text-slate-500"><span className="line-through">De R$ {brl(tri)}</span> com o cupom</p>
+                ) : (
+                  <p className="text-[13px] text-transparent">.</p>
+                )}
                 <p className="font-display text-[2.35rem] leading-none font-bold text-navy-900">
-                  <span className="text-2xl">R$</span> {brl(tri)}
+                  <span className="text-2xl">R$</span> {brl(OFERTA_ATIVA ? triCupom : tri)}
                 </p>
-                <p className="mt-1 text-[14px] text-slate-600">a cada 3 meses</p>
+                <p className="mt-1 text-[14px] text-slate-600">
+                  {OFERTA_ATIVA ? `à vista no 1º pagamento · preço normal R$ ${brl(tri)} a cada 3 meses` : 'a cada 3 meses'}
+                </p>
               </div>
               <ul className="my-3.5 flex-1 space-y-1.5 border-t border-slate-200 pt-4">
                 <BaseCurta />

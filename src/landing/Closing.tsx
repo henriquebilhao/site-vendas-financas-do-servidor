@@ -134,7 +134,7 @@ export const Footer: React.FC = () => (
       <div>
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">Navegação</p>
         <ul className="space-y-2">
-          {[['Como funciona', '#plantao'], ['Teste agora', '#teste'], ['Planos', '#planos'], ['Dúvidas', '#faq']].map(([l, h]) => (
+          {[['Como funciona', '#como-funciona'], ['Teste agora', '#teste'], ['Planos', '#planos'], ['Dúvidas', '#faq']].map(([l, h]) => (
             <li key={h}><a href={h} className="hover:text-white">{l}</a></li>
           ))}
           <li><a href={LINKS.areaCliente} target="_blank" rel="noopener noreferrer" className="hover:text-white">Área do cliente</a></li>

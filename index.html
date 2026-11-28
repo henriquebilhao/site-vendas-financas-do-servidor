@@ -45,7 +45,25 @@
     <!-- End Meta Pixel Code -->
   </head>
   <body class="bg-black text-slate-100 antialiased selection:bg-amber-400 selection:text-black">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Topo estático: aparece antes do JavaScript. Manter o texto igual ao Hero (src/landing/Hero.tsx). -->
+      <div class="min-h-screen bg-navy-900 font-sans text-slate-100">
+        <div class="flex h-16 items-center gap-2.5 border-b border-white/5 bg-navy-950 px-4 sm:px-6">
+          <img src="/logo.png" alt="" width="34" height="34" class="rounded-lg" />
+          <span class="font-display text-[17px] font-bold tracking-tight text-white">Finanças do Servidor</span>
+        </div>
+        <div class="mx-auto max-w-7xl px-4 pt-12 text-center sm:px-6 sm:pt-16 lg:text-left">
+          <h1 class="font-display text-[2.5rem] font-bold leading-[1.05] tracking-tight text-white text-balance sm:text-6xl lg:text-[4.2rem]">
+            Seu salário organizado começa numa
+            <span class="bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-500 bg-clip-text text-transparent">mensagem.</span>
+          </h1>
+          <p class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-300 lg:mx-0">
+            Mande um texto, um áudio, a foto da nota fiscal ou um PDF no WhatsApp. O assistente registra cada gasto e cada extra, e você
+            sabe quanto sobra, mesmo na correria do dia a dia.
+          </p>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

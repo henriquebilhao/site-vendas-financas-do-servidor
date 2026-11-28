@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Check, Copy, Lock, Menu, ShieldCheck, X } from 'lucide-react';
+import { ArrowRight, Lock, Menu, ShieldCheck, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { CUPOM, LANCAMENTO_FIM, LINKS } from './data';
 import { AudioBubble, Bubble, DateChip, EncryptionNotice, PdfBubble, PhoneFrame, PhotoBubble, TypingBubble } from './ui';
@@ -50,44 +50,14 @@ export const TopBar: React.FC = () => {
         </div>
       </div>
       {CUPOM.codigo && (
-        <div className="mx-auto mt-1 flex max-w-7xl flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12.5px] text-slate-200 sm:text-[14px]">
-          <span><span className="hidden sm:inline">Cupom de lançamento: </span>Use <b className="tracking-wide text-amber-300">{CUPOM.codigo}</b> e ganhe {CUPOM.pct}% de desconto</span>
-          <CopiarCupom className="!px-2.5 !py-0.5" />
-        </div>
+        <p className="mx-auto mt-1 max-w-7xl text-center text-[12.5px] text-slate-200 sm:text-[14px]">
+          Cupom <b className="tracking-wide text-amber-300">{CUPOM.codigo}</b>: {CUPOM.pct}% de desconto já aplicado nos botões de assinatura
+        </p>
       )}
     </div>
   );
 };
 
-/* Botão "Copiar cupom": copia o código e confirma com "Copiado!" */
-export const CopiarCupom: React.FC<{ className?: string }> = ({ className = '' }) => {
-  const [ok, setOk] = useState(false);
-  const copiar = async () => {
-    try {
-      await navigator.clipboard.writeText(CUPOM.codigo);
-    } catch {
-      const el = document.createElement('textarea');
-      el.value = CUPOM.codigo;
-      document.body.appendChild(el);
-      el.select();
-      try { document.execCommand('copy'); } catch { /* sem suporte */ }
-      document.body.removeChild(el);
-    }
-    setOk(true);
-    setTimeout(() => setOk(false), 2000);
-  };
-  return (
-    <button
-      type="button"
-      onClick={copiar}
-      aria-live="polite"
-      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-amber-400 px-3 py-1 text-[12px] font-bold text-[#0b1020] transition hover:bg-amber-300 sm:text-[13px] ${className}`}
-    >
-      {ok ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-      {ok ? 'Copiado!' : 'Copiar cupom'}
-    </button>
-  );
-};
 /* ---------- Navegação ---------- */
 const NAV = [
   ['Depoimentos', '#depoimentos'],
@@ -95,8 +65,8 @@ const NAV = [
   ['Teste agora', '#teste'],
   ['Painel', '#painel'],
   ['Ferramentas', '#ferramentas'],
-  ['Quem somos', '#quem-somos'],
   ['Planos', '#planos'],
+  ['Quem somos', '#quem-somos'],
   ['Dúvidas', '#faq'],
 ];
 
@@ -259,30 +229,22 @@ export const Hero: React.FC = () => (
 
     <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="text-center lg:text-left">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        {/* sem animação de entrada: o texto do topo aparece na hora (o mesmo bloco está em index.html) */}
+        <h1
           className="font-display text-[2.5rem] font-bold leading-[1.05] tracking-tight text-white text-balance sm:text-6xl lg:text-[4.2rem]"
         >
           Seu salário organizado começa numa{' '}
           <span className="bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-500 bg-clip-text text-transparent">mensagem.</span>
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+        <p
           className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-300 lg:mx-0"
         >
           Mande um texto, um áudio, a foto da nota fiscal ou um PDF no WhatsApp. O assistente registra cada gasto e cada extra, e você
           sabe quanto sobra, mesmo na correria do dia a dia.
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
+        <div
           className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center lg:justify-start"
         >
           <a href="#planos" className="btn-gold rounded-full px-7 py-4 text-[16px]">
@@ -296,16 +258,13 @@ export const Hero: React.FC = () => (
           >
             Testar 7 dias grátis
           </a>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
+        <div
           className="mt-7 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[13px] text-slate-400 lg:justify-start"
         >
           <span className="flex items-center gap-1.5"><Lock className="h-4 w-4 text-amber-400" /> Sem senha de banco ou Gov.br</span>          <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-amber-400" /> 7 dias de garantia</span>
-        </motion.div>
+        </div>
       </div>
 
       <motion.div

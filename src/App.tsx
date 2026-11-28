@@ -2,7 +2,7 @@ import React from 'react';
 import { MotionConfig } from 'motion/react';
 import { Hero, Nav, StickyCta, TopBar, TrustMarquee } from './landing/Hero';
 import { ForWho, ShiftTimeline, Together } from './landing/Sections';
-import { DashboardFeatures, DashboardSimulator } from './landing/Dashboard';
+import { DashboardFeatures } from './landing/Dashboard';
 import { Authority, ForWhom, VideoSection } from './landing/Story';
 import { Depoimentos } from './landing/Depoimentos';
 import { LiveDemo } from './landing/LiveDemo';
@@ -31,22 +31,21 @@ export default function App() {
           {/* 4. Resolução: funcionalidades */}
           <VideoSection />
 
-          {/* 5. Para quem é (logo depois da solução, para a pessoa se reconhecer cedo) */}
-          <ForWhom />
-
-          <ShiftTimeline />
+          {/* 5. Demonstração */}
           <LiveDemo />
+          {/* o simulador do painel abre por botão dentro desta dobra */}
           <DashboardFeatures />
-          <DashboardSimulator />
-          <Together />
 
-          {/* 6. Autoridade */}
-          <Authority />
-
-          {/* 7. Ferramentas e entregáveis + 8. Planos */}
+          {/* 6. Ferramentas e entregáveis + 7. Planos (cedo, para encurtar o caminho) */}
           <AnnualExclusives />
           <Pricing />
           <AnnualBenefits />
+
+          {/* 8. Para quem ainda está decidindo */}
+          <ForWhom />
+          <ShiftTimeline />
+          <Together />
+          <Authority />
 
           {/* 9. Dúvidas */}
           <Faq />

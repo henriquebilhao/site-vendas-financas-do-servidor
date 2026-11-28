@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Check, Eye, HeartHandshake, KeyRound, Lock, ShieldCheck, X } from 'lucide-react';
 import { LogoFS } from '../components/LogoFS';
 import { Reveal, SectionTitle } from './ui';
+import { FUNDADOR } from './data';
 
 /* =====================================================================
    DOBRA 4 (abertura) — VÍDEO: alguém mandando mensagem no WhatsApp
@@ -30,7 +31,7 @@ export const VideoSection: React.FC = () => {
     return () => clearInterval(t);
   }, []);
 
-  // só toca quando aparece na tela (economiza bateria e dados no celular)
+  // só baixa e toca quando aparece na tela (preload="none": não pesa na abertura)
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -55,12 +56,12 @@ export const VideoSection: React.FC = () => {
               <video
                 ref={videoRef}
                 src="/videos/maos-digitando.mp4"
+                poster="/videos/maos-digitando.jpg"
                 muted
                 loop
                 playsInline
-                autoPlay
-                preload="metadata"
-                className="aspect-video w-full object-cover"
+                preload="none"
+                className="aspect-video w-full bg-navy-900 object-cover"
                 aria-label="Pessoa digitando uma mensagem no celular"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-900/60 via-transparent to-transparent" />
@@ -242,6 +243,19 @@ export const Authority: React.FC = () => (
               renda, rendas extras e as contas da casa divididas com a família.
             </p>
           </div>
+          {/* cartão de quem criou: só aparece com dados reais em FUNDADOR (data.ts) */}
+          {FUNDADOR.nome && (
+            <figure className="card mt-6 flex items-center gap-4 p-5">
+              {FUNDADOR.foto && (
+                <img src={FUNDADOR.foto} alt={FUNDADOR.nome} width={72} height={72} loading="lazy" className="h-[72px] w-[72px] shrink-0 rounded-full object-cover" />
+              )}
+              <figcaption className="min-w-0">
+                <p className="font-display text-lg font-bold text-white">{FUNDADOR.nome}</p>
+                {FUNDADOR.cargo && <p className="text-[14px] text-amber-300">{FUNDADOR.cargo}</p>}
+                {FUNDADOR.frase && <p className="mt-1 text-[14.5px] leading-relaxed text-slate-300">{FUNDADOR.frase}</p>}
+              </figcaption>
+            </figure>
+          )}
         </Reveal>
       </div>
 

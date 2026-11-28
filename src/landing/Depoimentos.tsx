@@ -162,7 +162,7 @@ export const Depoimentos: React.FC = () => {
                   alt={d.alt}
                   width={d.w}
                   height={d.h}
-                  loading={i === 0 ? 'eager' : 'lazy'}
+                  loading="lazy"
                   decoding="async"
                   className="block h-auto w-full object-contain object-top"
                 />

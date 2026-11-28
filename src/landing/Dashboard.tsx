@@ -86,7 +86,16 @@ const MobileMock: React.FC = () => (
   </div>
 );
 
-export const DashboardFeatures: React.FC = () => (
+export const DashboardFeatures: React.FC = () => {
+  // o simulador fica fechado para a página ficar mais curta; abre pelo botão
+  const [aberto, setAberto] = useState(false);
+  const alternar = () => {
+    setAberto((a) => !a);
+    if (!aberto) setTimeout(() => document.getElementById('simulador')?.scrollIntoView({ behavior: 'smooth' }), 50);
+  };
+
+  return (
+  <>
   <section id="painel" className="relative overflow-hidden bg-navy-900 py-12 sm:py-16">
     <div className="pointer-events-none absolute right-0 top-1/3 h-[500px] w-[700px] rounded-full bg-blue-700/20 blur-[140px]" />
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
@@ -120,9 +129,9 @@ export const DashboardFeatures: React.FC = () => (
             ))}
           </ul>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a href="#simulador" className="btn-gold rounded-full px-6 py-3.5 text-[15px]">
-              Testar o painel agora <ArrowRight className="h-4 w-4" />
-            </a>
+            <button type="button" onClick={alternar} aria-expanded={aberto} className="btn-gold rounded-full px-6 py-3.5 text-[15px]">
+              {aberto ? 'Fechar o simulador' : 'Testar o painel agora'} <ArrowRight className={`h-4 w-4 ${aberto ? '-rotate-90' : ''}`} />
+            </button>
             <span className="flex items-center gap-2 text-[13px] text-slate-400">
               <Smartphone className="h-4 w-4" /> Funciona no celular e no computador
             </span>
@@ -138,7 +147,10 @@ export const DashboardFeatures: React.FC = () => (
       </div>
     </div>
   </section>
-);
+  {aberto && <DashboardSimulator />}
+  </>
+  );
+};
 
 /* ==========================================================================
    Dobra: simulador do painel (lançar receitas e despesas)
